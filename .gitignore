@@ -1,0 +1,39 @@
+## Build results
+bin/
+obj/
+out/
+TestResults/
+*.log
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.VC.db
+
+## Visual Studio
+.vscode/
+.vs/
+*.dbmdl
+*.jfm
+
+## Rider
+.idea/
+*.sln.iml
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+
+## Others
+*.tmp
+*.bak
+*.orig
+
+## dotnet publish/output
+publish/
+app.publish/
