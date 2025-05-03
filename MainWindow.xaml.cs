@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace DamnSimpleFileManager
+namespace SimpleFileManager
 {
     public partial class MainWindow : Window
     {
@@ -56,25 +59,72 @@ namespace DamnSimpleFileManager
             }
         }
 
-        private void LeftList_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (LeftList.SelectedItem is DirectoryInfo dir)
+            var list = (ListView)sender;
+            if (list.SelectedItem is DirectoryInfo dir)
             {
-                leftDir = dir;
-                LoadList(LeftList, leftDir);
+                if (list == LeftList)
+                {
+                    leftDir = dir;
+                    LoadList(LeftList, leftDir);
+                }
+                else
+                {
+                    rightDir = dir;
+                    LoadList(RightList, rightDir);
+                }
+            }
+            else if (list.SelectedItem is FileInfo file)
+            {
+                Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
             }
         }
 
-        private void RightList_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (RightList.SelectedItem is DirectoryInfo dir)
+            if (e.Key == Key.Enter)
             {
-                rightDir = dir;
-                LoadList(RightList, rightDir);
+                var list = LeftList.IsKeyboardFocusWithin ? LeftList : RightList;
+                if (list.SelectedItem is DirectoryInfo dir)
+                {
+                    if (list == LeftList)
+                    {
+                        leftDir = dir;
+                        LoadList(LeftList, leftDir);
+                    }
+                    else
+                    {
+                        rightDir = dir;
+                        LoadList(RightList, rightDir);
+                    }
+                }
+                else if (list.SelectedItem is FileInfo file)
+                {
+                    Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
+                }
+                e.Handled = true;
             }
         }
 
-        // CopyRight_Click отключён
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, uint cidl, IntPtr apidl, uint dwFlags);
+
+        private void List_RightClick(object sender, MouseButtonEventArgs e)
+        {
+            var list = (ListView)sender;
+            if (list.SelectedItem is FileSystemInfo selectedItem)
+            {
+                try
+                {
+                    Process.Start("explorer.exe", $"/select,\"{selectedItem.FullName}\"");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Не удалось открыть контекстное меню: {ex.Message}");
+                }
+            }
+        }
 
         private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

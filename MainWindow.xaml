@@ -1,7 +1,8 @@
-﻿<Window x:Class="DamnSimpleFileManager.MainWindow"
+﻿<Window x:Class="SimpleFileManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Damn Simple File Manager" Height="450" Width="800">
+        Title="Damn Simple File Manager" Height="450" Width="800"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,9 +28,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name" MouseDoubleClick="LeftList_DoubleClick" />
-            <Button Grid.Column="1" Content=">>" Width="50" Margin="10" IsEnabled="False" />
-            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name" MouseDoubleClick="RightList_DoubleClick" />
+            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick" />
+            <Label Grid.Column="1" Width="10" />
+            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick" />
         </Grid>
     </Grid>
 </Window>
