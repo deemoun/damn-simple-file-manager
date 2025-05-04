@@ -7,17 +7,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace SimpleFileManager
+namespace DamnSimpleFileManager
 {
     public partial class MainWindow : Window
     {
-        private DirectoryInfo leftDir;
-        private DirectoryInfo rightDir;
+        private DirectoryInfo leftDir = null!;
+        private DirectoryInfo rightDir = null!;
+        private readonly Stack<DirectoryInfo> leftHistory = new();
+        private readonly Stack<DirectoryInfo> rightHistory = new();
 
         public MainWindow()
         {
             InitializeComponent();
             PopulateDriveSelectors();
+            UpdateBackButtons();
         }
 
         private void PopulateDriveSelectors()
@@ -30,18 +33,22 @@ namespace SimpleFileManager
                     RightDriveSelector.Items.Add(drive.Name);
                 }
             }
+
             if (LeftDriveSelector.Items.Count > 0)
             {
                 LeftDriveSelector.SelectedIndex = 0;
                 leftDir = new DirectoryInfo(LeftDriveSelector.SelectedItem.ToString());
                 LoadList(LeftList, leftDir);
             }
+
             if (RightDriveSelector.Items.Count > 1)
             {
                 RightDriveSelector.SelectedIndex = 1;
                 rightDir = new DirectoryInfo(RightDriveSelector.SelectedItem.ToString());
                 LoadList(RightList, rightDir);
             }
+
+            UpdateBackButtons();
         }
 
         private void LoadList(ListView list, DirectoryInfo dir)
@@ -66,14 +73,17 @@ namespace SimpleFileManager
             {
                 if (list == LeftList)
                 {
+                    leftHistory.Push(leftDir);
                     leftDir = dir;
                     LoadList(LeftList, leftDir);
                 }
                 else
                 {
+                    rightHistory.Push(rightDir);
                     rightDir = dir;
                     LoadList(RightList, rightDir);
                 }
+                UpdateBackButtons();
             }
             else if (list.SelectedItem is FileInfo file)
             {
@@ -90,14 +100,17 @@ namespace SimpleFileManager
                 {
                     if (list == LeftList)
                     {
+                        leftHistory.Push(leftDir);
                         leftDir = dir;
                         LoadList(LeftList, leftDir);
                     }
                     else
                     {
+                        rightHistory.Push(rightDir);
                         rightDir = dir;
                         LoadList(RightList, rightDir);
                     }
+                    UpdateBackButtons();
                 }
                 else if (list.SelectedItem is FileInfo file)
                 {
@@ -107,8 +120,53 @@ namespace SimpleFileManager
             }
         }
 
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-        static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, uint cidl, IntPtr apidl, uint dwFlags);
+        private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LeftDriveSelector.SelectedItem is string path)
+            {
+                leftDir = new DirectoryInfo(path);
+                leftHistory.Clear();
+                LoadList(LeftList, leftDir);
+                UpdateBackButtons();
+            }
+        }
+
+        private void RightDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RightDriveSelector.SelectedItem is string path)
+            {
+                rightDir = new DirectoryInfo(path);
+                rightHistory.Clear();
+                LoadList(RightList, rightDir);
+                UpdateBackButtons();
+            }
+        }
+
+        private void LeftBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (leftHistory.Count > 0)
+            {
+                leftDir = leftHistory.Pop();
+                LoadList(LeftList, leftDir);
+                UpdateBackButtons();
+            }
+        }
+
+        private void RightBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (rightHistory.Count > 0)
+            {
+                rightDir = rightHistory.Pop();
+                LoadList(RightList, rightDir);
+                UpdateBackButtons();
+            }
+        }
+
+        private void UpdateBackButtons()
+        {
+            LeftBackButton.IsEnabled = leftHistory.Count > 0;
+            RightBackButton.IsEnabled = rightHistory.Count > 0;
+        }
 
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
@@ -123,24 +181,6 @@ namespace SimpleFileManager
                 {
                     MessageBox.Show($"Не удалось открыть контекстное меню: {ex.Message}");
                 }
-            }
-        }
-
-        private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LeftDriveSelector.SelectedItem is string path)
-            {
-                leftDir = new DirectoryInfo(path);
-                LoadList(LeftList, leftDir);
-            }
-        }
-
-        private void RightDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RightDriveSelector.SelectedItem is string path)
-            {
-                rightDir = new DirectoryInfo(path);
-                LoadList(RightList, rightDir);
             }
         }
     }
