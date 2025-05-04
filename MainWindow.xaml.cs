@@ -59,6 +59,15 @@ namespace DamnSimpleFileManager
                 foreach (var d in dir.GetDirectories()) items.Add(d);
                 foreach (var f in dir.GetFiles()) items.Add(f);
                 list.ItemsSource = items;
+
+                if (list == LeftList)
+                {
+                    LeftPathText.Text = dir.FullName;
+                }
+                else
+                {
+                    RightPathText.Text = dir.FullName;
+                }
             }
             catch (Exception ex)
             {
