@@ -10,6 +10,8 @@
             <RowDefinition Height="Auto"/>
             <!-- Назад -->
             <RowDefinition Height="Auto"/>
+            <!-- Операции -->
+            <RowDefinition Height="Auto"/>
             <!-- Пути -->
             <RowDefinition Height="*"/>
             <!-- Списки -->
@@ -41,8 +43,24 @@
                     Click="RightBack_Click" HorizontalAlignment="Right" Margin="5"/>
         </Grid>
 
-        <!-- Текущие пути -->
+        <!-- Операции -->
         <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CreateFolderButton" Grid.Column="1" Content="Создать папку" Width="100" Height="30" Click="CreateFolder_Click"/>
+            <Button x:Name="CreateFileButton" Grid.Column="2" Content="Создать файл" Width="100" Height="30" Margin="5,0" Click="CreateFile_Click"/>
+            <Button x:Name="CopyButton" Grid.Column="3" Content="Копировать" Width="100" Height="30" Margin="5,0" Click="Copy_Click"/>
+            <Button x:Name="MoveButton" Grid.Column="4" Content="Переместить" Width="100" Height="30" Margin="5,0" Click="Move_Click"/>
+        </Grid>
+
+        <!-- Текущие пути -->
+        <Grid Grid.Row="3" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -54,7 +72,7 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
