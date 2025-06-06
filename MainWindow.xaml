@@ -10,6 +10,8 @@
             <RowDefinition Height="Auto"/>
             <!-- Назад -->
             <RowDefinition Height="Auto"/>
+            <!-- Операции -->
+            <RowDefinition Height="Auto"/>
             <!-- Пути -->
             <RowDefinition Height="*"/>
             <!-- Списки -->
@@ -22,9 +24,15 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" SelectionChanged="LeftDriveSelector_SelectionChanged"/>
+            <StackPanel Grid.Column="0">
+                <ComboBox x:Name="LeftDriveSelector" SelectionChanged="LeftDriveSelector_SelectionChanged"/>
+                <TextBlock x:Name="LeftDiskText" FontSize="10"/>
+            </StackPanel>
             <Label Grid.Column="1" Content="" Width="50"/>
-            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" SelectionChanged="RightDriveSelector_SelectionChanged"/>
+            <StackPanel Grid.Column="2">
+                <ComboBox x:Name="RightDriveSelector" SelectionChanged="RightDriveSelector_SelectionChanged"/>
+                <TextBlock x:Name="RightDiskText" FontSize="10" HorizontalAlignment="Right"/>
+            </StackPanel>
         </Grid>
 
         <!-- Кнопки Назад -->
@@ -41,8 +49,29 @@
                     Click="RightBack_Click" HorizontalAlignment="Right" Margin="5"/>
         </Grid>
 
-        <!-- Текущие пути -->
+        <!-- Операции -->
         <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="ShowHiddenCheck" Grid.Column="0" Content="Скрытые" VerticalAlignment="Center" Checked="ShowHidden_Checked" Unchecked="ShowHidden_Checked"/>
+            <Button x:Name="CreateFolderButton" Grid.Column="1" Content="Создать папку" Width="100" Height="30" Click="CreateFolder_Click"/>
+            <Button x:Name="CreateFileButton" Grid.Column="2" Content="Создать файл" Width="100" Height="30" Margin="5,0" Click="CreateFile_Click"/>
+            <Button x:Name="CopyButton" Grid.Column="3" Content="Копировать" Width="100" Height="30" Margin="5,0" Click="Copy_Click"/>
+            <Button x:Name="MoveButton" Grid.Column="4" Content="Переместить" Width="100" Height="30" Margin="5,0" Click="Move_Click"/>
+            <Button x:Name="RenameButton" Grid.Column="5" Content="Переименовать" Width="110" Height="30" Margin="5,0" Click="Rename_Click"/>
+            <Button x:Name="DeleteButton" Grid.Column="6" Content="Удалить" Width="80" Height="30" Margin="5,0" Click="Delete_Click"/>
+        </Grid>
+
+        <!-- Текущие пути -->
+        <Grid Grid.Row="3" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -54,16 +83,16 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name"
+            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name" SelectionMode="Extended"
                       MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <Label Grid.Column="1" Width="10"/>
-            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name"
+            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name" SelectionMode="Extended"
                       MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
     </Grid>

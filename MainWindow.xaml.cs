@@ -6,93 +6,45 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualBasic;
 
 namespace DamnSimpleFileManager
 {
     public partial class MainWindow : Window
     {
-        private DirectoryInfo leftDir = null!;
-        private DirectoryInfo rightDir = null!;
-        private readonly Stack<DirectoryInfo> leftHistory = new();
-        private readonly Stack<DirectoryInfo> rightHistory = new();
+        private readonly FilePane leftPane;
+        private readonly FilePane rightPane;
 
         public MainWindow()
         {
             InitializeComponent();
+            leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftDiskText);
+            rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightDiskText);
+            leftPane.ShowHidden = ShowHiddenCheck.IsChecked == true;
+            rightPane.ShowHidden = ShowHiddenCheck.IsChecked == true;
             PopulateDriveSelectors();
-            UpdateBackButtons();
         }
 
         private void PopulateDriveSelectors()
         {
-            foreach (var drive in DriveInfo.GetDrives())
-            {
-                if (drive.IsReady)
-                {
-                    LeftDriveSelector.Items.Add(drive.Name);
-                    RightDriveSelector.Items.Add(drive.Name);
-                }
-            }
+            leftPane.PopulateDrives();
+            rightPane.PopulateDrives();
 
-            if (LeftDriveSelector.Items.Count > 0)
+            if (rightPane.DriveSelector.Items.Count > 1)
             {
-                LeftDriveSelector.SelectedIndex = 0;
-                leftDir = new DirectoryInfo(LeftDriveSelector.SelectedItem.ToString());
-                LoadList(LeftList, leftDir);
-            }
-
-            if (RightDriveSelector.Items.Count > 1)
-            {
-                RightDriveSelector.SelectedIndex = 1;
-                rightDir = new DirectoryInfo(RightDriveSelector.SelectedItem.ToString());
-                LoadList(RightList, rightDir);
-            }
-
-            UpdateBackButtons();
-        }
-
-        private void LoadList(ListView list, DirectoryInfo dir)
-        {
-            try
-            {
-                var items = new ObservableCollection<FileSystemInfo>();
-                foreach (var d in dir.GetDirectories()) items.Add(d);
-                foreach (var f in dir.GetFiles()) items.Add(f);
-                list.ItemsSource = items;
-
-                if (list == LeftList)
-                {
-                    LeftPathText.Text = dir.FullName;
-                }
-                else
-                {
-                    RightPathText.Text = dir.FullName;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                rightPane.DriveSelector.SelectedIndex = 1;
+                rightPane.SetDrive(rightPane.DriveSelector.SelectedItem!.ToString()!);
             }
         }
+
 
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
+            var pane = list == LeftList ? leftPane : rightPane;
             if (list.SelectedItem is DirectoryInfo dir)
             {
-                if (list == LeftList)
-                {
-                    leftHistory.Push(leftDir);
-                    leftDir = dir;
-                    LoadList(LeftList, leftDir);
-                }
-                else
-                {
-                    rightHistory.Push(rightDir);
-                    rightDir = dir;
-                    LoadList(RightList, rightDir);
-                }
-                UpdateBackButtons();
+                pane.NavigateInto(dir);
             }
             else if (list.SelectedItem is FileInfo file)
             {
@@ -104,26 +56,44 @@ namespace DamnSimpleFileManager
         {
             if (e.Key == Key.Enter)
             {
-                var list = LeftList.IsKeyboardFocusWithin ? LeftList : RightList;
-                if (list.SelectedItem is DirectoryInfo dir)
+                var pane = LeftList.IsKeyboardFocusWithin ? leftPane : rightPane;
+                if (pane.List.SelectedItem is DirectoryInfo dir)
                 {
-                    if (list == LeftList)
-                    {
-                        leftHistory.Push(leftDir);
-                        leftDir = dir;
-                        LoadList(LeftList, leftDir);
-                    }
-                    else
-                    {
-                        rightHistory.Push(rightDir);
-                        rightDir = dir;
-                        LoadList(RightList, rightDir);
-                    }
-                    UpdateBackButtons();
+                    pane.NavigateInto(dir);
                 }
-                else if (list.SelectedItem is FileInfo file)
+                else if (pane.List.SelectedItem is FileInfo file)
                 {
                     Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
+                }
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Tab)
+            {
+                if (LeftList.IsKeyboardFocusWithin)
+                    RightList.Focus();
+                else
+                    LeftList.Focus();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                var pane = ActivePane;
+                string query = Interaction.InputBox("Фильтр", "Поиск", "");
+                if (query != null)
+                {
+                    var dir = pane.CurrentDir;
+                    var items = new ObservableCollection<FileSystemInfo>();
+                    foreach (var d in dir.GetDirectories())
+                    {
+                        if (!pane.ShowHidden && d.Attributes.HasFlag(FileAttributes.Hidden)) continue;
+                        if (d.Name.Contains(query, StringComparison.OrdinalIgnoreCase)) items.Add(d);
+                    }
+                    foreach (var f in dir.GetFiles())
+                    {
+                        if (!pane.ShowHidden && f.Attributes.HasFlag(FileAttributes.Hidden)) continue;
+                        if (f.Name.Contains(query, StringComparison.OrdinalIgnoreCase)) items.Add(f);
+                    }
+                    pane.List.ItemsSource = items;
                 }
                 e.Handled = true;
             }
@@ -133,10 +103,7 @@ namespace DamnSimpleFileManager
         {
             if (LeftDriveSelector.SelectedItem is string path)
             {
-                leftDir = new DirectoryInfo(path);
-                leftHistory.Clear();
-                LoadList(LeftList, leftDir);
-                UpdateBackButtons();
+                leftPane.SetDrive(path);
             }
         }
 
@@ -144,37 +111,18 @@ namespace DamnSimpleFileManager
         {
             if (RightDriveSelector.SelectedItem is string path)
             {
-                rightDir = new DirectoryInfo(path);
-                rightHistory.Clear();
-                LoadList(RightList, rightDir);
-                UpdateBackButtons();
+                rightPane.SetDrive(path);
             }
         }
 
         private void LeftBack_Click(object sender, RoutedEventArgs e)
         {
-            if (leftHistory.Count > 0)
-            {
-                leftDir = leftHistory.Pop();
-                LoadList(LeftList, leftDir);
-                UpdateBackButtons();
-            }
+            leftPane.NavigateBack();
         }
 
         private void RightBack_Click(object sender, RoutedEventArgs e)
         {
-            if (rightHistory.Count > 0)
-            {
-                rightDir = rightHistory.Pop();
-                LoadList(RightList, rightDir);
-                UpdateBackButtons();
-            }
-        }
-
-        private void UpdateBackButtons()
-        {
-            LeftBackButton.IsEnabled = leftHistory.Count > 0;
-            RightBackButton.IsEnabled = rightHistory.Count > 0;
+            rightPane.NavigateBack();
         }
 
         private void List_RightClick(object sender, MouseButtonEventArgs e)
@@ -191,6 +139,154 @@ namespace DamnSimpleFileManager
                     MessageBox.Show($"Не удалось открыть контекстное меню: {ex.Message}");
                 }
             }
+        }
+
+        private FilePane ActivePane => LeftList.IsKeyboardFocusWithin ? leftPane : rightPane;
+        private FilePane InactivePane => LeftList.IsKeyboardFocusWithin ? rightPane : leftPane;
+
+        private void CreateFolder_Click(object sender, RoutedEventArgs e)
+        {
+            var pane = ActivePane;
+            string name = Interaction.InputBox("Имя папки:", "Создать папку", "Новая папка");
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        private void CreateFile_Click(object sender, RoutedEventArgs e)
+        {
+            var pane = ActivePane;
+            string name = Interaction.InputBox("Имя файла:", "Создать файл", "Новый файл.txt");
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+            var source = ActivePane;
+            var dest = InactivePane;
+            foreach (FileSystemInfo item in source.List.SelectedItems)
+            {
+                string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
+                try
+                {
+                    if (item is FileInfo)
+                    {
+                        File.Copy(item.FullName, target, true);
+                    }
+                    else if (item is DirectoryInfo)
+                    {
+                        CopyDirectory(item.FullName, target);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка копирования: {ex.Message}");
+                }
+            }
+            dest.LoadDirectory(dest.CurrentDir);
+        }
+
+        private void Move_Click(object sender, RoutedEventArgs e)
+        {
+            var source = ActivePane;
+            var dest = InactivePane;
+            foreach (FileSystemInfo item in source.List.SelectedItems)
+            {
+                string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
+                try
+                {
+                    if (item is FileInfo)
+                    {
+                        File.Move(item.FullName, target, true);
+                    }
+                    else if (item is DirectoryInfo)
+                    {
+                        Directory.Move(item.FullName, target, true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка перемещения: {ex.Message}");
+                }
+            }
+            source.LoadDirectory(source.CurrentDir);
+            dest.LoadDirectory(dest.CurrentDir);
+        }
+
+        private void Rename_Click(object sender, RoutedEventArgs e)
+        {
+            var pane = ActivePane;
+            if (pane.List.SelectedItems.Count == 1 && pane.List.SelectedItem is FileSystemInfo item)
+            {
+                string name = Interaction.InputBox("Новое имя:", "Переименование", item.Name);
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    string target = Path.Combine(pane.CurrentDir.FullName, name);
+                    try
+                    {
+                        if (item is FileInfo)
+                        {
+                            File.Move(item.FullName, target, true);
+                        }
+                        else if (item is DirectoryInfo)
+                        {
+                            Directory.Move(item.FullName, target, true);
+                        }
+                        pane.LoadDirectory(pane.CurrentDir);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка переименования: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var pane = ActivePane;
+            if (pane.List.SelectedItems.Count == 0) return;
+            if (MessageBox.Show("Удалить выбранные элементы?", "Удаление", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                foreach (FileSystemInfo item in pane.List.SelectedItems)
+                {
+                    try
+                    {
+                        if (item is FileInfo)
+                            File.Delete(item.FullName);
+                        else if (item is DirectoryInfo)
+                            Directory.Delete(item.FullName, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                    }
+                }
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        private void ShowHidden_Checked(object sender, RoutedEventArgs e)
+        {
+            leftPane.ShowHidden = ShowHiddenCheck.IsChecked == true;
+            rightPane.ShowHidden = ShowHiddenCheck.IsChecked == true;
+            leftPane.LoadDirectory(leftPane.CurrentDir);
+            rightPane.LoadDirectory(rightPane.CurrentDir);
+        }
+
+        private static void CopyDirectory(string sourceDir, string destinationDir)
+        {
+            Directory.CreateDirectory(destinationDir);
+            foreach (var file in Directory.GetFiles(sourceDir))
+                File.Copy(file, Path.Combine(destinationDir, Path.GetFileName(file)), true);
+            foreach (var directory in Directory.GetDirectories(sourceDir))
+                CopyDirectory(directory, Path.Combine(destinationDir, Path.GetFileName(directory)));
         }
     }
 }
