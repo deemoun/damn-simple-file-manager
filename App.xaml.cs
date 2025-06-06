@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace FileManager
+namespace DamnSimpleFileManager
 {
     /// <summary>
     /// Interaction logic for App.xaml
