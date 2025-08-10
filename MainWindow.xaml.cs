@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,40 +45,43 @@ namespace DamnSimpleFileManager
 
         private void OpenSelected(FilePane pane)
         {
-            if (pane.List.SelectedItem is DirectoryInfo dir)
+            foreach (FileSystemInfo item in pane.List.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
-                if (dir.Exists)
+                if (item is DirectoryInfo dir)
                 {
-                    try
+                    if (dir.Exists)
                     {
-                        pane.NavigateInto(dir);
+                        try
+                        {
+                            pane.NavigateInto(dir);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Папка не найдена: {dir.FullName}");
-                }
-            }
-            else if (pane.List.SelectedItem is FileInfo file)
-            {
-                if (file.Exists)
-                {
-                    try
-                    {
-                        Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Не удалось открыть файл: {ex.Message}");
+                        MessageBox.Show($"Папка не найдена: {dir.FullName}");
                     }
                 }
-                else
+                else if (item is FileInfo file)
                 {
-                    MessageBox.Show($"Файл не найден: {file.FullName}");
+                    if (file.Exists)
+                    {
+                        try
+                        {
+                            Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Не удалось открыть файл: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Файл не найден: {file.FullName}");
+                    }
                 }
             }
         }
@@ -182,7 +186,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            if (source.List.SelectedItem is FileSystemInfo item)
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -208,7 +212,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            if (source.List.SelectedItem is FileSystemInfo item)
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -231,6 +235,19 @@ namespace DamnSimpleFileManager
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка перемещения: {ex.Message}");
+                }
+            }
+        }
+
+        private void List_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                var list = (ListView)sender;
+                if (Keyboard.FocusedElement is ListViewItem item && list.ItemContainerGenerator.IndexFromContainer(item) >= 0)
+                {
+                    item.IsSelected = !item.IsSelected;
+                    e.Handled = true;
                 }
             }
         }
