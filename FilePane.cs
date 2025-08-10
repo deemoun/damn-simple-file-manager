@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,16 +12,18 @@ namespace DamnSimpleFileManager
         public TextBlock PathText { get; }
         public ComboBox DriveSelector { get; }
         public Button BackButton { get; }
+        public TextBlock SpaceText { get; }
 
         public DirectoryInfo CurrentDir { get; private set; } = null!;
         private readonly Stack<DirectoryInfo> history = new();
 
-        public FilePane(ListView list, TextBlock pathText, ComboBox driveSelector, Button backButton)
+        public FilePane(ListView list, TextBlock pathText, ComboBox driveSelector, Button backButton, TextBlock spaceText)
         {
             List = list;
             PathText = pathText;
             DriveSelector = driveSelector;
             BackButton = backButton;
+            SpaceText = spaceText;
         }
 
         public void PopulateDrives()
@@ -59,6 +62,30 @@ namespace DamnSimpleFileManager
             foreach (var f in dir.GetFiles()) items.Add(f);
             List.ItemsSource = items;
             PathText.Text = dir.FullName;
+
+            UpdateDriveInfo(dir);
+        }
+
+        private void UpdateDriveInfo(DirectoryInfo dir)
+        {
+            var drive = new DriveInfo(dir.Root.FullName);
+            long total = drive.TotalSize;
+            long free = drive.TotalFreeSpace;
+            long used = total - free;
+            SpaceText.Text = $"Total: {FormatBytes(total)}  Used: {FormatBytes(used)}  Free: {FormatBytes(free)}";
+        }
+
+        private static string FormatBytes(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len /= 1024;
+            }
+            return $"{len:0.##} {sizes[order]}";
         }
 
         public void NavigateInto(DirectoryInfo dir)

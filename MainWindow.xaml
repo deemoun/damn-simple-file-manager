@@ -15,6 +15,8 @@
             <!-- Пути -->
             <RowDefinition Height="*"/>
             <!-- Списки -->
+            <RowDefinition Height="Auto"/>
+            <!-- Информация о диске -->
         </Grid.RowDefinitions>
 
         <!-- Диски -->
@@ -83,6 +85,18 @@
             <Label Grid.Column="1" Width="10"/>
             <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name"
                       MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+        </Grid>
+
+        <!-- Информация о диске -->
+        <Grid Grid.Row="5" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0" />
+            <Label Grid.Column="1" Width="10"/>
+            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right"/>
         </Grid>
     </Grid>
 </Window>
