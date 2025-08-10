@@ -46,20 +46,32 @@
         </Grid>
 
         <!-- Операции -->
-        <Grid Grid.Row="2" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button x:Name="CreateFolderButton" Grid.Column="1" Content="Создать папку" Width="100" Height="30" Click="CreateFolder_Click"/>
-            <Button x:Name="CreateFileButton" Grid.Column="2" Content="Создать файл" Width="100" Height="30" Margin="5,0" Click="CreateFile_Click"/>
-            <Button x:Name="CopyButton" Grid.Column="3" Content="Копировать" Width="100" Height="30" Margin="5,0" Click="Copy_Click"/>
-            <Button x:Name="MoveButton" Grid.Column="4" Content="Переместить" Width="100" Height="30" Margin="5,0" Click="Move_Click"/>
-        </Grid>
+        <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📁" Margin="0,0,5,0"/>
+                    <TextBlock Text="Создать папку"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📄" Margin="0,0,5,0"/>
+                    <TextBlock Text="Создать файл"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📋" Margin="0,0,5,0"/>
+                    <TextBlock Text="Копировать"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="MoveButton" Width="110" Height="30" Click="Move_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📂" Margin="0,0,5,0"/>
+                    <TextBlock Text="Переместить"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
 
         <!-- Текущие пути -->
         <Grid Grid.Row="3" Margin="5">
