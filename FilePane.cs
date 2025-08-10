@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace DamnSimpleFileManager
@@ -16,6 +17,7 @@ namespace DamnSimpleFileManager
 
         public DirectoryInfo CurrentDir { get; private set; } = null!;
         private readonly Stack<DirectoryInfo> history = new();
+        private FileSystemWatcher? watcher;
 
         public FilePane(ListView list, TextBlock pathText, ComboBox driveSelector, Button backButton, TextBlock spaceText)
         {
@@ -55,8 +57,13 @@ namespace DamnSimpleFileManager
             UpdateBackButton();
         }
 
-        public void LoadDirectory(DirectoryInfo dir)
+        public void LoadDirectory(DirectoryInfo dir, bool updateWatcher = true)
         {
+            if (updateWatcher)
+            {
+                SetupWatcher(dir);
+            }
+
             var items = new ObservableCollection<FileSystemInfo>();
             foreach (var d in dir.GetDirectories()) items.Add(d);
             foreach (var f in dir.GetFiles()) items.Add(f);
@@ -64,6 +71,33 @@ namespace DamnSimpleFileManager
             PathText.Text = dir.FullName;
 
             UpdateDriveInfo(dir);
+        }
+
+        private void SetupWatcher(DirectoryInfo dir)
+        {
+            watcher?.Dispose();
+            watcher = new FileSystemWatcher(dir.FullName)
+            {
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite,
+                IncludeSubdirectories = false,
+                EnableRaisingEvents = true
+            };
+
+            watcher.Changed += OnDirectoryChanged;
+            watcher.Created += OnDirectoryChanged;
+            watcher.Deleted += OnDirectoryChanged;
+            watcher.Renamed += OnDirectoryChanged;
+        }
+
+        private void OnDirectoryChanged(object sender, FileSystemEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (CurrentDir.Exists)
+                {
+                    LoadDirectory(CurrentDir, false);
+                }
+            });
         }
 
         private void UpdateDriveInfo(DirectoryInfo dir)
