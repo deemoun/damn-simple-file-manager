@@ -36,18 +36,51 @@ namespace DamnSimpleFileManager
         }
 
 
+        private void OpenSelected(FilePane pane)
+        {
+            if (pane.List.SelectedItem is DirectoryInfo dir)
+            {
+                if (dir.Exists)
+                {
+                    try
+                    {
+                        pane.NavigateInto(dir);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Папка не найдена: {dir.FullName}");
+                }
+            }
+            else if (pane.List.SelectedItem is FileInfo file)
+            {
+                if (file.Exists)
+                {
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Не удалось открыть файл: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Файл не найден: {file.FullName}");
+                }
+            }
+        }
+
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
             var pane = list == LeftList ? leftPane : rightPane;
-            if (list.SelectedItem is DirectoryInfo dir)
-            {
-                pane.NavigateInto(dir);
-            }
-            else if (list.SelectedItem is FileInfo file)
-            {
-                Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
-            }
+            OpenSelected(pane);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -55,14 +88,7 @@ namespace DamnSimpleFileManager
             if (e.Key == Key.Enter)
             {
                 var pane = LeftList.IsKeyboardFocusWithin ? leftPane : rightPane;
-                if (pane.List.SelectedItem is DirectoryInfo dir)
-                {
-                    pane.NavigateInto(dir);
-                }
-                else if (pane.List.SelectedItem is FileInfo file)
-                {
-                    Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
-                }
+                OpenSelected(pane);
                 e.Handled = true;
             }
             else if (e.Key == Key.Tab)
