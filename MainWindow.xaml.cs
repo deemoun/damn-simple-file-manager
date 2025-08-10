@@ -183,7 +183,11 @@ namespace DamnSimpleFileManager
                     }
                     else if (item is DirectoryInfo)
                     {
-                        Directory.Move(item.FullName, target, true);
+                        if (Directory.Exists(target))
+                        {
+                            Directory.Delete(target, true);
+                        }
+                        Directory.Move(item.FullName, target);
                     }
                     source.LoadDirectory(source.CurrentDir);
                     dest.LoadDirectory(dest.CurrentDir);
