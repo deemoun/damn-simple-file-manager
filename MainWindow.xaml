@@ -80,11 +80,11 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name"
-                      MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+            <ListView x:Name="LeftList" Grid.Column="0" DisplayMemberPath="Name" SelectionMode="Extended"
+                      PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <Label Grid.Column="1" Width="10"/>
-            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name"
-                      MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+            <ListView x:Name="RightList" Grid.Column="2" DisplayMemberPath="Name" SelectionMode="Extended"
+                      PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
 
         <!-- Информация о диске -->
