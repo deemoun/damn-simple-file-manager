@@ -19,8 +19,8 @@ namespace DamnSimpleFileManager
         public MainWindow()
         {
             InitializeComponent();
-            leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton);
-            rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton);
+            leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftSpaceText);
+            rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightSpaceText);
             PopulateDriveSelectors();
 
             activePane = leftPane;
