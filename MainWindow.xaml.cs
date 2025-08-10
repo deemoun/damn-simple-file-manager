@@ -14,6 +14,7 @@ namespace DamnSimpleFileManager
     {
         private readonly FilePane leftPane;
         private readonly FilePane rightPane;
+        private FilePane activePane;
 
         public MainWindow()
         {
@@ -21,6 +22,11 @@ namespace DamnSimpleFileManager
             leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton);
             rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton);
             PopulateDriveSelectors();
+
+            activePane = leftPane;
+            LeftList.Focus();
+            LeftList.GotFocus += List_GotFocus;
+            RightList.GotFocus += List_GotFocus;
         }
 
         private void PopulateDriveSelectors()
@@ -87,13 +93,12 @@ namespace DamnSimpleFileManager
         {
             if (e.Key == Key.Enter)
             {
-                var pane = LeftList.IsKeyboardFocusWithin ? leftPane : rightPane;
-                OpenSelected(pane);
+                OpenSelected(activePane);
                 e.Handled = true;
             }
             else if (e.Key == Key.Tab)
             {
-                if (LeftList.IsKeyboardFocusWithin)
+                if (activePane == leftPane)
                     RightList.Focus();
                 else
                     LeftList.Focus();
@@ -143,8 +148,13 @@ namespace DamnSimpleFileManager
             }
         }
 
-        private FilePane ActivePane => LeftList.IsKeyboardFocusWithin ? leftPane : rightPane;
-        private FilePane InactivePane => LeftList.IsKeyboardFocusWithin ? rightPane : leftPane;
+        private void List_GotFocus(object sender, RoutedEventArgs e)
+        {
+            activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
+        }
+
+        private FilePane ActivePane => activePane;
+        private FilePane InactivePane => activePane == leftPane ? rightPane : leftPane;
 
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
