@@ -65,10 +65,16 @@
                     <TextBlock Text="Копировать"/>
                 </StackPanel>
             </Button>
-            <Button x:Name="MoveButton" Width="110" Height="30" Click="Move_Click">
+            <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📂" Margin="0,0,5,0"/>
                     <TextBlock Text="Переместить"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DeleteButton" Width="110" Height="30" Click="Delete_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🗑️" Margin="0,0,5,0"/>
+                    <TextBlock Text="Удалить"/>
                 </StackPanel>
             </Button>
         </StackPanel>

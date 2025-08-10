@@ -239,6 +239,43 @@ namespace DamnSimpleFileManager
             }
         }
 
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var pane = ActivePane;
+            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().ToList();
+            if (selectedItems.Count == 0)
+                return;
+
+            var result = MessageBox.Show(
+                $"Удалить выбранные {selectedItems.Count} объект(ов)?",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            foreach (var item in selectedItems)
+            {
+                try
+                {
+                    if (item is FileInfo)
+                    {
+                        File.Delete(item.FullName);
+                    }
+                    else if (item is DirectoryInfo)
+                    {
+                        Directory.Delete(item.FullName, true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                }
+            }
+
+            pane.LoadDirectory(pane.CurrentDir);
+        }
+
         private void List_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
