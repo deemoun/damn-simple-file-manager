@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,7 +45,26 @@ namespace DamnSimpleFileManager
         {
             foreach (FileSystemInfo item in pane.List.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
-                if (item is DirectoryInfo dir)
+                if (item is ParentDirectoryInfo parent)
+                {
+                    var dir = new DirectoryInfo(parent.FullName);
+                    if (dir.Exists)
+                    {
+                        try
+                        {
+                            pane.NavigateInto(dir);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Папка не найдена: {dir.FullName}");
+                    }
+                }
+                else if (item is DirectoryInfo dir)
                 {
                     if (dir.Exists)
                     {
@@ -139,7 +156,7 @@ namespace DamnSimpleFileManager
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
-            if (list.SelectedItem is FileSystemInfo selectedItem)
+            if (list.SelectedItem is FileSystemInfo selectedItem && selectedItem is not ParentDirectoryInfo)
             {
                 try
                 {
@@ -186,7 +203,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -212,7 +229,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -242,7 +259,7 @@ namespace DamnSimpleFileManager
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             var pane = ActivePane;
-            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().ToList();
+            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
                 return;
 

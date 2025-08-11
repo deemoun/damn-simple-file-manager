@@ -65,6 +65,10 @@ namespace DamnSimpleFileManager
             }
 
             var items = new ObservableCollection<FileSystemInfo>();
+            if (dir.Parent != null)
+            {
+                items.Add(new ParentDirectoryInfo(dir.Parent));
+            }
             foreach (var d in dir.GetDirectories()) items.Add(d);
             foreach (var f in dir.GetFiles()) items.Add(f);
             List.ItemsSource = items;
