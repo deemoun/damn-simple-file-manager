@@ -190,14 +190,24 @@ namespace DamnSimpleFileManager
         private FilePane ActivePane => activePane;
         private FilePane InactivePane => activePane == leftPane ? rightPane : leftPane;
 
+        private static bool ValidateName(string name)
+        {
+            if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                MessageBox.Show(Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
+        }
+
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
             var pane = ActivePane;
             string name = Interaction.InputBox(
                 Localization.Get("Prompt_FolderName"),
                 Localization.Get("Prompt_CreateFolder"),
-                Localization.Get("Default_FolderName"));
-            if (!string.IsNullOrWhiteSpace(name))
+                Localization.Get("Default_FolderName")).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
             {
                 Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
                 pane.LoadDirectory(pane.CurrentDir);
@@ -210,8 +220,8 @@ namespace DamnSimpleFileManager
             string name = Interaction.InputBox(
                 Localization.Get("Prompt_FileName"),
                 Localization.Get("Prompt_CreateFile"),
-                Localization.Get("Default_FileName"));
-            if (!string.IsNullOrWhiteSpace(name))
+                Localization.Get("Default_FileName")).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
             {
                 File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
                 pane.LoadDirectory(pane.CurrentDir);
