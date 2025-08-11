@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace DamnSimpleFileManager
@@ -10,10 +11,25 @@ namespace DamnSimpleFileManager
 
         public static void LoadLanguage(string name)
         {
+            _strings.Clear();
+            if (!TryLoadLanguage(name))
+            {
+                TryLoadLanguage("English");
+            }
+        }
+
+        public static void LoadSystemLanguage()
+        {
+            var language = CultureInfo.CurrentUICulture.EnglishName.Split('(')[0].Trim();
+            LoadLanguage(language);
+        }
+
+        private static bool TryLoadLanguage(string name)
+        {
             var baseDir = AppContext.BaseDirectory;
             var path = Path.Combine(baseDir, "Languages", $"{name}.lang");
             if (!File.Exists(path))
-                return;
+                return false;
 
             foreach (var line in File.ReadAllLines(path))
             {
@@ -25,6 +41,8 @@ namespace DamnSimpleFileManager
                     _strings[parts[0].Trim()] = parts[1].Trim();
                 }
             }
+
+            return true;
         }
 
         public static string Get(string key) => _strings.TryGetValue(key, out var value) ? value : key;

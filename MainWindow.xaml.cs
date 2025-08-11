@@ -18,7 +18,7 @@ namespace DamnSimpleFileManager
         public MainWindow()
         {
             InitializeComponent();
-            Localization.LoadLanguage("English");
+            Localization.LoadSystemLanguage();
             ApplyLocalization();
 
             leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftSpaceText);
