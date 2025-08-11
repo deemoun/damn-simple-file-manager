@@ -1,5 +1,7 @@
 # Damn Simple File Manager
 
+![Damn Simple File Manager](images/app_main.png)
+
 Damn Simple File Manager is a lightweight two-pane file manager for Windows built with WPF. It provides basic file operations such as browsing directories, creating folders and files, copying, moving, and deleting items.
 
 The application is intentionally minimalistic and aims to offer a straightforward file management experience without unnecessary complexity.
