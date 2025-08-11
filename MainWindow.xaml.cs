@@ -139,7 +139,7 @@ namespace DamnSimpleFileManager
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
-            if (list.SelectedItem is FileSystemInfo selectedItem)
+            if (list.SelectedItem is FileSystemInfo selectedItem && selectedItem is not ParentDirectoryInfo)
             {
                 try
                 {
@@ -186,7 +186,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -212,7 +212,7 @@ namespace DamnSimpleFileManager
         {
             var source = ActivePane;
             var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -242,7 +242,7 @@ namespace DamnSimpleFileManager
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             var pane = ActivePane;
-            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().ToList();
+            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
                 return;
 
