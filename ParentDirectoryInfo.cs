@@ -5,13 +5,24 @@ using System.Runtime.Serialization;
 namespace DamnSimpleFileManager
 {
     [Serializable]
-    internal class ParentDirectoryInfo : FileSystemInfo
+    internal sealed class ParentDirectoryInfo : FileSystemInfo
     {
         private readonly DirectoryInfo inner;
 
         public ParentDirectoryInfo(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path cannot be null or empty", nameof(path));
+            }
+
             inner = new DirectoryInfo(path);
+        }
+
+        protected ParentDirectoryInfo(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            var fullName = info.GetString("ParentDirectoryInnerFullName")!;
+            inner = new DirectoryInfo(fullName);
         }
 
         public override string Name => "..";
