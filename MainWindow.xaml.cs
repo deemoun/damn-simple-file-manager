@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,7 +45,26 @@ namespace DamnSimpleFileManager
         {
             foreach (FileSystemInfo item in pane.List.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
-                if (item is DirectoryInfo dir)
+                if (item is ParentDirectoryInfo parent)
+                {
+                    var dir = new DirectoryInfo(parent.FullName);
+                    if (dir.Exists)
+                    {
+                        try
+                        {
+                            pane.NavigateInto(dir);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Папка не найдена: {dir.FullName}");
+                    }
+                }
+                else if (item is DirectoryInfo dir)
                 {
                     if (dir.Exists)
                     {
