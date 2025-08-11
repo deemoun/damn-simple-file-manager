@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 
 namespace DamnSimpleFileManager
 {
+    [Serializable]
     internal class ParentDirectoryInfo : FileSystemInfo
     {
         private readonly DirectoryInfo inner;
@@ -72,7 +73,10 @@ namespace DamnSimpleFileManager
 
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            ((ISerializable)inner).GetObjectData(info, context);
+            // Let the base serialize its state
+            base.GetObjectData(info, context);
+            // Persist the path so this can be reconstructed if deserialized
+            info.AddValue("ParentDirectoryInnerFullName", inner.FullName);
         }
     }
 }
