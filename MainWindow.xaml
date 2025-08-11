@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DamnSimpleFileManager"
-        Title="Damn Simple File Manager 1.0 by Dmitry Yarygin" Height="768" Width="1040"
+        Title="" Height="768" Width="1040"
         PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <local:FileTypeConverter x:Key="FileTypeConverter" />
@@ -64,31 +64,31 @@
             <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📁" Margin="0,0,5,0"/>
-                    <TextBlock Text="Создать папку"/>
+                    <TextBlock x:Name="CreateFolderText"/>
                 </StackPanel>
             </Button>
             <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📄" Margin="0,0,5,0"/>
-                    <TextBlock Text="Создать файл"/>
+                    <TextBlock x:Name="CreateFileText"/>
                 </StackPanel>
             </Button>
             <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📋" Margin="0,0,5,0"/>
-                    <TextBlock Text="Копировать"/>
+                    <TextBlock x:Name="CopyText"/>
                 </StackPanel>
             </Button>
             <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📂" Margin="0,0,5,0"/>
-                    <TextBlock Text="Переместить"/>
+                    <TextBlock x:Name="MoveText"/>
                 </StackPanel>
             </Button>
             <Button x:Name="DeleteButton" Width="110" Height="30" Click="Delete_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🗑️" Margin="0,0,5,0"/>
-                    <TextBlock Text="Удалить"/>
+                    <TextBlock x:Name="DeleteText"/>
                 </StackPanel>
             </Button>
         </StackPanel>

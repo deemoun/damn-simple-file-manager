@@ -10,7 +10,7 @@ namespace DamnSimpleFileManager
         public ParentDirectoryInfo(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
-                throw new ArgumentException("Path cannot be null or empty", nameof(path));
+                throw new ArgumentException(Localization.Get("Exception_PathNull"), nameof(path));
 
             inner = new DirectoryInfo(path);
         }

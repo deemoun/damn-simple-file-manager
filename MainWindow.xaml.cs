@@ -18,6 +18,9 @@ namespace DamnSimpleFileManager
         public MainWindow()
         {
             InitializeComponent();
+            Localization.LoadLanguage("English");
+            ApplyLocalization();
+
             leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftSpaceText);
             rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightSpaceText);
             PopulateDriveSelectors();
@@ -26,6 +29,16 @@ namespace DamnSimpleFileManager
             LeftList.Focus();
             LeftList.GotFocus += List_GotFocus;
             RightList.GotFocus += List_GotFocus;
+        }
+
+        private void ApplyLocalization()
+        {
+            Title = Localization.Get("App_Title");
+            CreateFolderText.Text = Localization.Get("Button_CreateFolder");
+            CreateFileText.Text = Localization.Get("Button_CreateFile");
+            CopyText.Text = Localization.Get("Button_Copy");
+            MoveText.Text = Localization.Get("Button_Move");
+            DeleteText.Text = Localization.Get("Button_Delete");
         }
 
         private void PopulateDriveSelectors()
@@ -56,12 +69,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                            MessageBox.Show(Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"Папка не найдена: {dir.FullName}");
+                        MessageBox.Show(Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
                 else if (item is DirectoryInfo dir)
@@ -74,12 +87,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Не удалось открыть папку: {ex.Message}");
+                            MessageBox.Show(Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"Папка не найдена: {dir.FullName}");
+                        MessageBox.Show(Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
                 else if (item is FileInfo file)
@@ -92,12 +105,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Не удалось открыть файл: {ex.Message}");
+                            MessageBox.Show(Localization.Get("Error_OpenFile", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"Файл не найден: {file.FullName}");
+                        MessageBox.Show(Localization.Get("Error_FileNotFound", file.FullName));
                     }
                 }
             }
@@ -164,7 +177,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Не удалось открыть контекстное меню: {ex.Message}");
+                    MessageBox.Show(Localization.Get("Error_ContextMenu", ex.Message));
                 }
             }
         }
@@ -180,7 +193,10 @@ namespace DamnSimpleFileManager
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
             var pane = ActivePane;
-            string name = Interaction.InputBox("Имя папки:", "Создать папку", "Новая папка");
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FolderName"),
+                Localization.Get("Prompt_CreateFolder"),
+                Localization.Get("Default_FolderName"));
             if (!string.IsNullOrWhiteSpace(name))
             {
                 Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
@@ -191,7 +207,10 @@ namespace DamnSimpleFileManager
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
             var pane = ActivePane;
-            string name = Interaction.InputBox("Имя файла:", "Создать файл", "Новый файл.txt");
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FileName"),
+                Localization.Get("Prompt_CreateFile"),
+                Localization.Get("Default_FileName"));
             if (!string.IsNullOrWhiteSpace(name))
             {
                 File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
@@ -220,7 +239,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка копирования: {ex.Message}");
+                    MessageBox.Show(Localization.Get("Error_Copy", ex.Message));
                 }
             }
         }
@@ -251,7 +270,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка перемещения: {ex.Message}");
+                    MessageBox.Show(Localization.Get("Error_Move", ex.Message));
                 }
             }
         }
@@ -264,8 +283,8 @@ namespace DamnSimpleFileManager
                 return;
 
             var result = MessageBox.Show(
-                $"Удалить выбранные {selectedItems.Count} объект(ов)?",
-                "Подтверждение удаления",
+                Localization.Get("Confirm_Delete", selectedItems.Count),
+                Localization.Get("Confirm_Delete_Title"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes)
@@ -286,7 +305,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                    MessageBox.Show(Localization.Get("Error_Delete", ex.Message));
                 }
             }
 
