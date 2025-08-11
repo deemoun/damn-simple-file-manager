@@ -9,4 +9,10 @@
     <ApplicationIcon>Resources/dsfm.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="Languages\*.lang">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

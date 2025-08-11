@@ -18,7 +18,7 @@ namespace DamnSimpleFileManager
             }
             if (value is FileInfo fi)
             {
-                return string.IsNullOrEmpty(fi.Extension) ? "FILE" : fi.Extension.TrimStart('.').ToUpperInvariant();
+                return string.IsNullOrEmpty(fi.Extension) ? Localization.Get("FileType_Default") : fi.Extension.TrimStart('.').ToUpperInvariant();
             }
             return string.Empty;
         }

@@ -110,12 +110,16 @@ namespace DamnSimpleFileManager
             long total = drive.TotalSize;
             long free = drive.TotalFreeSpace;
             long used = total - free;
-            SpaceText.Text = $"Total: {FormatBytes(total)}  Used: {FormatBytes(used)}  Free: {FormatBytes(free)}";
+            SpaceText.Text = Localization.Get(
+                "DriveInfo_Format",
+                FormatBytes(total),
+                FormatBytes(used),
+                FormatBytes(free));
         }
 
         private static string FormatBytes(long bytes)
         {
-            string[] sizes = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            var sizes = Localization.Get("SizeUnits").Split(',');
             double len = bytes;
             int order = 0;
             while (len >= 1024 && order < sizes.Length - 1)
