@@ -12,6 +12,12 @@ The application is intentionally minimalistic and aims to offer a straightforwar
 - Keyboard support and simple navigation
 - Create, copy, move, and delete files or folders
 - Displays drive information and available space
+- Configurable behavior via `dsfm.ini`
+
+## Configuration
+
+`dsfm.ini` is created automatically next to the application.  
+Set `hidden_files=false` to hide files and folders marked as hidden.
 
 ## Building
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -69,8 +70,10 @@ namespace DamnSimpleFileManager
             {
                 items.Add(new ParentDirectoryInfo(dir.Parent.FullName));
             }
-            foreach (var d in dir.GetDirectories()) items.Add(d);
-            foreach (var f in dir.GetFiles()) items.Add(f);
+            foreach (var d in dir.GetDirectories().Where(d => Settings.ShowHiddenFiles || !d.Attributes.HasFlag(FileAttributes.Hidden)))
+                items.Add(d);
+            foreach (var f in dir.GetFiles().Where(f => Settings.ShowHiddenFiles || !f.Attributes.HasFlag(FileAttributes.Hidden)))
+                items.Add(f);
             List.ItemsSource = items;
             PathText.Text = dir.FullName;
 
