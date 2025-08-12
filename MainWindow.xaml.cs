@@ -293,18 +293,7 @@ namespace DamnSimpleFileManager
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
                 {
-                    if (item is FileInfo)
-                    {
-                        File.Move(item.FullName, target, true);
-                    }
-                    else if (item is DirectoryInfo)
-                    {
-                        if (Directory.Exists(target))
-                        {
-                            Directory.Delete(target, true);
-                        }
-                        Directory.Move(item.FullName, target);
-                    }
+                    MoveWithFallback(item.FullName, target);
                     source.LoadDirectory(source.CurrentDir);
                     dest.LoadDirectory(dest.CurrentDir);
                 }
@@ -372,6 +361,50 @@ namespace DamnSimpleFileManager
                 File.Copy(file, Path.Combine(destinationDir, Path.GetFileName(file)), true);
             foreach (var directory in Directory.GetDirectories(sourceDir))
                 CopyDirectory(directory, Path.Combine(destinationDir, Path.GetFileName(directory)));
+        }
+
+        private static void MoveWithFallback(string source, string destination)
+        {
+            try
+            {
+                if (File.Exists(source))
+                {
+                    File.Move(source, destination, true);
+                }
+                else if (Directory.Exists(source))
+                {
+                    if (Directory.Exists(destination))
+                    {
+                        Directory.Delete(destination, true);
+                    }
+                    Directory.Move(source, destination);
+                }
+                else
+                {
+                    throw new FileNotFoundException("Source does not exist", source);
+                }
+            }
+            catch (IOException)
+            {
+                if (File.Exists(source))
+                {
+                    File.Copy(source, destination, true);
+                    File.Delete(source);
+                }
+                else if (Directory.Exists(source))
+                {
+                    if (Directory.Exists(destination))
+                    {
+                        Directory.Delete(destination, true);
+                    }
+                    CopyDirectory(source, destination);
+                    Directory.Delete(source, true);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }
