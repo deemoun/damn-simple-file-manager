@@ -69,6 +69,7 @@ namespace DamnSimpleFileManager
             return Directory.GetFiles(dir, "*.lang")
                 .Select(Path.GetFileNameWithoutExtension)
                 .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n!)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
         }
     }
