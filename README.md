@@ -13,6 +13,13 @@ The application is intentionally minimalistic and aims to offer a straightforwar
 - Create, copy, move, and delete files or folders
 - Displays drive information and available space
 
+## Keyboard Shortcuts
+
+- **F5** – Copy selected files or folders to the opposite pane
+- **F7** – Create a new folder
+- **Shift+F7** – Create a new file
+- **F8** – Delete selected files or folders (with confirmation)
+
 ## Building
 
 This project targets .NET 9 and uses WPF. To build the application, run:

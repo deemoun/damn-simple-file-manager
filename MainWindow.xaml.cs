@@ -139,6 +139,24 @@ namespace DamnSimpleFileManager
                     LeftList.Focus();
                 e.Handled = true;
             }
+            else if (e.Key == Key.F5)
+            {
+                Copy_Click(null, null);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F7)
+            {
+                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                    CreateFile_Click(null, null);
+                else
+                    CreateFolder_Click(null, null);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F8)
+            {
+                Delete_Click(null, null);
+                e.Handled = true;
+            }
         }
 
         private void OpenTerminal_Click(object sender, RoutedEventArgs e)
