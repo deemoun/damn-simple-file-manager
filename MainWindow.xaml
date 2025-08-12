@@ -20,6 +20,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Меню -->
+            <RowDefinition Height="Auto"/>
             <!-- Диски -->
             <RowDefinition Height="Auto"/>
             <!-- Назад -->
@@ -33,8 +35,27 @@
             <!-- Информация о диске -->
         </Grid.RowDefinitions>
 
+        <!-- Меню -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Folder" Click="CreateFolder_Click"/>
+                <MenuItem Header="New _File" Click="CreateFile_Click"/>
+                <Separator/>
+                <MenuItem Header="_Copy" Click="Copy_Click"/>
+                <MenuItem Header="_Move" Click="Move_Click"/>
+                <MenuItem Header="_Delete" Click="Delete_Click"/>
+                <Separator/>
+                <MenuItem Header="_Open Terminal" Click="OpenTerminal_Click"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+
         <!-- Диски -->
-        <Grid Grid.Row="0" Margin="5">
+        <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -46,7 +67,7 @@
         </Grid>
 
         <!-- Кнопки Назад -->
-        <Grid Grid.Row="1" Margin="5">
+        <Grid Grid.Row="2" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -60,7 +81,7 @@
         </Grid>
 
         <!-- Операции -->
-        <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
+        <StackPanel Grid.Row="3" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📁" Margin="0,0,5,0"/>
@@ -100,7 +121,7 @@
         </StackPanel>
 
         <!-- Текущие пути -->
-        <Grid Grid.Row="3" Margin="5">
+        <Grid Grid.Row="4" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -112,7 +133,7 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -126,7 +147,7 @@
         </Grid>
 
         <!-- Информация о диске -->
-        <Grid Grid.Row="5" Margin="5">
+        <Grid Grid.Row="6" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

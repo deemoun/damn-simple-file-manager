@@ -1,0 +1,12 @@
+<Window x:Class="DamnSimpleFileManager.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About" Height="200" Width="300">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Damn Simple File Manager" FontWeight="Bold" FontSize="16" TextAlignment="Center" Margin="0,0,0,10"/>
+            <TextBlock Text="A simple file manager built with WPF." TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,20"/>
+            <Button Content="OK" Width="80" Height="30" HorizontalAlignment="Center" Click="Close_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
