@@ -6,7 +6,8 @@
     <Grid>
         <StackPanel Margin="10">
             <TextBlock Text="Damn Simple File Manager" FontWeight="Bold" FontSize="16" TextAlignment="Center" Margin="0,0,0,10"/>
-            <TextBlock Text="A simple file manager built with WPF." TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,20"/>
+            <TextBlock Text="A simple file manager built with love" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,5"/>
+            <TextBlock Text="Created by Dmitry Yarygin" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,20"/>
             <Button Content="OK" Width="80" Height="30" HorizontalAlignment="Center" Click="Close_Click"/>
         </StackPanel>
     </Grid>
