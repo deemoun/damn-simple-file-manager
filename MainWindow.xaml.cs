@@ -144,6 +144,11 @@ namespace DamnSimpleFileManager
                 Copy_Click(null, null);
                 e.Handled = true;
             }
+            else if (e.Key == Key.F6)
+            {
+                Move_Click(null, null);
+                e.Handled = true;
+            }
             else if (e.Key == Key.F7)
             {
                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
