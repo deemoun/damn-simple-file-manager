@@ -16,8 +16,10 @@ The application is intentionally minimalistic and aims to offer a straightforwar
 
 ## Configuration
 
-`dsfm.ini` is created automatically next to the application.  
+`dsfm.ini` is created automatically next to the application.
 Set `hidden_files=false` to hide files and folders marked as hidden.
+Set `copy_confirmation=false` to copy files and folders without confirmation.
+Set `move_confirmation=false` to move files and folders without confirmation.
 
 ## Keyboard Shortcuts
 
