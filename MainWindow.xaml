@@ -85,10 +85,16 @@
                     <TextBlock x:Name="MoveText"/>
                 </StackPanel>
             </Button>
-            <Button x:Name="DeleteButton" Width="110" Height="30" Click="Delete_Click">
+            <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🗑️" Margin="0,0,5,0"/>
                     <TextBlock x:Name="DeleteText"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="💻" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="TerminalText"/>
                 </StackPanel>
             </Button>
         </StackPanel>
