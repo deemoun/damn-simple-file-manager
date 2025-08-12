@@ -6,7 +6,7 @@ using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Services
 {
-    public class FileOperationsService
+    internal class FileOperationsService
     {
         public void Copy(FilePane source, FilePane dest, Window owner)
         {
