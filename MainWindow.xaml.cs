@@ -70,12 +70,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(Localization.Get("Error_OpenFolder", ex.Message));
+                            MessageBox.Show(this, Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show(Localization.Get("Error_FolderNotFound", dir.FullName));
+                        MessageBox.Show(this, Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
                 else if (item is DirectoryInfo dir)
@@ -88,12 +88,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(Localization.Get("Error_OpenFolder", ex.Message));
+                            MessageBox.Show(this, Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show(Localization.Get("Error_FolderNotFound", dir.FullName));
+                        MessageBox.Show(this, Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
                 else if (item is FileInfo file)
@@ -106,12 +106,12 @@ namespace DamnSimpleFileManager
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(Localization.Get("Error_OpenFile", ex.Message));
+                            MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
                         }
                     }
                     else
                     {
-                        MessageBox.Show(Localization.Get("Error_FileNotFound", file.FullName));
+                        MessageBox.Show(this, Localization.Get("Error_FileNotFound", file.FullName));
                     }
                 }
             }
@@ -176,7 +176,7 @@ namespace DamnSimpleFileManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Localization.Get("Error_OpenTerminal", ex.Message));
+                MessageBox.Show(this, Localization.Get("Error_OpenTerminal", ex.Message));
             }
         }
 
@@ -231,7 +231,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(Localization.Get("Error_ContextMenu", ex.Message));
+                    MessageBox.Show(this, Localization.Get("Error_ContextMenu", ex.Message));
                 }
             }
         }
@@ -248,7 +248,7 @@ namespace DamnSimpleFileManager
         {
             if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
-                MessageBox.Show(Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Application.Current.MainWindow!, Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             return true;
@@ -260,7 +260,9 @@ namespace DamnSimpleFileManager
             string name = Interaction.InputBox(
                 Localization.Get("Prompt_FolderName"),
                 Localization.Get("Prompt_CreateFolder"),
-                Localization.Get("Default_FolderName")).Trim();
+                Localization.Get("Default_FolderName"),
+                (int)(Left + (ActualWidth - 300) / 2),
+                (int)(Top + (ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
             {
                 Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
@@ -274,7 +276,9 @@ namespace DamnSimpleFileManager
             string name = Interaction.InputBox(
                 Localization.Get("Prompt_FileName"),
                 Localization.Get("Prompt_CreateFile"),
-                Localization.Get("Default_FileName")).Trim();
+                Localization.Get("Default_FileName"),
+                (int)(Left + (ActualWidth - 300) / 2),
+                (int)(Top + (ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
             {
                 File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
@@ -294,6 +298,7 @@ namespace DamnSimpleFileManager
                     if (Settings.CopyConfirmation)
                     {
                         var result = MessageBox.Show(
+                            this,
                             Localization.Get("Confirm_Copy", item.FullName, target),
                             Localization.Get("Confirm_Copy_Title"),
                             MessageBoxButton.YesNo,
@@ -314,7 +319,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(Localization.Get("Error_Copy", ex.Message));
+                    MessageBox.Show(this, Localization.Get("Error_Copy", ex.Message));
                 }
             }
         }
@@ -331,6 +336,7 @@ namespace DamnSimpleFileManager
                     if (Settings.MoveConfirmation)
                     {
                         var result = MessageBox.Show(
+                            this,
                             Localization.Get("Confirm_Move", item.FullName, target),
                             Localization.Get("Confirm_Move_Title"),
                             MessageBoxButton.YesNo,
@@ -345,7 +351,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(Localization.Get("Error_Move", ex.Message));
+                    MessageBox.Show(this, Localization.Get("Error_Move", ex.Message));
                 }
             }
         }
@@ -358,6 +364,7 @@ namespace DamnSimpleFileManager
                 return;
 
             var result = MessageBox.Show(
+                this,
                 Localization.Get("Confirm_Delete", selectedItems.Count),
                 Localization.Get("Confirm_Delete_Title"),
                 MessageBoxButton.YesNo,
@@ -380,7 +387,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(Localization.Get("Error_Delete", ex.Message));
+                    MessageBox.Show(this, Localization.Get("Error_Delete", ex.Message));
                 }
             }
 
