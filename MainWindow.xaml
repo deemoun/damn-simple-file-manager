@@ -6,13 +6,16 @@
         PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <local:FileTypeConverter x:Key="FileTypeConverter" />
+        <local:FileForegroundConverter x:Key="FileForegroundConverter" />
         <DataTemplate x:Key="FileItemTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}}" Width="50" Margin="0,0,5,0" />
+                <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}}"
+                           Width="50" Margin="0,0,5,0"
+                           Foreground="{Binding Converter={StaticResource FileForegroundConverter}}" />
                 <TextBlock Grid.Column="1" Text="{Binding Name}" />
             </Grid>
         </DataTemplate>
