@@ -180,6 +180,20 @@ namespace DamnSimpleFileManager
             }
         }
 
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var about = new AboutWindow
+            {
+                Owner = this
+            };
+            about.ShowDialog();
+        }
+
         private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LeftDriveSelector.SelectedItem is string path)
