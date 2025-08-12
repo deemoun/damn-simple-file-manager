@@ -14,7 +14,7 @@ namespace DamnSimpleFileManager
         {
             if (value is DirectoryInfo)
             {
-                return "📁"; // folder icon
+                return "🗂"; // folder icon with improved visibility
             }
             if (value is FileInfo fi)
             {
