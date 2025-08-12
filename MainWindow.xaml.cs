@@ -39,6 +39,7 @@ namespace DamnSimpleFileManager
             CopyText.Text = Localization.Get("Button_Copy");
             MoveText.Text = Localization.Get("Button_Move");
             DeleteText.Text = Localization.Get("Button_Delete");
+            TerminalText.Text = Localization.Get("Button_OpenTerminal");
         }
 
         private void PopulateDriveSelectors()
@@ -137,6 +138,22 @@ namespace DamnSimpleFileManager
                 else
                     LeftList.Focus();
                 e.Handled = true;
+            }
+        }
+
+        private void OpenTerminal_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("powershell.exe")
+                {
+                    WorkingDirectory = activePane.CurrentDir.FullName,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Localization.Get("Error_OpenTerminal", ex.Message));
             }
         }
 
