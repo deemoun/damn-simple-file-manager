@@ -2,12 +2,43 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Microsoft.VisualBasic;
 using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Services
 {
     public class FileOperationsService
     {
+        public void CreateFolder(FilePane pane, Window owner)
+        {
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FolderName"),
+                Localization.Get("Prompt_CreateFolder"),
+                Localization.Get("Default_FolderName"),
+                (int)(owner.Left + (owner.ActualWidth - 300) / 2),
+                (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
+            {
+                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        public void CreateFile(FilePane pane, Window owner)
+        {
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FileName"),
+                Localization.Get("Prompt_CreateFile"),
+                Localization.Get("Default_FileName"),
+                (int)(owner.Left + (owner.ActualWidth - 300) / 2),
+                (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
+            {
+                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
         public void Copy(FilePane source, FilePane dest, Window owner)
         {
             foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
@@ -162,6 +193,16 @@ namespace DamnSimpleFileManager.Services
                     throw;
                 }
             }
+        }
+
+        private static bool ValidateName(string name, Window owner)
+        {
+            if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                MessageBox.Show(owner, Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
         }
     }
 }
