@@ -277,6 +277,17 @@ namespace DamnSimpleFileManager
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
                 {
+                    if (Settings.CopyConfirmation)
+                    {
+                        var result = MessageBox.Show(
+                            Localization.Get("Confirm_Copy", item.FullName, target),
+                            Localization.Get("Confirm_Copy_Title"),
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                        if (result != MessageBoxResult.Yes)
+                            continue;
+                    }
+
                     if (item is FileInfo)
                     {
                         File.Copy(item.FullName, target, true);
@@ -303,6 +314,17 @@ namespace DamnSimpleFileManager
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
                 {
+                    if (Settings.MoveConfirmation)
+                    {
+                        var result = MessageBox.Show(
+                            Localization.Get("Confirm_Move", item.FullName, target),
+                            Localization.Get("Confirm_Move_Title"),
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                        if (result != MessageBoxResult.Yes)
+                            continue;
+                    }
+
                     MoveWithFallback(item.FullName, target);
                     source.LoadDirectory(source.CurrentDir);
                     dest.LoadDirectory(dest.CurrentDir);

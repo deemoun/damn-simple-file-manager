@@ -14,6 +14,16 @@ namespace DamnSimpleFileManager
                 ? value.Equals("true", StringComparison.OrdinalIgnoreCase)
                 : true;
 
+        public static bool CopyConfirmation =>
+            Values.TryGetValue("copy_confirmation", out var value)
+                ? value.Equals("true", StringComparison.OrdinalIgnoreCase)
+                : true;
+
+        public static bool MoveConfirmation =>
+            Values.TryGetValue("move_confirmation", out var value)
+                ? value.Equals("true", StringComparison.OrdinalIgnoreCase)
+                : true;
+
         public static void Load()
         {
             Values.Clear();
@@ -29,11 +39,24 @@ namespace DamnSimpleFileManager
                 }
             }
 
+            var changed = false;
             if (!Values.ContainsKey("hidden_files"))
             {
                 Values["hidden_files"] = "true";
-                Save();
+                changed = true;
             }
+            if (!Values.ContainsKey("copy_confirmation"))
+            {
+                Values["copy_confirmation"] = "true";
+                changed = true;
+            }
+            if (!Values.ContainsKey("move_confirmation"))
+            {
+                Values["move_confirmation"] = "true";
+                changed = true;
+            }
+            if (changed)
+                Save();
         }
 
         public static void Save()
