@@ -22,6 +22,7 @@ Set `hidden_files=false` to hide files and folders marked as hidden.
 ## Keyboard Shortcuts
 
 - **F5** – Copy selected files or folders to the opposite pane
+- **F6** – Move selected files or folders to the opposite pane
 - **F7** – Create a new folder
 - **Shift+F7** – Create a new file
 - **F8** – Delete selected files or folders (with confirmation)
