@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualBasic;
+using DamnSimpleFileManager.Services;
 
 namespace DamnSimpleFileManager
 {
@@ -14,6 +15,7 @@ namespace DamnSimpleFileManager
         private readonly FilePane leftPane;
         private readonly FilePane rightPane;
         private FilePane activePane;
+        private readonly FileOperationsService fileOperationsService;
 
         public MainWindow()
         {
@@ -25,6 +27,7 @@ namespace DamnSimpleFileManager
             rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightSpaceText);
             PopulateDriveSelectors();
 
+            fileOperationsService = new FileOperationsService();
             activePane = leftPane;
             LeftList.Focus();
             LeftList.GotFocus += List_GotFocus;
@@ -288,110 +291,17 @@ namespace DamnSimpleFileManager
 
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
-            var source = ActivePane;
-            var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
-            {
-                string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
-                try
-                {
-                    if (Settings.CopyConfirmation)
-                    {
-                        var result = MessageBox.Show(
-                            this,
-                            Localization.Get("Confirm_Copy", item.FullName, target),
-                            Localization.Get("Confirm_Copy_Title"),
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
-                        if (result != MessageBoxResult.Yes)
-                            continue;
-                    }
-
-                    if (item is FileInfo)
-                    {
-                        File.Copy(item.FullName, target, true);
-                    }
-                    else if (item is DirectoryInfo)
-                    {
-                        CopyDirectory(item.FullName, target);
-                    }
-                    dest.LoadDirectory(dest.CurrentDir);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, Localization.Get("Error_Copy", ex.Message));
-                }
-            }
+            fileOperationsService.Copy(ActivePane, InactivePane, this);
         }
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
-            var source = ActivePane;
-            var dest = InactivePane;
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
-            {
-                string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
-                try
-                {
-                    if (Settings.MoveConfirmation)
-                    {
-                        var result = MessageBox.Show(
-                            this,
-                            Localization.Get("Confirm_Move", item.FullName, target),
-                            Localization.Get("Confirm_Move_Title"),
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
-                        if (result != MessageBoxResult.Yes)
-                            continue;
-                    }
-
-                    MoveWithFallback(item.FullName, target);
-                    source.LoadDirectory(source.CurrentDir);
-                    dest.LoadDirectory(dest.CurrentDir);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, Localization.Get("Error_Move", ex.Message));
-                }
-            }
+            fileOperationsService.Move(ActivePane, InactivePane, this);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            var pane = ActivePane;
-            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
-            if (selectedItems.Count == 0)
-                return;
-
-            var result = MessageBox.Show(
-                this,
-                Localization.Get("Confirm_Delete", selectedItems.Count),
-                Localization.Get("Confirm_Delete_Title"),
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-            if (result != MessageBoxResult.Yes)
-                return;
-
-            foreach (var item in selectedItems)
-            {
-                try
-                {
-                    if (item is FileInfo)
-                    {
-                        File.Delete(item.FullName);
-                    }
-                    else if (item is DirectoryInfo)
-                    {
-                        Directory.Delete(item.FullName, true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, Localization.Get("Error_Delete", ex.Message));
-                }
-            }
-
-            pane.LoadDirectory(pane.CurrentDir);
+            fileOperationsService.Delete(ActivePane, this);
         }
 
         private void List_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -407,57 +317,5 @@ namespace DamnSimpleFileManager
             }
         }
 
-        private static void CopyDirectory(string sourceDir, string destinationDir)
-        {
-            Directory.CreateDirectory(destinationDir);
-            foreach (var file in Directory.GetFiles(sourceDir))
-                File.Copy(file, Path.Combine(destinationDir, Path.GetFileName(file)), true);
-            foreach (var directory in Directory.GetDirectories(sourceDir))
-                CopyDirectory(directory, Path.Combine(destinationDir, Path.GetFileName(directory)));
-        }
-
-        private static void MoveWithFallback(string source, string destination)
-        {
-            try
-            {
-                if (File.Exists(source))
-                {
-                    File.Move(source, destination, true);
-                }
-                else if (Directory.Exists(source))
-                {
-                    if (Directory.Exists(destination))
-                    {
-                        Directory.Delete(destination, true);
-                    }
-                    Directory.Move(source, destination);
-                }
-                else
-                {
-                    throw new FileNotFoundException("Source does not exist", source);
-                }
-            }
-            catch (IOException)
-            {
-                if (File.Exists(source))
-                {
-                    File.Copy(source, destination, true);
-                    File.Delete(source);
-                }
-                else if (Directory.Exists(source))
-                {
-                    if (Directory.Exists(destination))
-                    {
-                        Directory.Delete(destination, true);
-                    }
-                    CopyDirectory(source, destination);
-                    Directory.Delete(source, true);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
     }
 }

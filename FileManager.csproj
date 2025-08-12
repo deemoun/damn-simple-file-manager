@@ -15,4 +15,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Services\FileOperationsService.cs" />
+  </ItemGroup>
+
 </Project>
