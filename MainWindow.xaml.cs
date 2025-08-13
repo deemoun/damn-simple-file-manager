@@ -66,8 +66,8 @@ namespace DamnSimpleFileManager
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
-            CreateFolderText.Text = Localization.Get("Button_CreateFolder") + " (F7)";
-            CreateFileText.Text = Localization.Get("Button_CreateFile") + " (Shift+F7)";
+            CreateFolderText.Text = Localization.Get("Button_CreateFolder");
+            CreateFileText.Text = Localization.Get("Button_CreateFile");
             CopyText.Text = Localization.Get("Button_Copy") + " (F5)";
             MoveText.Text = Localization.Get("Button_Move") + " (F6)";
             DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
