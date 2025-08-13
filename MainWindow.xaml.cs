@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualBasic;
 using DamnSimpleFileManager.Services;
+using DamnSimpleFileManager.Windows;
 
 namespace DamnSimpleFileManager
 {
