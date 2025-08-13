@@ -4,6 +4,7 @@ obj/
 out/
 TestResults/
 *.log
+dsfm.log
 
 ## User-specific files
 *.user
