@@ -37,6 +37,16 @@ namespace DamnSimpleFileManager
         private void ApplyLocalization()
         {
             Title = Localization.Get("App_Title");
+            FileMenu.Header = Localization.Get("Menu_File");
+            NewFolderMenuItem.Header = Localization.Get("Menu_NewFolder");
+            NewFileMenuItem.Header = Localization.Get("Menu_NewFile");
+            CopyMenuItem.Header = Localization.Get("Menu_Copy");
+            MoveMenuItem.Header = Localization.Get("Menu_Move");
+            DeleteMenuItem.Header = Localization.Get("Menu_Delete");
+            OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
+            ExitMenuItem.Header = Localization.Get("Menu_Exit");
+            HelpMenu.Header = Localization.Get("Menu_Help");
+            AboutMenuItem.Header = Localization.Get("Menu_About");
             CreateFolderText.Text = Localization.Get("Button_CreateFolder");
             CreateFileText.Text = Localization.Get("Button_CreateFile");
             CopyText.Text = Localization.Get("Button_Copy");
