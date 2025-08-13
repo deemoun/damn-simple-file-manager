@@ -39,12 +39,12 @@
         <!-- Меню -->
         <Menu Grid.Row="0">
             <MenuItem x:Name="FileMenu" Header="_File">
-                <MenuItem x:Name="NewFolderMenuItem" Header="_New Folder" Click="CreateFolder_Click"/>
-                <MenuItem x:Name="NewFileMenuItem" Header="New _File" Click="CreateFile_Click"/>
+                <MenuItem x:Name="NewFolderMenuItem" Header="_New Folder" Click="CreateFolder_Click" InputGestureText="F7"/>
+                <MenuItem x:Name="NewFileMenuItem" Header="New _File" Click="CreateFile_Click" InputGestureText="Shift+F7"/>
                 <Separator/>
-                <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click"/>
-                <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click"/>
-                <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click"/>
+                <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click" InputGestureText="F5"/>
+                <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click" InputGestureText="F6"/>
+                <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click" InputGestureText="F8"/>
                 <Separator/>
                 <MenuItem x:Name="OpenTerminalMenuItem" Header="_Open Terminal" Click="OpenTerminal_Click"/>
                 <Separator/>
