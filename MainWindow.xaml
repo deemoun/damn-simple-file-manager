@@ -40,20 +40,20 @@
 
         <!-- Меню -->
         <Menu Grid.Row="0">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New Folder" Click="CreateFolder_Click"/>
-                <MenuItem Header="New _File" Click="CreateFile_Click"/>
+            <MenuItem x:Name="FileMenu" Header="_File">
+                <MenuItem x:Name="NewFolderMenuItem" Header="_New Folder" Click="CreateFolder_Click"/>
+                <MenuItem x:Name="NewFileMenuItem" Header="New _File" Click="CreateFile_Click"/>
                 <Separator/>
-                <MenuItem Header="_Copy" Click="Copy_Click"/>
-                <MenuItem Header="_Move" Click="Move_Click"/>
-                <MenuItem Header="_Delete" Click="Delete_Click"/>
+                <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click"/>
+                <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click"/>
+                <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click"/>
                 <Separator/>
-                <MenuItem Header="_Open Terminal" Click="OpenTerminal_Click"/>
+                <MenuItem x:Name="OpenTerminalMenuItem" Header="_Open Terminal" Click="OpenTerminal_Click"/>
                 <Separator/>
-                <MenuItem Header="E_xit" Click="Exit_Click"/>
+                <MenuItem x:Name="ExitMenuItem" Header="E_xit" Click="Exit_Click"/>
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="_About" Click="About_Click"/>
+            <MenuItem x:Name="HelpMenu" Header="_Help">
+                <MenuItem x:Name="AboutMenuItem" Header="_About" Click="About_Click"/>
             </MenuItem>
         </Menu>
 

@@ -1,4 +1,14 @@
 App_Title=Damn Simple File Manager
+Menu_File=_File
+Menu_NewFolder=_New Folder
+Menu_NewFile=New _File
+Menu_Copy=_Copy
+Menu_Move=_Move
+Menu_Delete=_Delete
+Menu_OpenTerminal=_Open Terminal
+Menu_Exit=E_xit
+Menu_Help=_Help
+Menu_About=_About
 Button_CreateFolder=Create Folder
 Button_CreateFile=Create File
 Button_Copy=Copy
