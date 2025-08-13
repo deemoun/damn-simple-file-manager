@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -8,9 +9,9 @@ namespace DamnSimpleFileManager.Services
 {
     internal class FileOperationsService
     {
-        public void Copy(FilePane source, FilePane dest, Window owner)
+        public void Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
+            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -44,9 +45,9 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public void Move(FilePane source, FilePane dest, Window owner)
+        public void Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
+            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -74,9 +75,9 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public void Delete(FilePane pane, Window owner)
+        public void Delete(FilePaneViewModel pane, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
                 return;
 

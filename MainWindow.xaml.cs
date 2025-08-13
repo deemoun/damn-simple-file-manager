@@ -12,9 +12,9 @@ namespace DamnSimpleFileManager
 {
     public partial class MainWindow : Window
     {
-        private readonly FilePane leftPane;
-        private readonly FilePane rightPane;
-        private FilePane activePane;
+        private readonly FilePaneViewModel leftPane;
+        private readonly FilePaneViewModel rightPane;
+        private FilePaneViewModel activePane;
         private readonly FileOperationsService fileOperationsService;
 
         public MainWindow()
@@ -23,8 +23,21 @@ namespace DamnSimpleFileManager
             Localization.LoadSystemLanguage();
             ApplyLocalization();
 
-            leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftSpaceText);
-            rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightSpaceText);
+            leftPane = new FilePaneViewModel();
+            rightPane = new FilePaneViewModel();
+
+            LeftList.DataContext = leftPane;
+            LeftPathText.DataContext = leftPane;
+            LeftDriveSelector.DataContext = leftPane;
+            LeftBackButton.DataContext = leftPane;
+            LeftSpaceText.DataContext = leftPane;
+
+            RightList.DataContext = rightPane;
+            RightPathText.DataContext = rightPane;
+            RightDriveSelector.DataContext = rightPane;
+            RightBackButton.DataContext = rightPane;
+            RightSpaceText.DataContext = rightPane;
+
             PopulateDriveSelectors();
 
             fileOperationsService = new FileOperationsService();
@@ -60,17 +73,15 @@ namespace DamnSimpleFileManager
             leftPane.PopulateDrives();
             rightPane.PopulateDrives();
 
-            if (rightPane.DriveSelector.Items.Count > 1)
+            if (rightPane.Drives.Count > 1)
             {
-                rightPane.DriveSelector.SelectedIndex = 1;
-                rightPane.SetDrive(rightPane.DriveSelector.SelectedItem!.ToString()!);
+                rightPane.SelectedDrive = rightPane.Drives[1];
             }
         }
 
-
-        private void OpenSelected(FilePane pane)
+        private void OpenSelected(FilePaneViewModel pane, ListView list)
         {
-            foreach (FileSystemInfo item in pane.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in list.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
                 if (item is ParentDirectoryInfo parent)
                 {
@@ -134,14 +145,14 @@ namespace DamnSimpleFileManager
         {
             var list = (ListView)sender;
             var pane = list == LeftList ? leftPane : rightPane;
-            OpenSelected(pane);
+            OpenSelected(pane, list);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                OpenSelected(activePane);
+                OpenSelected(activePane, ActiveList);
                 e.Handled = true;
             }
             else if (e.Key == Key.Tab)
@@ -207,32 +218,6 @@ namespace DamnSimpleFileManager
             about.ShowDialog();
         }
 
-        private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LeftDriveSelector.SelectedItem is string path)
-            {
-                leftPane.SetDrive(path);
-            }
-        }
-
-        private void RightDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RightDriveSelector.SelectedItem is string path)
-            {
-                rightPane.SetDrive(path);
-            }
-        }
-
-        private void LeftBack_Click(object sender, RoutedEventArgs e)
-        {
-            leftPane.NavigateBack();
-        }
-
-        private void RightBack_Click(object sender, RoutedEventArgs e)
-        {
-            rightPane.NavigateBack();
-        }
-
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
@@ -254,8 +239,9 @@ namespace DamnSimpleFileManager
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
         }
 
-        private FilePane ActivePane => activePane;
-        private FilePane InactivePane => activePane == leftPane ? rightPane : leftPane;
+        private FilePaneViewModel ActivePane => activePane;
+        private FilePaneViewModel InactivePane => activePane == leftPane ? rightPane : leftPane;
+        private ListView ActiveList => activePane == leftPane ? LeftList : RightList;
 
         private static bool ValidateName(string name)
         {
@@ -301,17 +287,20 @@ namespace DamnSimpleFileManager
 
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Copy(ActivePane, InactivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Copy(ActivePane, InactivePane, items, this);
         }
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Move(ActivePane, InactivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Move(ActivePane, InactivePane, items, this);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Delete(ActivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Delete(ActivePane, items, this);
         }
 
         private void List_PreviewKeyDown(object sender, KeyEventArgs e)
