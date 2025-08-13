@@ -41,6 +41,7 @@
             <MenuItem x:Name="FileMenu" Header="_File">
                 <MenuItem x:Name="NewFolderMenuItem" Header="_New Folder" Click="CreateFolder_Click"/>
                 <MenuItem x:Name="NewFileMenuItem" Header="New _File" Click="CreateFile_Click"/>
+                <MenuItem x:Name="ViewMenuItem" Header="_View" Click="View_Click" InputGestureText="F3" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click" InputGestureText="F5"/>
                 <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click" InputGestureText="F6"/>
@@ -77,6 +78,12 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="📄" Margin="0,0,5,0"/>
                         <TextBlock x:Name="CreateFileText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ViewButton" Width="110" Height="30" Margin="0,0,5,0" Click="View_Click" IsEnabled="False">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="👁️" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="ViewText"/>
                     </StackPanel>
                 </Button>
                 <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
