@@ -15,6 +15,7 @@ namespace DamnSimpleFileManager.Services
             foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
+                Logger.Log($"Copying '{item.FullName}' to '{target}'");
                 try
                 {
                     if (Settings.CopyConfirmation)
@@ -41,6 +42,7 @@ namespace DamnSimpleFileManager.Services
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogError($"Error copying '{item.FullName}' to '{target}'", ex);
                     MessageBox.Show(owner, Localization.Get("Error_Copy", ex.Message));
                 }
             }
@@ -51,6 +53,7 @@ namespace DamnSimpleFileManager.Services
             foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
+                Logger.Log($"Moving '{item.FullName}' to '{target}'");
                 try
                 {
                     if (Settings.MoveConfirmation)
@@ -71,6 +74,7 @@ namespace DamnSimpleFileManager.Services
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogError($"Error moving '{item.FullName}' to '{target}'", ex);
                     MessageBox.Show(owner, Localization.Get("Error_Move", ex.Message));
                 }
             }
@@ -93,6 +97,7 @@ namespace DamnSimpleFileManager.Services
 
             foreach (var item in selectedItems)
             {
+                Logger.Log($"Deleting '{item.FullName}'");
                 try
                 {
                     if (item is FileInfo)
@@ -106,6 +111,7 @@ namespace DamnSimpleFileManager.Services
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogError($"Error deleting '{item.FullName}'", ex);
                     MessageBox.Show(owner, Localization.Get("Error_Delete", ex.Message));
                 }
             }
@@ -124,6 +130,7 @@ namespace DamnSimpleFileManager.Services
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
                 Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
+                Logger.Log($"Created folder '{name}' in '{pane.CurrentDir.FullName}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
         }
@@ -139,6 +146,7 @@ namespace DamnSimpleFileManager.Services
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
                 File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
+                Logger.Log($"Created file '{name}' in '{pane.CurrentDir.FullName}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
         }

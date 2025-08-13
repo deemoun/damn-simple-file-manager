@@ -20,6 +20,7 @@ namespace DamnSimpleFileManager
         public MainWindow()
         {
             InitializeComponent();
+            Logger.Log("MainWindow initialized");
             Localization.LoadSystemLanguage();
             ApplyLocalization();
 
@@ -52,6 +53,7 @@ namespace DamnSimpleFileManager
 
         private void ApplyLocalization()
         {
+            Logger.Log("Applying localization");
             Title = Localization.Get("App_Title");
             FileMenu.Header = Localization.Get("Menu_File");
             NewFolderMenuItem.Header = Localization.Get("Menu_NewFolder");
@@ -81,6 +83,7 @@ namespace DamnSimpleFileManager
 
         private void PopulateDriveSelectors()
         {
+            Logger.Log("Populating drive selectors");
             leftPane.PopulateDrives();
             rightPane.PopulateDrives();
 
@@ -92,6 +95,7 @@ namespace DamnSimpleFileManager
 
         private void OpenSelected(FilePaneViewModel pane, ListView list)
         {
+            Logger.Log("Opening selected items");
             foreach (FileSystemInfo item in list.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
                 if (item is ParentDirectoryInfo parent)
@@ -101,15 +105,18 @@ namespace DamnSimpleFileManager
                     {
                         try
                         {
+                            Logger.Log($"Navigating into '{dir.FullName}'");
                             pane.NavigateInto(dir);
                         }
                         catch (Exception ex)
                         {
+                            Logger.LogError($"Error navigating into '{dir.FullName}'", ex);
                             MessageBox.Show(this, Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
+                        Logger.LogError($"Folder not found: '{dir.FullName}'", new DirectoryNotFoundException(dir.FullName));
                         MessageBox.Show(this, Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
@@ -119,15 +126,18 @@ namespace DamnSimpleFileManager
                     {
                         try
                         {
+                            Logger.Log($"Navigating into '{dir.FullName}'");
                             pane.NavigateInto(dir);
                         }
                         catch (Exception ex)
                         {
+                            Logger.LogError($"Error navigating into '{dir.FullName}'", ex);
                             MessageBox.Show(this, Localization.Get("Error_OpenFolder", ex.Message));
                         }
                     }
                     else
                     {
+                        Logger.LogError($"Folder not found: '{dir.FullName}'", new DirectoryNotFoundException(dir.FullName));
                         MessageBox.Show(this, Localization.Get("Error_FolderNotFound", dir.FullName));
                     }
                 }
@@ -137,15 +147,18 @@ namespace DamnSimpleFileManager
                     {
                         try
                         {
+                            Logger.Log($"Opening file '{file.FullName}'");
                             Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
                         }
                         catch (Exception ex)
                         {
+                            Logger.LogError($"Error opening file '{file.FullName}'", ex);
                             MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
                         }
                     }
                     else
                     {
+                        Logger.LogError($"File not found: '{file.FullName}'", new FileNotFoundException(file.FullName));
                         MessageBox.Show(this, Localization.Get("Error_FileNotFound", file.FullName));
                     }
                 }
@@ -154,21 +167,25 @@ namespace DamnSimpleFileManager
 
         private void ViewSelectedFile()
         {
+            Logger.Log("ViewSelectedFile called");
             if (ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo file)
             {
                 if (file.Exists)
                 {
                     try
                     {
+                        Logger.Log($"Viewing file '{file.FullName}'");
                         Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
                     }
                     catch (Exception ex)
                     {
+                        Logger.LogError($"Error viewing file '{file.FullName}'", ex);
                         MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
                     }
                 }
                 else
                 {
+                    Logger.LogError($"File not found: '{file.FullName}'", new FileNotFoundException(file.FullName));
                     MessageBox.Show(this, Localization.Get("Error_FileNotFound", file.FullName));
                 }
             }
@@ -176,11 +193,13 @@ namespace DamnSimpleFileManager
 
         private void View_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("View button clicked");
             ViewSelectedFile();
         }
 
         private void UpdateOperationsAvailability()
         {
+            Logger.Log("Updating operations availability");
             var canView = ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo;
             ViewButton.IsEnabled = canView;
             ViewMenuItem.IsEnabled = canView;
@@ -196,12 +215,14 @@ namespace DamnSimpleFileManager
 
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Logger.Log("List selection changed");
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
             UpdateOperationsAvailability();
         }
 
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
+            Logger.Log("List double-clicked");
             var list = (ListView)sender;
             var pane = list == LeftList ? leftPane : rightPane;
             OpenSelected(pane, list);
@@ -209,6 +230,7 @@ namespace DamnSimpleFileManager
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            Logger.Log($"Key pressed: {e.Key}");
             if (e.Key == Key.Enter)
             {
                 OpenSelected(activePane, ActiveList);
@@ -257,6 +279,7 @@ namespace DamnSimpleFileManager
 
         private void OpenTerminal_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Open terminal clicked");
             try
             {
                 Process.Start(new ProcessStartInfo("powershell.exe")
@@ -267,17 +290,20 @@ namespace DamnSimpleFileManager
             }
             catch (Exception ex)
             {
+                Logger.LogError("Error opening terminal", ex);
                 MessageBox.Show(this, Localization.Get("Error_OpenTerminal", ex.Message));
             }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Exit clicked");
             Close();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("About clicked");
             var about = new AboutWindow
             {
                 Owner = this
@@ -287,6 +313,7 @@ namespace DamnSimpleFileManager
 
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
+            Logger.Log("List right-clicked");
             var list = (ListView)sender;
             if (list.SelectedItem is FileSystemInfo selectedItem && selectedItem is not ParentDirectoryInfo)
             {
@@ -296,6 +323,7 @@ namespace DamnSimpleFileManager
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogError("Error opening context menu", ex);
                     MessageBox.Show(this, Localization.Get("Error_ContextMenu", ex.Message));
                 }
             }
@@ -303,6 +331,7 @@ namespace DamnSimpleFileManager
 
         private void List_GotFocus(object sender, RoutedEventArgs e)
         {
+            Logger.Log("List got focus");
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
             UpdateOperationsAvailability();
         }
@@ -313,34 +342,40 @@ namespace DamnSimpleFileManager
 
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Create folder clicked");
             fileOperationsService.CreateFolder(ActivePane, this);
         }
 
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Create file clicked");
             fileOperationsService.CreateFile(ActivePane, this);
         }
 
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Copy clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
             fileOperationsService.Copy(ActivePane, InactivePane, items, this);
         }
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Move clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
             fileOperationsService.Move(ActivePane, InactivePane, items, this);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log("Delete clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
             fileOperationsService.Delete(ActivePane, items, this);
         }
 
         private void List_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            Logger.Log($"List key pressed: {e.Key}");
             if (e.Key == Key.Space)
             {
                 var list = (ListView)sender;
