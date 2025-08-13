@@ -11,7 +11,8 @@ namespace DamnSimpleFileManager
         {
             InitializeComponent();
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0.0";
+            var v = Assembly.GetExecutingAssembly().GetName().Version;
+            var version = v is null ? "1.0.0" : $"{v.Major}.{v.Minor}.{v.Build}";
             AppNameTextBlock.Text += $" v{version}";
         }
 
