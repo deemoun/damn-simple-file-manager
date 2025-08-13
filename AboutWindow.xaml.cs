@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Navigation;
+using System.Reflection;
 
 namespace DamnSimpleFileManager
 {
@@ -9,6 +10,9 @@ namespace DamnSimpleFileManager
         public AboutWindow()
         {
             InitializeComponent();
+
+            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0.0";
+            AppNameTextBlock.Text += $" v{version}";
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
