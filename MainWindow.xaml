@@ -43,9 +43,9 @@
                 <MenuItem x:Name="NewFileMenuItem" Header="New _File" Click="CreateFile_Click"/>
                 <MenuItem x:Name="ViewMenuItem" Header="_View" Click="View_Click" InputGestureText="F3" IsEnabled="False"/>
                 <Separator/>
-                <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click" InputGestureText="F5"/>
-                <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click" InputGestureText="F6"/>
-                <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click" InputGestureText="F8"/>
+                <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click" InputGestureText="F5" IsEnabled="False"/>
+                <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click" InputGestureText="F6" IsEnabled="False"/>
+                <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click" InputGestureText="F8" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem x:Name="OpenTerminalMenuItem" Header="_Open Terminal" Click="OpenTerminal_Click"/>
                 <Separator/>
@@ -86,19 +86,19 @@
                         <TextBlock x:Name="ViewText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
+                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="📋" Margin="0,0,5,0"/>
                         <TextBlock x:Name="CopyText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click">
+                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="📂" Margin="0,0,5,0"/>
                         <TextBlock x:Name="MoveText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click">
+                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="🗑️" Margin="0,0,5,0"/>
                         <TextBlock x:Name="DeleteText"/>
