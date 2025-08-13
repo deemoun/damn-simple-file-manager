@@ -45,6 +45,10 @@ namespace DamnSimpleFileManager
             LeftList.Focus();
             LeftList.GotFocus += List_GotFocus;
             RightList.GotFocus += List_GotFocus;
+            LeftList.SelectionChanged += List_SelectionChanged;
+            RightList.SelectionChanged += List_SelectionChanged;
+            ViewButton.IsEnabled = false;
+            ViewMenuItem.IsEnabled = false;
         }
 
         private void ApplyLocalization()
@@ -55,6 +59,8 @@ namespace DamnSimpleFileManager
             NewFolderMenuItem.InputGestureText = "F7";
             NewFileMenuItem.Header = Localization.Get("Menu_NewFile");
             NewFileMenuItem.InputGestureText = "Shift+F7";
+            ViewMenuItem.Header = Localization.Get("Menu_View");
+            ViewMenuItem.InputGestureText = "F3";
             CopyMenuItem.Header = Localization.Get("Menu_Copy");
             CopyMenuItem.InputGestureText = "F5";
             MoveMenuItem.Header = Localization.Get("Menu_Move");
@@ -67,6 +73,7 @@ namespace DamnSimpleFileManager
             AboutMenuItem.Header = Localization.Get("Menu_About");
             CreateFolderText.Text = Localization.Get("Button_CreateFolder");
             CreateFileText.Text = Localization.Get("Button_CreateFile");
+            ViewText.Text = Localization.Get("Button_View") + " (F3)";
             CopyText.Text = Localization.Get("Button_Copy") + " (F5)";
             MoveText.Text = Localization.Get("Button_Move") + " (F6)";
             DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
@@ -146,6 +153,46 @@ namespace DamnSimpleFileManager
             }
         }
 
+        private void ViewSelectedFile()
+        {
+            if (ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo file)
+            {
+                if (file.Exists)
+                {
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(file.FullName) { UseShellExecute = true });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, Localization.Get("Error_FileNotFound", file.FullName));
+                }
+            }
+        }
+
+        private void View_Click(object sender, RoutedEventArgs e)
+        {
+            ViewSelectedFile();
+        }
+
+        private void UpdateViewAvailability()
+        {
+            var isEnabled = ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo;
+            ViewButton.IsEnabled = isEnabled;
+            ViewMenuItem.IsEnabled = isEnabled;
+        }
+
+        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
+            UpdateViewAvailability();
+        }
+
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
@@ -166,6 +213,11 @@ namespace DamnSimpleFileManager
                     RightList.Focus();
                 else
                     LeftList.Focus();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F3)
+            {
+                ViewSelectedFile();
                 e.Handled = true;
             }
             else if (e.Key == Key.F5)
@@ -245,6 +297,7 @@ namespace DamnSimpleFileManager
         private void List_GotFocus(object sender, RoutedEventArgs e)
         {
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
+            UpdateViewAvailability();
         }
 
         private FilePaneViewModel ActivePane => activePane;
