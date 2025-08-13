@@ -64,9 +64,13 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" SelectionChanged="LeftDriveSelector_SelectionChanged"/>
+            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="80"
+                      HorizontalAlignment="Left"
+                      SelectionChanged="LeftDriveSelector_SelectionChanged"/>
             <Label Grid.Column="1" Content="" Width="50"/>
-            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" SelectionChanged="RightDriveSelector_SelectionChanged"/>
+            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="80"
+                      HorizontalAlignment="Right"
+                      SelectionChanged="RightDriveSelector_SelectionChanged"/>
         </Grid>
 
         <!-- Кнопки Назад -->
