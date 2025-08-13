@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Navigation;
 using System.Reflection;
 
-namespace DamnSimpleFileManager
+namespace DamnSimpleFileManager.Windows
 {
     public partial class AboutWindow : Window
     {
