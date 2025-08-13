@@ -7,6 +7,7 @@ namespace DamnSimpleFileManager
     {
         private static readonly object _lock = new();
         private static readonly string LogPath = Path.Combine(AppContext.BaseDirectory, "dsfm.log");
+        private const long MaxLogSizeBytes = 5 * 1024 * 1024;
 
         public static void Log(string message)
         {
@@ -22,9 +23,13 @@ namespace DamnSimpleFileManager
         {
             try
             {
-                var line = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{level}] {message}{Environment.NewLine}";
+                var line = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{level}] {message}{Environment.NewLine}"; 
                 lock (_lock)
                 {
+                    if (File.Exists(LogPath) && new FileInfo(LogPath).Length >= MaxLogSizeBytes)
+                    {
+                        File.WriteAllText(LogPath, string.Empty);
+                    }
                     File.AppendAllText(LogPath, line);
                 }
             }
