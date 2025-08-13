@@ -29,8 +29,6 @@
             <RowDefinition Height="Auto"/>
             <!-- Назад -->
             <RowDefinition Height="Auto"/>
-            <!-- Операции -->
-            <RowDefinition Height="Auto"/>
             <!-- Пути -->
             <RowDefinition Height="*"/>
             <!-- Списки -->
@@ -68,7 +66,44 @@
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Drives}"
                       SelectedItem="{Binding SelectedDrive}"/>
-            <Label Grid.Column="1" Content="" Width="50"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📁" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="CreateFolderText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📄" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="CreateFileText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📋" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="CopyText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📂" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="MoveText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🗑️" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="DeleteText"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="💻" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="TerminalText"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
             <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="80"
                       HorizontalAlignment="Right"
                       ItemsSource="{Binding Drives}"
@@ -89,48 +124,8 @@
                     Command="{Binding NavigateBackCommand}" HorizontalAlignment="Right" Margin="5"/>
         </Grid>
 
-        <!-- Операции -->
-        <StackPanel Grid.Row="3" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📁" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="CreateFolderText"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📄" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="CreateFileText"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📋" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="CopyText"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📂" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="MoveText"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🗑️" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="DeleteText"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="💻" Margin="0,0,5,0"/>
-                    <TextBlock x:Name="TerminalText"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-
         <!-- Текущие пути -->
-        <Grid Grid.Row="4" Margin="5">
+        <Grid Grid.Row="3" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -142,7 +137,7 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -158,7 +153,7 @@
         </Grid>
 
         <!-- Информация о диске -->
-        <Grid Grid.Row="6" Margin="5">
+        <Grid Grid.Row="5" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
