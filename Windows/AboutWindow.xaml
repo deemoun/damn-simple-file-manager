@@ -4,7 +4,7 @@
         Title="About" Height="200" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
-        <StackPanel Margin="10">
+        <StackPanel Margin="3">
             <TextBlock x:Name="AppNameTextBlock" Text="Damn Simple File Manager" FontWeight="Bold" FontSize="16" TextAlignment="Center" Margin="0,0,0,10"/>
             <TextBlock Text="A simple file manager built with love" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,5"/>
             <TextBlock Text="Created by Dmitry Yarygin" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,5"/>
