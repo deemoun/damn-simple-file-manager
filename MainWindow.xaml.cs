@@ -5,16 +5,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.VisualBasic;
 using DamnSimpleFileManager.Services;
+using DamnSimpleFileManager.Windows;
 
 namespace DamnSimpleFileManager
 {
     public partial class MainWindow : Window
     {
-        private readonly FilePane leftPane;
-        private readonly FilePane rightPane;
-        private FilePane activePane;
+        private readonly FilePaneViewModel leftPane;
+        private readonly FilePaneViewModel rightPane;
+        private FilePaneViewModel activePane;
         private readonly FileOperationsService fileOperationsService;
 
         public MainWindow()
@@ -23,8 +23,21 @@ namespace DamnSimpleFileManager
             Localization.LoadSystemLanguage();
             ApplyLocalization();
 
-            leftPane = new FilePane(LeftList, LeftPathText, LeftDriveSelector, LeftBackButton, LeftSpaceText);
-            rightPane = new FilePane(RightList, RightPathText, RightDriveSelector, RightBackButton, RightSpaceText);
+            leftPane = new FilePaneViewModel();
+            rightPane = new FilePaneViewModel();
+
+            LeftList.DataContext = leftPane;
+            LeftPathText.DataContext = leftPane;
+            LeftDriveSelector.DataContext = leftPane;
+            LeftBackButton.DataContext = leftPane;
+            LeftSpaceText.DataContext = leftPane;
+
+            RightList.DataContext = rightPane;
+            RightPathText.DataContext = rightPane;
+            RightDriveSelector.DataContext = rightPane;
+            RightBackButton.DataContext = rightPane;
+            RightSpaceText.DataContext = rightPane;
+
             PopulateDriveSelectors();
 
             fileOperationsService = new FileOperationsService();
@@ -39,19 +52,24 @@ namespace DamnSimpleFileManager
             Title = Localization.Get("App_Title");
             FileMenu.Header = Localization.Get("Menu_File");
             NewFolderMenuItem.Header = Localization.Get("Menu_NewFolder");
+            NewFolderMenuItem.InputGestureText = "F7";
             NewFileMenuItem.Header = Localization.Get("Menu_NewFile");
+            NewFileMenuItem.InputGestureText = "Shift+F7";
             CopyMenuItem.Header = Localization.Get("Menu_Copy");
+            CopyMenuItem.InputGestureText = "F5";
             MoveMenuItem.Header = Localization.Get("Menu_Move");
+            MoveMenuItem.InputGestureText = "F6";
             DeleteMenuItem.Header = Localization.Get("Menu_Delete");
+            DeleteMenuItem.InputGestureText = "F8";
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
             CreateFolderText.Text = Localization.Get("Button_CreateFolder");
             CreateFileText.Text = Localization.Get("Button_CreateFile");
-            CopyText.Text = Localization.Get("Button_Copy");
-            MoveText.Text = Localization.Get("Button_Move");
-            DeleteText.Text = Localization.Get("Button_Delete");
+            CopyText.Text = Localization.Get("Button_Copy") + " (F5)";
+            MoveText.Text = Localization.Get("Button_Move") + " (F6)";
+            DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
             TerminalText.Text = Localization.Get("Button_OpenTerminal");
         }
 
@@ -60,17 +78,15 @@ namespace DamnSimpleFileManager
             leftPane.PopulateDrives();
             rightPane.PopulateDrives();
 
-            if (rightPane.DriveSelector.Items.Count > 1)
+            if (rightPane.Drives.Count > 1)
             {
-                rightPane.DriveSelector.SelectedIndex = 1;
-                rightPane.SetDrive(rightPane.DriveSelector.SelectedItem!.ToString()!);
+                rightPane.SelectedDrive = rightPane.Drives[1];
             }
         }
 
-
-        private void OpenSelected(FilePane pane)
+        private void OpenSelected(FilePaneViewModel pane, ListView list)
         {
-            foreach (FileSystemInfo item in pane.List.SelectedItems.Cast<FileSystemInfo>().ToList())
+            foreach (FileSystemInfo item in list.SelectedItems.Cast<FileSystemInfo>().ToList())
             {
                 if (item is ParentDirectoryInfo parent)
                 {
@@ -134,14 +150,14 @@ namespace DamnSimpleFileManager
         {
             var list = (ListView)sender;
             var pane = list == LeftList ? leftPane : rightPane;
-            OpenSelected(pane);
+            OpenSelected(pane, list);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                OpenSelected(activePane);
+                OpenSelected(activePane, ActiveList);
                 e.Handled = true;
             }
             else if (e.Key == Key.Tab)
@@ -154,25 +170,28 @@ namespace DamnSimpleFileManager
             }
             else if (e.Key == Key.F5)
             {
-                Copy_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Copy(ActivePane, InactivePane, items, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F6)
             {
-                Move_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Move(ActivePane, InactivePane, items, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F7)
             {
                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-                    CreateFile_Click(null, null);
+                    fileOperationsService.CreateFile(ActivePane, this);
                 else
-                    CreateFolder_Click(null, null);
+                    fileOperationsService.CreateFolder(ActivePane, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F8)
             {
-                Delete_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Delete(ActivePane, items, this);
                 e.Handled = true;
             }
         }
@@ -207,32 +226,6 @@ namespace DamnSimpleFileManager
             about.ShowDialog();
         }
 
-        private void LeftDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LeftDriveSelector.SelectedItem is string path)
-            {
-                leftPane.SetDrive(path);
-            }
-        }
-
-        private void RightDriveSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RightDriveSelector.SelectedItem is string path)
-            {
-                rightPane.SetDrive(path);
-            }
-        }
-
-        private void LeftBack_Click(object sender, RoutedEventArgs e)
-        {
-            leftPane.NavigateBack();
-        }
-
-        private void RightBack_Click(object sender, RoutedEventArgs e)
-        {
-            rightPane.NavigateBack();
-        }
-
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
             var list = (ListView)sender;
@@ -254,64 +247,36 @@ namespace DamnSimpleFileManager
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
         }
 
-        private FilePane ActivePane => activePane;
-        private FilePane InactivePane => activePane == leftPane ? rightPane : leftPane;
-
-        private static bool ValidateName(string name)
-        {
-            if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-            {
-                MessageBox.Show(Application.Current.MainWindow!, Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            return true;
-        }
+        private FilePaneViewModel ActivePane => activePane;
+        private FilePaneViewModel InactivePane => activePane == leftPane ? rightPane : leftPane;
+        private ListView ActiveList => activePane == leftPane ? LeftList : RightList;
 
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
-            var pane = ActivePane;
-            string name = Interaction.InputBox(
-                Localization.Get("Prompt_FolderName"),
-                Localization.Get("Prompt_CreateFolder"),
-                Localization.Get("Default_FolderName"),
-                (int)(Left + (ActualWidth - 300) / 2),
-                (int)(Top + (ActualHeight - 150) / 2)).Trim();
-            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
-            {
-                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
-                pane.LoadDirectory(pane.CurrentDir);
-            }
+            fileOperationsService.CreateFolder(ActivePane, this);
         }
 
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
-            var pane = ActivePane;
-            string name = Interaction.InputBox(
-                Localization.Get("Prompt_FileName"),
-                Localization.Get("Prompt_CreateFile"),
-                Localization.Get("Default_FileName"),
-                (int)(Left + (ActualWidth - 300) / 2),
-                (int)(Top + (ActualHeight - 150) / 2)).Trim();
-            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
-            {
-                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
-                pane.LoadDirectory(pane.CurrentDir);
-            }
+            fileOperationsService.CreateFile(ActivePane, this);
         }
 
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Copy(ActivePane, InactivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Copy(ActivePane, InactivePane, items, this);
         }
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Move(ActivePane, InactivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Move(ActivePane, InactivePane, items, this);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            fileOperationsService.Delete(ActivePane, this);
+            var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            fileOperationsService.Delete(ActivePane, items, this);
         }
 
         private void List_PreviewKeyDown(object sender, KeyEventArgs e)

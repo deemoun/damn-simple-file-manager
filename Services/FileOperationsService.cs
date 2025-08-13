@@ -1,16 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Microsoft.VisualBasic;
 using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Services
 {
     internal class FileOperationsService
     {
-        public void Copy(FilePane source, FilePane dest, Window owner)
+        public void Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
+            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -44,9 +46,9 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public void Move(FilePane source, FilePane dest, Window owner)
+        public void Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            foreach (FileSystemInfo item in source.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList())
+            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
             {
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 try
@@ -74,9 +76,9 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public void Delete(FilePane pane, Window owner)
+        public void Delete(FilePaneViewModel pane, IEnumerable<FileSystemInfo> items, Window owner)
         {
-            var selectedItems = pane.List.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
                 return;
 
@@ -109,6 +111,46 @@ namespace DamnSimpleFileManager.Services
             }
 
             pane.LoadDirectory(pane.CurrentDir);
+        }
+
+        public void CreateFolder(FilePaneViewModel pane, Window owner)
+        {
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FolderName"),
+                Localization.Get("Prompt_CreateFolder"),
+                Localization.Get("Default_FolderName"),
+                (int)(owner.Left + (owner.ActualWidth - 300) / 2),
+                (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
+            {
+                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        public void CreateFile(FilePaneViewModel pane, Window owner)
+        {
+            string name = Interaction.InputBox(
+                Localization.Get("Prompt_FileName"),
+                Localization.Get("Prompt_CreateFile"),
+                Localization.Get("Default_FileName"),
+                (int)(owner.Left + (owner.ActualWidth - 300) / 2),
+                (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
+            {
+                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
+                pane.LoadDirectory(pane.CurrentDir);
+            }
+        }
+
+        private static bool ValidateName(string name, Window owner)
+        {
+            if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                MessageBox.Show(owner, Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
         }
 
         private static void CopyDirectory(string sourceDir, string destinationDir)

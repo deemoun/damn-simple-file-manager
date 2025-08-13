@@ -1,61 +1,98 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace DamnSimpleFileManager
 {
-    internal class FilePane
+    internal class FilePaneViewModel : INotifyPropertyChanged
     {
-        public ListView List { get; }
-        public TextBlock PathText { get; }
-        public ComboBox DriveSelector { get; }
-        public Button BackButton { get; }
-        public TextBlock SpaceText { get; }
+        public ObservableCollection<FileSystemInfo> Items { get; } = new();
+        public ObservableCollection<string> Drives { get; } = new();
+
+        private string? selectedDrive;
+        public string? SelectedDrive
+        {
+            get => selectedDrive;
+            set
+            {
+                if (selectedDrive != value)
+                {
+                    selectedDrive = value;
+                    OnPropertyChanged();
+                    if (value != null)
+                    {
+                        CurrentDir = new DirectoryInfo(value);
+                        history.Clear();
+                        LoadDirectory(CurrentDir);
+                        OnPropertyChanged(nameof(CanGoBack));
+                        NavigateBackCommand.RaiseCanExecuteChanged();
+                    }
+                }
+            }
+        }
+
+        private string currentPath = string.Empty;
+        public string CurrentPath
+        {
+            get => currentPath;
+            private set
+            {
+                if (currentPath != value)
+                {
+                    currentPath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string driveInfo = string.Empty;
+        public string DriveInfo
+        {
+            get => driveInfo;
+            private set
+            {
+                if (driveInfo != value)
+                {
+                    driveInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public DirectoryInfo CurrentDir { get; private set; } = null!;
         private readonly Stack<DirectoryInfo> history = new();
         private FileSystemWatcher? watcher;
 
-        public FilePane(ListView list, TextBlock pathText, ComboBox driveSelector, Button backButton, TextBlock spaceText)
+        public RelayCommand NavigateBackCommand { get; }
+
+        public bool CanGoBack => history.Count > 0;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public FilePaneViewModel()
         {
-            List = list;
-            PathText = pathText;
-            DriveSelector = driveSelector;
-            BackButton = backButton;
-            SpaceText = spaceText;
+            NavigateBackCommand = new RelayCommand(_ => NavigateBack(), _ => CanGoBack);
         }
 
         public void PopulateDrives()
         {
-            DriveSelector.Items.Clear();
-            foreach (var drive in DriveInfo.GetDrives())
+            Drives.Clear();
+            foreach (var drive in System.IO.DriveInfo.GetDrives())
             {
                 if (drive.IsReady)
                 {
-                    DriveSelector.Items.Add(drive.Name);
+                    Drives.Add(drive.Name);
                 }
             }
 
-            if (DriveSelector.Items.Count > 0)
+            if (Drives.Count > 0)
             {
-                DriveSelector.SelectedIndex = 0;
-                CurrentDir = new DirectoryInfo(DriveSelector.SelectedItem!.ToString()!);
-                LoadDirectory(CurrentDir);
+                SelectedDrive = Drives[0];
             }
-
-            UpdateBackButton();
-        }
-
-        public void SetDrive(string path)
-        {
-            CurrentDir = new DirectoryInfo(path);
-            history.Clear();
-            LoadDirectory(CurrentDir);
-            UpdateBackButton();
         }
 
         public void LoadDirectory(DirectoryInfo dir, bool updateWatcher = true)
@@ -65,17 +102,17 @@ namespace DamnSimpleFileManager
                 SetupWatcher(dir);
             }
 
-            var items = new ObservableCollection<FileSystemInfo>();
+            Items.Clear();
             if (dir.Parent != null)
             {
-                items.Add(new ParentDirectoryInfo(dir.Parent.FullName));
+                Items.Add(new ParentDirectoryInfo(dir.Parent.FullName));
             }
             foreach (var d in dir.GetDirectories().Where(d => Settings.ShowHiddenFiles || !d.Attributes.HasFlag(FileAttributes.Hidden)))
-                items.Add(d);
+                Items.Add(d);
             foreach (var f in dir.GetFiles().Where(f => Settings.ShowHiddenFiles || !f.Attributes.HasFlag(FileAttributes.Hidden)))
-                items.Add(f);
-            List.ItemsSource = items;
-            PathText.Text = dir.FullName;
+                Items.Add(f);
+
+            CurrentPath = dir.FullName;
 
             UpdateDriveInfo(dir);
         }
@@ -98,7 +135,7 @@ namespace DamnSimpleFileManager
 
         private void OnDirectoryChanged(object sender, FileSystemEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 if (CurrentDir.Exists)
                 {
@@ -109,11 +146,11 @@ namespace DamnSimpleFileManager
 
         private void UpdateDriveInfo(DirectoryInfo dir)
         {
-            var drive = new DriveInfo(dir.Root.FullName);
+            var drive = new System.IO.DriveInfo(dir.Root.FullName);
             long total = drive.TotalSize;
             long free = drive.TotalFreeSpace;
             long used = total - free;
-            SpaceText.Text = Localization.Get(
+            DriveInfo = Localization.Get(
                 "DriveInfo_Format",
                 FormatBytes(total),
                 FormatBytes(used),
@@ -138,7 +175,8 @@ namespace DamnSimpleFileManager
             history.Push(CurrentDir);
             CurrentDir = dir;
             LoadDirectory(CurrentDir);
-            UpdateBackButton();
+            OnPropertyChanged(nameof(CanGoBack));
+            NavigateBackCommand.RaiseCanExecuteChanged();
         }
 
         public void NavigateBack()
@@ -147,13 +185,15 @@ namespace DamnSimpleFileManager
             {
                 CurrentDir = history.Pop();
                 LoadDirectory(CurrentDir);
-                UpdateBackButton();
+                OnPropertyChanged(nameof(CanGoBack));
+                NavigateBackCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public void UpdateBackButton()
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
         {
-            BackButton.IsEnabled = history.Count > 0;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
+
