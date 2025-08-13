@@ -148,7 +148,7 @@
             </Grid.ColumnDefinitions>
             <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
-            <Label Grid.Column="1" Width="10"/>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
