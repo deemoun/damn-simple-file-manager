@@ -47,8 +47,7 @@ namespace DamnSimpleFileManager
             RightList.GotFocus += List_GotFocus;
             LeftList.SelectionChanged += List_SelectionChanged;
             RightList.SelectionChanged += List_SelectionChanged;
-            ViewButton.IsEnabled = false;
-            ViewMenuItem.IsEnabled = false;
+            UpdateOperationsAvailability();
         }
 
         private void ApplyLocalization()
@@ -180,17 +179,25 @@ namespace DamnSimpleFileManager
             ViewSelectedFile();
         }
 
-        private void UpdateViewAvailability()
+        private void UpdateOperationsAvailability()
         {
-            var isEnabled = ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo;
-            ViewButton.IsEnabled = isEnabled;
-            ViewMenuItem.IsEnabled = isEnabled;
+            var canView = ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileInfo;
+            ViewButton.IsEnabled = canView;
+            ViewMenuItem.IsEnabled = canView;
+
+            var hasItems = ActiveList.SelectedItems.Cast<FileSystemInfo>().Any(i => i is not ParentDirectoryInfo);
+            CopyButton.IsEnabled = hasItems;
+            CopyMenuItem.IsEnabled = hasItems;
+            MoveButton.IsEnabled = hasItems;
+            MoveMenuItem.IsEnabled = hasItems;
+            DeleteButton.IsEnabled = hasItems;
+            DeleteMenuItem.IsEnabled = hasItems;
         }
 
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
-            UpdateViewAvailability();
+            UpdateOperationsAvailability();
         }
 
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -297,7 +304,7 @@ namespace DamnSimpleFileManager
         private void List_GotFocus(object sender, RoutedEventArgs e)
         {
             activePane = ((ListView)sender) == LeftList ? leftPane : rightPane;
-            UpdateViewAvailability();
+            UpdateOperationsAvailability();
         }
 
         private FilePaneViewModel ActivePane => activePane;
