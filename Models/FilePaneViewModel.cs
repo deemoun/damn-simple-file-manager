@@ -81,7 +81,7 @@ namespace DamnSimpleFileManager
         public void PopulateDrives()
         {
             Drives.Clear();
-            foreach (var drive in DriveInfo.GetDrives())
+            foreach (var drive in System.IO.DriveInfo.GetDrives())
             {
                 if (drive.IsReady)
                 {
@@ -146,7 +146,7 @@ namespace DamnSimpleFileManager
 
         private void UpdateDriveInfo(DirectoryInfo dir)
         {
-            var drive = new DriveInfo(dir.Root.FullName);
+            var drive = new System.IO.DriveInfo(dir.Root.FullName);
             long total = drive.TotalSize;
             long free = drive.TotalFreeSpace;
             long used = total - free;
