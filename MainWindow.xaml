@@ -66,11 +66,13 @@
             </Grid.ColumnDefinitions>
             <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="80"
                       HorizontalAlignment="Left"
-                      SelectionChanged="LeftDriveSelector_SelectionChanged"/>
+                      ItemsSource="{Binding Drives}"
+                      SelectedItem="{Binding SelectedDrive}"/>
             <Label Grid.Column="1" Content="" Width="50"/>
             <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="80"
                       HorizontalAlignment="Right"
-                      SelectionChanged="RightDriveSelector_SelectionChanged"/>
+                      ItemsSource="{Binding Drives}"
+                      SelectedItem="{Binding SelectedDrive}"/>
         </Grid>
 
         <!-- Кнопки Назад -->
@@ -81,10 +83,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button x:Name="LeftBackButton" Grid.Column="0" Content="←" Width="40" Height="30"
-                    Click="LeftBack_Click" HorizontalAlignment="Left" Margin="5"/>
+                    Command="{Binding NavigateBackCommand}" HorizontalAlignment="Left" Margin="5"/>
             <Label Grid.Column="1" Width="10"/>
             <Button x:Name="RightBackButton" Grid.Column="2" Content="←" Width="40" Height="30"
-                    Click="RightBack_Click" HorizontalAlignment="Right" Margin="5"/>
+                    Command="{Binding NavigateBackCommand}" HorizontalAlignment="Right" Margin="5"/>
         </Grid>
 
         <!-- Операции -->
@@ -134,9 +136,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LeftPathText" Grid.Column="0" Margin="5,0" FontWeight="Bold" />
+            <TextBlock x:Name="LeftPathText" Grid.Column="0" Margin="5,0" FontWeight="Bold" Text="{Binding CurrentPath}" />
             <Label Grid.Column="1" Width="10"/>
-            <TextBlock x:Name="RightPathText" Grid.Column="2" Margin="5,0" FontWeight="Bold" HorizontalAlignment="Right"/>
+            <TextBlock x:Name="RightPathText" Grid.Column="2" Margin="5,0" FontWeight="Bold" HorizontalAlignment="Right" Text="{Binding CurrentPath}"/>
         </Grid>
 
         <!-- Основные списки -->
@@ -147,9 +149,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                      ItemsSource="{Binding Items}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                      ItemsSource="{Binding Items}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
 
@@ -160,9 +164,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0" />
+            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0" Text="{Binding DriveInfo}" />
             <Label Grid.Column="1" Width="10"/>
-            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right"/>
+            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right" Text="{Binding DriveInfo}"/>
         </Grid>
     </Grid>
 </Window>
