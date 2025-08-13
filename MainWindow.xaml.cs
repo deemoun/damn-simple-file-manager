@@ -53,19 +53,24 @@ namespace DamnSimpleFileManager
             Title = Localization.Get("App_Title");
             FileMenu.Header = Localization.Get("Menu_File");
             NewFolderMenuItem.Header = Localization.Get("Menu_NewFolder");
+            NewFolderMenuItem.InputGestureText = "F7";
             NewFileMenuItem.Header = Localization.Get("Menu_NewFile");
+            NewFileMenuItem.InputGestureText = "Shift+F7";
             CopyMenuItem.Header = Localization.Get("Menu_Copy");
+            CopyMenuItem.InputGestureText = "F5";
             MoveMenuItem.Header = Localization.Get("Menu_Move");
+            MoveMenuItem.InputGestureText = "F6";
             DeleteMenuItem.Header = Localization.Get("Menu_Delete");
+            DeleteMenuItem.InputGestureText = "F8";
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
-            CreateFolderText.Text = Localization.Get("Button_CreateFolder");
-            CreateFileText.Text = Localization.Get("Button_CreateFile");
-            CopyText.Text = Localization.Get("Button_Copy");
-            MoveText.Text = Localization.Get("Button_Move");
-            DeleteText.Text = Localization.Get("Button_Delete");
+            CreateFolderText.Text = Localization.Get("Button_CreateFolder") + " (F7)";
+            CreateFileText.Text = Localization.Get("Button_CreateFile") + " (Shift+F7)";
+            CopyText.Text = Localization.Get("Button_Copy") + " (F5)";
+            MoveText.Text = Localization.Get("Button_Move") + " (F6)";
+            DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
             TerminalText.Text = Localization.Get("Button_OpenTerminal");
         }
 
