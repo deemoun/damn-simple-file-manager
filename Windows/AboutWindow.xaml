@@ -12,6 +12,10 @@
                 <Hyperlink NavigateUri="https://github.com/deemoun/damn-simple-file-manager" RequestNavigate="Hyperlink_RequestNavigate">
                     Github repository
                 </Hyperlink>
+                <LineBreak/>
+                <Hyperlink NavigateUri="https://www.youtube.com/@NomadicDmitry/" RequestNavigate="Hyperlink_RequestNavigate">
+                    My YouTube channel
+                </Hyperlink>
             </TextBlock>
             <Button Content="OK" Width="80" Height="30" HorizontalAlignment="Center" Click="Close_Click"/>
         </StackPanel>
