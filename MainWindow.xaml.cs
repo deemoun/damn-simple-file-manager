@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.VisualBasic;
 using DamnSimpleFileManager.Services;
 using DamnSimpleFileManager.Windows;
 
@@ -171,25 +170,28 @@ namespace DamnSimpleFileManager
             }
             else if (e.Key == Key.F5)
             {
-                Copy_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Copy(ActivePane, InactivePane, items, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F6)
             {
-                Move_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Move(ActivePane, InactivePane, items, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F7)
             {
                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-                    CreateFile_Click(null, null);
+                    fileOperationsService.CreateFile(ActivePane, this);
                 else
-                    CreateFolder_Click(null, null);
+                    fileOperationsService.CreateFolder(ActivePane, this);
                 e.Handled = true;
             }
             else if (e.Key == Key.F8)
             {
-                Delete_Click(null, null);
+                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+                fileOperationsService.Delete(ActivePane, items, this);
                 e.Handled = true;
             }
         }
@@ -249,46 +251,14 @@ namespace DamnSimpleFileManager
         private FilePaneViewModel InactivePane => activePane == leftPane ? rightPane : leftPane;
         private ListView ActiveList => activePane == leftPane ? LeftList : RightList;
 
-        private static bool ValidateName(string name)
-        {
-            if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-            {
-                MessageBox.Show(Application.Current.MainWindow!, Localization.Get("Error_InvalidName"), Localization.Get("Error_InvalidName_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            return true;
-        }
-
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
-            var pane = ActivePane;
-            string name = Interaction.InputBox(
-                Localization.Get("Prompt_FolderName"),
-                Localization.Get("Prompt_CreateFolder"),
-                Localization.Get("Default_FolderName"),
-                (int)(Left + (ActualWidth - 300) / 2),
-                (int)(Top + (ActualHeight - 150) / 2)).Trim();
-            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
-            {
-                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
-                pane.LoadDirectory(pane.CurrentDir);
-            }
+            fileOperationsService.CreateFolder(ActivePane, this);
         }
 
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
-            var pane = ActivePane;
-            string name = Interaction.InputBox(
-                Localization.Get("Prompt_FileName"),
-                Localization.Get("Prompt_CreateFile"),
-                Localization.Get("Default_FileName"),
-                (int)(Left + (ActualWidth - 300) / 2),
-                (int)(Top + (ActualHeight - 150) / 2)).Trim();
-            if (!string.IsNullOrWhiteSpace(name) && ValidateName(name))
-            {
-                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
-                pane.LoadDirectory(pane.CurrentDir);
-            }
+            fileOperationsService.CreateFile(ActivePane, this);
         }
 
         private void Copy_Click(object sender, RoutedEventArgs e)
