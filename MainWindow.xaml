@@ -149,6 +149,7 @@
                 <ListView x:Name="LeftList" SelectionMode="Extended"
                           HorizontalContentAlignment="Stretch"
                           ItemsSource="{Binding Items, Mode=OneWay}"
+                          SizeChanged="List_SizeChanged"
                           PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -182,7 +183,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="120">
+                            <GridViewColumn>
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader x:Name="LeftDateHeader" Tag="CreationTime" Click="GridViewColumnHeader_Click"/>
                                 </GridViewColumn.Header>
@@ -214,6 +215,7 @@
                 <ListView x:Name="RightList" SelectionMode="Extended"
                           HorizontalContentAlignment="Stretch"
                           ItemsSource="{Binding Items, Mode=OneWay}"
+                          SizeChanged="List_SizeChanged"
                           PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -247,7 +249,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="120">
+                            <GridViewColumn>
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader x:Name="RightDateHeader" Tag="CreationTime" Click="GridViewColumnHeader_Click"/>
                                 </GridViewColumn.Header>

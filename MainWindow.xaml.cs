@@ -234,6 +234,27 @@ namespace DamnSimpleFileManager
             UpdateOperationsAvailability();
         }
 
+        private void List_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (sender is not ListView listView || listView.View is not GridView gridView || gridView.Columns.Count == 0)
+            {
+                return;
+            }
+
+            listView.UpdateLayout();
+            double otherColumnsWidth = 0;
+            for (int i = 0; i < gridView.Columns.Count - 1; i++)
+            {
+                otherColumnsWidth += gridView.Columns[i].ActualWidth;
+            }
+
+            double availableWidth = listView.ActualWidth - otherColumnsWidth - SystemParameters.VerticalScrollBarWidth - 2;
+            if (availableWidth > 0)
+            {
+                gridView.Columns[gridView.Columns.Count - 1].Width = availableWidth;
+            }
+        }
+
         private void List_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             Logger.Log("List double-clicked");
