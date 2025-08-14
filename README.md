@@ -26,8 +26,8 @@ Set `move_confirmation=false` to move files and folders without confirmation.
 
 ## Keyboard Shortcuts
 
-- **Alt+F1** – Switch focus to the left pane
-- **Alt+F2** – Switch focus to the right pane
+- **Alt+F1** – Open drive selection for the left pane
+- **Alt+F2** – Open drive selection for the right pane
 - **F2** – Rename selected files or folders
 - **F5** – Copy selected files or folders to the opposite pane
 - **F6** – Move selected files or folders to the opposite pane

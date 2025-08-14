@@ -287,12 +287,14 @@ namespace DamnSimpleFileManager
             }
             else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.SystemKey == Key.F1)
             {
-                LeftList.Focus();
+                LeftDriveSelector.Focus();
+                LeftDriveSelector.IsDropDownOpen = true;
                 e.Handled = true;
             }
             else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.SystemKey == Key.F2)
             {
-                RightList.Focus();
+                RightDriveSelector.Focus();
+                RightDriveSelector.IsDropDownOpen = true;
                 e.Handled = true;
             }
             else if (e.Key == Key.F2)
