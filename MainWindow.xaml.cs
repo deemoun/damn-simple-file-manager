@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -418,11 +419,30 @@ namespace DamnSimpleFileManager
         {
             Logger.Log("Copy clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            if (Settings.CopyConfirmation)
+            {
+                var confirmed = new List<FileSystemInfo>();
+                foreach (var item in items)
+                {
+                    string target = Path.Combine(InactivePane.CurrentDir.FullName, item.Name);
+                    var result = MessageBox.Show(this,
+                        Localization.Get("Confirm_Copy", item.FullName, target),
+                        Localization.Get("Confirm_Copy_Title"),
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                        confirmed.Add(item);
+                }
+                items = confirmed;
+            }
+            if (items.Count == 0)
+                return;
+
             var progressWindow = new CopyProgressWindow { Owner = this };
             progressWindow.Show();
             try
             {
-                await fileOperationsService.Copy(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token);
+                await fileOperationsService.Copy(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token, confirm: false);
             }
             catch (OperationCanceledException)
             {
@@ -438,11 +458,30 @@ namespace DamnSimpleFileManager
         {
             Logger.Log("Move clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
+            if (Settings.MoveConfirmation)
+            {
+                var confirmed = new List<FileSystemInfo>();
+                foreach (var item in items)
+                {
+                    string target = Path.Combine(InactivePane.CurrentDir.FullName, item.Name);
+                    var result = MessageBox.Show(this,
+                        Localization.Get("Confirm_Move", item.FullName, target),
+                        Localization.Get("Confirm_Move_Title"),
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                        confirmed.Add(item);
+                }
+                items = confirmed;
+            }
+            if (items.Count == 0)
+                return;
+
             var progressWindow = new CopyProgressWindow { Owner = this };
             progressWindow.Show();
             try
             {
-                await fileOperationsService.Move(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token);
+                await fileOperationsService.Move(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token, confirm: false);
             }
             catch (OperationCanceledException)
             {
