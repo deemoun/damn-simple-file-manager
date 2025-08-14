@@ -151,19 +151,19 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="4" Grid.IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      Grid.IsSharedSizeScope="True"
+                      HorizontalContentAlignment="Stretch"
                       ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      Grid.IsSharedSizeScope="True"
+                      HorizontalContentAlignment="Stretch"
                       ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
