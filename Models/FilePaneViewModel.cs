@@ -16,6 +16,7 @@ namespace DamnSimpleFileManager
         internal enum SortField
         {
             Name,
+            Type,
             Size,
             CreationTime
         }
@@ -192,6 +193,9 @@ namespace DamnSimpleFileManager
                 SortField.Name => sortAscending
                     ? items.OrderBy(i => i.Name, StringComparer.CurrentCultureIgnoreCase)
                     : items.OrderByDescending(i => i.Name, StringComparer.CurrentCultureIgnoreCase),
+                SortField.Type => sortAscending
+                    ? items.OrderBy(i => i is FileInfo).ThenBy(i => i is FileInfo fi ? fi.Extension.ToUpperInvariant() : string.Empty)
+                    : items.OrderByDescending(i => i is FileInfo).ThenByDescending(i => i is FileInfo fi ? fi.Extension.ToUpperInvariant() : string.Empty),
                 SortField.Size => sortAscending
                     ? items.OrderBy(i => i is FileInfo fi ? fi.Length : 0L)
                     : items.OrderByDescending(i => i is FileInfo fi ? fi.Length : 0L),
