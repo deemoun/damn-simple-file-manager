@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.VisualBasic;
 using DamnSimpleFileManager;
@@ -10,10 +12,27 @@ namespace DamnSimpleFileManager.Services
 {
     internal class FileOperationsService
     {
-        public void Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
+        public async Task Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token)
         {
-            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
+            var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
+            if (selectedItems.Count == 0)
             {
+                progress.Report(100);
+                return;
+            }
+
+            long totalBytes = selectedItems.Sum(GetTotalSize);
+            if (totalBytes == 0)
+            {
+                progress.Report(100);
+                return;
+            }
+
+            long copied = 0;
+
+            foreach (FileSystemInfo item in selectedItems)
+            {
+                token.ThrowIfCancellationRequested();
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 Logger.Log($"Copying '{item.FullName}' to '{target}'");
                 try
@@ -30,15 +49,16 @@ namespace DamnSimpleFileManager.Services
                             continue;
                     }
 
-                    if (item is FileInfo)
-                    {
-                        File.Copy(item.FullName, target, true);
-                    }
-                    else if (item is DirectoryInfo)
-                    {
-                        CopyDirectory(item.FullName, target);
-                    }
+                    await CopyItemAsync(item, target, progress, token, totalBytes, ref copied);
                     dest.LoadDirectory(dest.CurrentDir);
+                }
+                catch (OperationCanceledException)
+                {
+                    if (File.Exists(target))
+                        File.Delete(target);
+                    if (Directory.Exists(target))
+                        Directory.Delete(target, true);
+                    throw;
                 }
                 catch (Exception ex)
                 {
@@ -48,10 +68,27 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public void Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner)
+        public async Task Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token)
         {
-            foreach (FileSystemInfo item in items.Where(i => i is not ParentDirectoryInfo))
+            var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
+            if (selectedItems.Count == 0)
             {
+                progress.Report(100);
+                return;
+            }
+
+            long totalBytes = selectedItems.Sum(GetTotalSize);
+            if (totalBytes == 0)
+            {
+                progress.Report(100);
+                return;
+            }
+
+            long copied = 0;
+
+            foreach (FileSystemInfo item in selectedItems)
+            {
+                token.ThrowIfCancellationRequested();
                 string target = Path.Combine(dest.CurrentDir.FullName, item.Name);
                 Logger.Log($"Moving '{item.FullName}' to '{target}'");
                 try
@@ -68,9 +105,40 @@ namespace DamnSimpleFileManager.Services
                             continue;
                     }
 
-                    MoveWithFallback(item.FullName, target);
+                    try
+                    {
+                        if (item is FileInfo)
+                        {
+                            File.Move(item.FullName, target, true);
+                            copied += GetTotalSize(item);
+                            progress.Report(copied * 100.0 / totalBytes);
+                        }
+                        else if (item is DirectoryInfo)
+                        {
+                            Directory.Move(item.FullName, target);
+                            copied += GetTotalSize(item);
+                            progress.Report(copied * 100.0 / totalBytes);
+                        }
+                    }
+                    catch (IOException)
+                    {
+                        await CopyItemAsync(item, target, progress, token, totalBytes, ref copied);
+                        if (item is FileInfo)
+                            File.Delete(item.FullName);
+                        else if (item is DirectoryInfo)
+                            Directory.Delete(item.FullName, true);
+                    }
+
                     source.LoadDirectory(source.CurrentDir);
                     dest.LoadDirectory(dest.CurrentDir);
+                }
+                catch (OperationCanceledException)
+                {
+                    if (File.Exists(target))
+                        File.Delete(target);
+                    if (Directory.Exists(target))
+                        Directory.Delete(target, true);
+                    throw;
                 }
                 catch (Exception ex)
                 {
@@ -163,55 +231,58 @@ namespace DamnSimpleFileManager.Services
             return true;
         }
 
-        private static void CopyDirectory(string sourceDir, string destinationDir)
+        private static long GetTotalSize(FileSystemInfo item)
         {
-            Directory.CreateDirectory(destinationDir);
-            foreach (var file in Directory.GetFiles(sourceDir))
-                File.Copy(file, Path.Combine(destinationDir, Path.GetFileName(file)), true);
-            foreach (var directory in Directory.GetDirectories(sourceDir))
-                CopyDirectory(directory, Path.Combine(destinationDir, Path.GetFileName(directory)));
+            if (item is FileInfo file)
+                return file.Length;
+
+            if (item is DirectoryInfo dir)
+            {
+                long size = 0;
+                foreach (var child in dir.GetFileSystemInfos())
+                {
+                    size += GetTotalSize(child);
+                }
+                return size;
+            }
+
+            return 0;
         }
 
-        private static void MoveWithFallback(string source, string destination)
+        private static async Task CopyItemAsync(FileSystemInfo source, string destination, IProgress<double> progress, CancellationToken token, long totalBytes, ref long copied)
         {
-            try
+            if (source is FileInfo file)
             {
-                if (File.Exists(source))
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                try
                 {
-                    File.Move(source, destination, true);
-                }
-                else if (Directory.Exists(source))
-                {
-                    if (Directory.Exists(destination))
+                    const int bufferSize = 81920;
+                    await using var sourceStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true);
+                    await using var destStream = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, useAsync: true);
+                    var buffer = new byte[bufferSize];
+                    int bytesRead;
+                    while ((bytesRead = await sourceStream.ReadAsync(buffer.AsMemory(0, buffer.Length), token)) > 0)
                     {
-                        Directory.Delete(destination, true);
+                        await destStream.WriteAsync(buffer.AsMemory(0, bytesRead), token);
+                        copied += bytesRead;
+                        progress.Report(copied * 100.0 / totalBytes);
+                        token.ThrowIfCancellationRequested();
                     }
-                    Directory.Move(source, destination);
                 }
-                else
+                catch
                 {
-                    throw new FileNotFoundException("Source does not exist", source);
+                    if (File.Exists(destination))
+                        File.Delete(destination);
+                    throw;
                 }
             }
-            catch (IOException)
+            else if (source is DirectoryInfo dir)
             {
-                if (File.Exists(source))
+                Directory.CreateDirectory(destination);
+                foreach (var child in dir.GetFileSystemInfos())
                 {
-                    File.Copy(source, destination, true);
-                    File.Delete(source);
-                }
-                else if (Directory.Exists(source))
-                {
-                    if (Directory.Exists(destination))
-                    {
-                        Directory.Delete(destination, true);
-                    }
-                    CopyDirectory(source, destination);
-                    Directory.Delete(source, true);
-                }
-                else
-                {
-                    throw;
+                    var childDest = Path.Combine(destination, child.Name);
+                    await CopyItemAsync(child, childDest, progress, token, totalBytes, ref copied);
                 }
             }
         }
