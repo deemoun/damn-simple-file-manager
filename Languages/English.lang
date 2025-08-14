@@ -57,6 +57,7 @@ Menu_Services=_Services
 Menu_ControlPanel=Control _Panel
 Menu_System=_System
 Menu_Lynkr=_Lynkr
+Menu_OpenSettingsIni=_Open Settings ini file
 Column_Name=Name
 Column_Type=Type
 Column_Size=Size

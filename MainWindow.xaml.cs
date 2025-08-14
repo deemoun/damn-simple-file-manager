@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
+using System.ComponentModel;
 using DamnSimpleFileManager.Services;
 using DamnSimpleFileManager.Windows;
 
@@ -79,6 +81,7 @@ namespace DamnSimpleFileManager
             ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
             SystemMenuItem.Header = Localization.Get("Menu_System");
             LynkrMenuItem.Header = Localization.Get("Menu_Lynkr");
+            OpenSettingsIniMenuItem.Header = Localization.Get("Menu_OpenSettingsIni");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
@@ -365,6 +368,38 @@ namespace DamnSimpleFileManager
                 Owner = this
             };
             wnd.ShowDialog();
+        }
+
+        private void OpenSettingsIni_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open Settings ini clicked");
+            var configPath = Path.Combine(AppContext.BaseDirectory, "dsfm.ini");
+            try
+            {
+                Process.Start(new ProcessStartInfo("notepad.exe", configPath)
+                {
+                    UseShellExecute = true
+                });
+            }
+            catch (Win32Exception)
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "Executable Files (*.exe)|*.exe|All Files (*.*)|*.*"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    Process.Start(new ProcessStartInfo(dialog.FileName, configPath)
+                    {
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error opening settings file", ex);
+                MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

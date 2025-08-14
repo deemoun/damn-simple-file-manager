@@ -57,6 +57,7 @@ Menu_Services=_Службы
 Menu_ControlPanel=_Панель управления
 Menu_System=_Система
 Menu_Lynkr=_Lynkr
+Menu_OpenSettingsIni=_Открыть файл настроек ini
 Column_Name=Имя
 Column_Type=Тип
 Column_Size=Размер
