@@ -13,8 +13,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="FileSizeColumn" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="CreationDateColumn" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
                            Width="50" Margin="0,0,5,0"
@@ -23,7 +23,7 @@
                 <TextBlock Grid.Column="2" Text="{Binding Converter={StaticResource FileSizeConverter}, Mode=OneWay}"
                            Margin="10,0,5,0" TextAlignment="Right" />
                 <TextBlock Grid.Column="3" Text="{Binding CreationTime, StringFormat={}{0:dd/MM/yyyy}}"
-                           Margin="10,0,0,0" />
+                           Margin="10,0,0,0" TextAlignment="Right" />
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -158,10 +158,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                      Grid.IsSharedSizeScope="True"
                       ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                      Grid.IsSharedSizeScope="True"
                       ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
