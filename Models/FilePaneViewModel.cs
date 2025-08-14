@@ -13,6 +13,16 @@ namespace DamnSimpleFileManager
         public ObservableCollection<FileSystemInfo> Items { get; } = new();
         public ObservableCollection<string> Drives { get; } = new();
 
+        internal enum SortField
+        {
+            Name,
+            Size,
+            CreationTime
+        }
+
+        private SortField currentSortField = SortField.Name;
+        private bool sortAscending = true;
+
         private string? selectedDrive;
         public string? SelectedDrive
         {
@@ -151,9 +161,56 @@ namespace DamnSimpleFileManager
                               !f.Attributes.HasFlag(FileAttributes.System))))
                 Items.Add(f);
 
+            SortItems();
+
             CurrentPath = dir.FullName;
 
             UpdateDriveInfo(dir);
+        }
+
+        public void Sort(SortField field)
+        {
+            if (currentSortField == field)
+            {
+                sortAscending = !sortAscending;
+            }
+            else
+            {
+                currentSortField = field;
+                sortAscending = true;
+            }
+            SortItems();
+        }
+
+        private void SortItems()
+        {
+            var parent = Items.OfType<ParentDirectoryInfo>().FirstOrDefault();
+            var items = Items.Where(i => i is not ParentDirectoryInfo).ToList();
+
+            IEnumerable<FileSystemInfo> sorted = currentSortField switch
+            {
+                SortField.Name => sortAscending
+                    ? items.OrderBy(i => i.Name, StringComparer.CurrentCultureIgnoreCase)
+                    : items.OrderByDescending(i => i.Name, StringComparer.CurrentCultureIgnoreCase),
+                SortField.Size => sortAscending
+                    ? items.OrderBy(i => i is FileInfo fi ? fi.Length : 0L)
+                    : items.OrderByDescending(i => i is FileInfo fi ? fi.Length : 0L),
+                SortField.CreationTime => sortAscending
+                    ? items.OrderBy(i => i.CreationTime)
+                    : items.OrderByDescending(i => i.CreationTime),
+                _ => items
+            };
+
+            Items.Clear();
+            if (parent != null)
+            {
+                Items.Add(parent);
+            }
+
+            foreach (var item in sorted)
+            {
+                Items.Add(item);
+            }
         }
 
         private void SetupWatcher(DirectoryInfo dir)

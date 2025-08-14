@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using DamnSimpleFileManager.Services;
 using DamnSimpleFileManager.Windows;
 
@@ -84,6 +85,12 @@ namespace DamnSimpleFileManager
             MoveText.Text = Localization.Get("Button_Move") + " (F6)";
             DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
             TerminalText.Text = Localization.Get("Button_OpenTerminal");
+            LeftNameHeader.Content = Localization.Get("Column_Name");
+            RightNameHeader.Content = Localization.Get("Column_Name");
+            LeftSizeHeader.Content = Localization.Get("Column_Size");
+            RightSizeHeader.Content = Localization.Get("Column_Size");
+            LeftDateHeader.Content = Localization.Get("Column_Created");
+            RightDateHeader.Content = Localization.Get("Column_Created");
         }
 
         private void PopulateDriveSelectors()
@@ -418,6 +425,31 @@ namespace DamnSimpleFileManager
                     e.Handled = true;
                 }
             }
+        }
+
+        private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is GridViewColumnHeader header && header.Tag is string tag &&
+                Enum.TryParse<FilePaneViewModel.SortField>(tag, out var field))
+            {
+                var listView = FindAncestor<ListView>(header);
+                if (listView != null)
+                {
+                    var pane = listView == LeftList ? leftPane : rightPane;
+                    pane.Sort(field);
+                }
+            }
+        }
+
+        private static T? FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null)
+            {
+                if (current is T target)
+                    return target;
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
         }
 
     }

@@ -53,3 +53,6 @@ Menu_Services=_Servicios
 Menu_ControlPanel=_Panel de control
 Menu_System=_Sistema
 Menu_Lynkr=_Lynkr
+Column_Name=Nombre
+Column_Size=Tamaño
+Column_Created=Creado
