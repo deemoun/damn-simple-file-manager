@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -263,7 +264,7 @@ namespace DamnSimpleFileManager
             OpenSelected(pane, list);
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private async void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             Logger.Log($"Key pressed: {e.Key}");
             if (e.Key == Key.Enter)
@@ -286,14 +287,12 @@ namespace DamnSimpleFileManager
             }
             else if (e.Key == Key.F5)
             {
-                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
-                fileOperationsService.Copy(ActivePane, InactivePane, items, this);
+                await CopySelectedAsync();
                 e.Handled = true;
             }
             else if (e.Key == Key.F6)
             {
-                var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
-                fileOperationsService.Move(ActivePane, InactivePane, items, this);
+                await MoveSelectedAsync();
                 e.Handled = true;
             }
             else if (e.Key == Key.F7)
@@ -415,19 +414,49 @@ namespace DamnSimpleFileManager
             fileOperationsService.CreateFile(ActivePane, this);
         }
 
-        private void Copy_Click(object sender, RoutedEventArgs e)
+        private async Task CopySelectedAsync()
         {
             Logger.Log("Copy clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
-            fileOperationsService.Copy(ActivePane, InactivePane, items, this);
+            var progressWindow = new CopyProgressWindow { Owner = this };
+            progressWindow.Show();
+            try
+            {
+                await fileOperationsService.Copy(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.Log("Copy operation cancelled");
+            }
+            finally
+            {
+                progressWindow.Close();
+            }
         }
 
-        private void Move_Click(object sender, RoutedEventArgs e)
+        private async Task MoveSelectedAsync()
         {
             Logger.Log("Move clicked");
             var items = ActiveList.SelectedItems.Cast<FileSystemInfo>().Where(i => i is not ParentDirectoryInfo).ToList();
-            fileOperationsService.Move(ActivePane, InactivePane, items, this);
+            var progressWindow = new CopyProgressWindow { Owner = this };
+            progressWindow.Show();
+            try
+            {
+                await fileOperationsService.Move(ActivePane, InactivePane, items, this, progressWindow.Progress, progressWindow.Cancellation.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.Log("Move operation cancelled");
+            }
+            finally
+            {
+                progressWindow.Close();
+            }
         }
+
+        private async void Copy_Click(object sender, RoutedEventArgs e) => await CopySelectedAsync();
+
+        private async void Move_Click(object sender, RoutedEventArgs e) => await MoveSelectedAsync();
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
