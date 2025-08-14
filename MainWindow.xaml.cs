@@ -73,6 +73,7 @@ namespace DamnSimpleFileManager
             ServicesMenuItem.Header = Localization.Get("Menu_Services");
             ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
             SystemMenuItem.Header = Localization.Get("Menu_System");
+            LynkrMenuItem.Header = Localization.Get("Menu_Lynkr");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
@@ -315,6 +316,16 @@ namespace DamnSimpleFileManager
         {
             Logger.Log("Open System clicked");
             Process.Start(new ProcessStartInfo("control", "system") { UseShellExecute = true });
+        }
+
+        private void OpenLynkr_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open Lynkr clicked");
+            var wnd = new LynkrWindow
+            {
+                Owner = this
+            };
+            wnd.ShowDialog();
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
