@@ -47,3 +47,4 @@ DriveInfo_Free=Свободно
 SizeUnits=Б,КБ,МБ,ГБ,ТБ,ПБ,ЭБ
 Exception_PathNull=Путь не может быть пустым
 FileType_Default=ФАЙЛ
+NoItemsMessage=Ничего не найдено. Добавьте что-нибудь!

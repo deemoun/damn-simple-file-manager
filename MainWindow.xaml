@@ -157,15 +157,45 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      HorizontalContentAlignment="Stretch"
-                      ItemsSource="{Binding Items, Mode=OneWay}"
-                      PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+            <Grid Grid.Column="0">
+                <ListView x:Name="LeftList" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                          HorizontalContentAlignment="Stretch"
+                          ItemsSource="{Binding Items, Mode=OneWay}"
+                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+                <TextBlock DataContext="{Binding DataContext, ElementName=LeftList}" Text="{Binding NoItemsMessage}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Items.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
-            <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      HorizontalContentAlignment="Stretch"
-                      ItemsSource="{Binding Items, Mode=OneWay}"
-                      PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+            <Grid Grid.Column="2">
+                <ListView x:Name="RightList" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                          HorizontalContentAlignment="Stretch"
+                          ItemsSource="{Binding Items, Mode=OneWay}"
+                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+                <TextBlock DataContext="{Binding DataContext, ElementName=RightList}" Text="{Binding NoItemsMessage}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Items.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
         </Grid>
 
         <!-- Информация о диске -->

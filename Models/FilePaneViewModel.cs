@@ -94,6 +94,7 @@ namespace DamnSimpleFileManager
         public string TotalLabel => Localization.Get("DriveInfo_Total") + ":";
         public string UsedLabel => Localization.Get("DriveInfo_Used") + ":";
         public string FreeLabel => Localization.Get("DriveInfo_Free") + ":";
+        public string NoItemsMessage => Localization.Get("NoItemsMessage");
 
         public DirectoryInfo CurrentDir { get; private set; } = null!;
         private readonly Stack<DirectoryInfo> history = new();
