@@ -153,6 +153,9 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
                             <GridViewColumn Width="50">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="LeftTypeHeader" Tag="Type" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
@@ -215,6 +218,9 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
                             <GridViewColumn Width="50">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="RightTypeHeader" Tag="Type" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"

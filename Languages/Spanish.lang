@@ -54,5 +54,6 @@ Menu_ControlPanel=_Panel de control
 Menu_System=_Sistema
 Menu_Lynkr=_Lynkr
 Column_Name=Nombre
+Column_Type=Tipo
 Column_Size=Tamaño
 Column_Created=Creado

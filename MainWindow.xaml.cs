@@ -85,6 +85,8 @@ namespace DamnSimpleFileManager
             MoveText.Text = Localization.Get("Button_Move") + " (F6)";
             DeleteText.Text = Localization.Get("Button_Delete") + " (F8)";
             TerminalText.Text = Localization.Get("Button_OpenTerminal");
+            LeftTypeHeader.Content = Localization.Get("Column_Type");
+            RightTypeHeader.Content = Localization.Get("Column_Type");
             LeftNameHeader.Content = Localization.Get("Column_Name");
             RightNameHeader.Content = Localization.Get("Column_Name");
             LeftSizeHeader.Content = Localization.Get("Column_Size");
