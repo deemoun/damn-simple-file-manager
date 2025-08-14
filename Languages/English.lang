@@ -47,3 +47,4 @@ DriveInfo_Free=Free
 SizeUnits=B,KB,MB,GB,TB,PB,EB
 Exception_PathNull=Path cannot be null or empty
 FileType_Default=FILE
+NoItemsMessage=No items found. Go add some!

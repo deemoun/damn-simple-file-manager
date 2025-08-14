@@ -47,3 +47,4 @@ DriveInfo_Free=Libre
 SizeUnits=B,KB,MB,GB,TB,PB,EB
 Exception_PathNull=La ruta no puede estar vacía
 FileType_Default=ARCHIVO
+NoItemsMessage=No se encontraron elementos. ¡Ve y agrega algunos!
