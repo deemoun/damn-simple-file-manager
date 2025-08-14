@@ -12,7 +12,7 @@ namespace DamnSimpleFileManager.Services
 {
     internal class FileOperationsService
     {
-        public async Task Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token)
+        public async Task Copy(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token, bool confirm = true)
         {
             var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
@@ -37,7 +37,7 @@ namespace DamnSimpleFileManager.Services
                 Logger.Log($"Copying '{item.FullName}' to '{target}'");
                 try
                 {
-                    if (Settings.CopyConfirmation)
+                    if (confirm && Settings.CopyConfirmation)
                     {
                         var result = MessageBox.Show(
                             owner,
@@ -68,7 +68,7 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
-        public async Task Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token)
+        public async Task Move(FilePaneViewModel source, FilePaneViewModel dest, IEnumerable<FileSystemInfo> items, Window owner, IProgress<double> progress, CancellationToken token, bool confirm = true)
         {
             var selectedItems = items.Where(i => i is not ParentDirectoryInfo).ToList();
             if (selectedItems.Count == 0)
@@ -93,7 +93,7 @@ namespace DamnSimpleFileManager.Services
                 Logger.Log($"Moving '{item.FullName}' to '{target}'");
                 try
                 {
-                    if (Settings.MoveConfirmation)
+                    if (confirm && Settings.MoveConfirmation)
                     {
                         var result = MessageBox.Show(
                             owner,
