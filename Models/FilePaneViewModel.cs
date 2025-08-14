@@ -21,7 +21,7 @@ namespace DamnSimpleFileManager
             CreationTime
         }
 
-        private SortField currentSortField = SortField.Name;
+        private SortField currentSortField = SortField.Type;
         private bool sortAscending = true;
 
         private string? selectedDrive;
