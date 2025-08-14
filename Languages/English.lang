@@ -48,3 +48,7 @@ SizeUnits=B,KB,MB,GB,TB,PB,EB
 Exception_PathNull=Path cannot be null or empty
 FileType_Default=FILE
 NoItemsMessage=No items found. Go add some!
+Menu_Tools=_Tools
+Menu_Services=_Services
+Menu_ControlPanel=Control _Panel
+Menu_System=_System
