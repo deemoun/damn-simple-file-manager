@@ -12,7 +12,7 @@ namespace DamnSimpleFileManager.Windows
             InitializeComponent();
 
             var v = Assembly.GetExecutingAssembly().GetName().Version;
-            var version = v is null ? "1.0.0" : $"{v.Major}.{v.Minor}.{v.Build}";
+            var version = v is null ? "1.0.8" : $"{v.Major}.{v.Minor}.{v.Build}";
             AppNameTextBlock.Text += $" v{version}";
         }
 
