@@ -53,3 +53,6 @@ Menu_Services=_Службы
 Menu_ControlPanel=_Панель управления
 Menu_System=_Система
 Menu_Lynkr=_Lynkr
+Column_Name=Имя
+Column_Size=Размер
+Column_Created=Создано

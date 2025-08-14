@@ -8,24 +8,6 @@
         <local:FileTypeConverter x:Key="FileTypeConverter" />
         <local:FileForegroundConverter x:Key="FileForegroundConverter" />
         <local:FileSizeConverter x:Key="FileSizeConverter" />
-        <DataTemplate x:Key="FileItemTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="FileSizeColumn" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="CreationDateColumn" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
-                           Width="50" Margin="0,0,5,0"
-                           Foreground="{Binding Converter={StaticResource FileForegroundConverter}, Mode=OneWay}" />
-                <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" />
-                <TextBlock Grid.Column="2" Text="{Binding Converter={StaticResource FileSizeConverter}, Mode=OneWay}"
-                           Margin="10,0,5,0" TextAlignment="Right" />
-                <TextBlock Grid.Column="3" Text="{Binding CreationTime, StringFormat={}{0:dd/MM/yyyy}}"
-                           Margin="10,0,0,0" TextAlignment="Right" />
-            </Grid>
-        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -164,10 +146,52 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <ListView x:Name="LeftList" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                <ListView x:Name="LeftList" SelectionMode="Extended"
                           HorizontalContentAlignment="Stretch"
                           ItemsSource="{Binding Items, Mode=OneWay}"
-                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
+                                                   Width="50" Margin="0,0,5,0"
+                                                   Foreground="{Binding Converter={StaticResource FileForegroundConverter}, Mode=OneWay}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="LeftNameHeader" Tag="Name" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.DisplayMemberBinding>
+                                    <Binding Path="Name"/>
+                                </GridViewColumn.DisplayMemberBinding>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="LeftSizeHeader" Tag="Size" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FileSizeConverter}, Mode=OneWay}" Margin="10,0,5,0" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="120">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="LeftDateHeader" Tag="CreationTime" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CreationTime, StringFormat={}{0:dd/MM/yyyy}}" Margin="10,0,0,0" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
                 <TextBlock DataContext="{Binding DataContext, ElementName=LeftList}" Text="{Binding NoItemsMessage}"
                            HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray">
                     <TextBlock.Style>
@@ -184,10 +208,52 @@
             </Grid>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <Grid Grid.Column="2">
-                <ListView x:Name="RightList" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
+                <ListView x:Name="RightList" SelectionMode="Extended"
                           HorizontalContentAlignment="Stretch"
                           ItemsSource="{Binding Items, Mode=OneWay}"
-                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
+                          PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
+                                                   Width="50" Margin="0,0,5,0"
+                                                   Foreground="{Binding Converter={StaticResource FileForegroundConverter}, Mode=OneWay}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="RightNameHeader" Tag="Name" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.DisplayMemberBinding>
+                                    <Binding Path="Name"/>
+                                </GridViewColumn.DisplayMemberBinding>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="RightSizeHeader" Tag="Size" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FileSizeConverter}, Mode=OneWay}" Margin="10,0,5,0" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="120">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader x:Name="RightDateHeader" Tag="CreationTime" Click="GridViewColumnHeader_Click"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CreationTime, StringFormat={}{0:dd/MM/yyyy}}" Margin="10,0,0,0" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
                 <TextBlock DataContext="{Binding DataContext, ElementName=RightList}" Text="{Binding NoItemsMessage}"
                            HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray">
                     <TextBlock.Style>
