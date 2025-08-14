@@ -285,12 +285,12 @@ namespace DamnSimpleFileManager
                     LeftList.Focus();
                 e.Handled = true;
             }
-            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.Key == Key.F1)
+            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.SystemKey == Key.F1)
             {
                 LeftList.Focus();
                 e.Handled = true;
             }
-            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.Key == Key.F2)
+            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.SystemKey == Key.F2)
             {
                 RightList.Focus();
                 e.Handled = true;
