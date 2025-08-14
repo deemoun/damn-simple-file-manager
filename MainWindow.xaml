@@ -13,10 +13,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}}"
+                <TextBlock Text="{Binding Converter={StaticResource FileTypeConverter}, Mode=OneWay}"
                            Width="50" Margin="0,0,5,0"
-                           Foreground="{Binding Converter={StaticResource FileForegroundConverter}}" />
-                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                           Foreground="{Binding Converter={StaticResource FileForegroundConverter}, Mode=OneWay}" />
+                <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -65,7 +65,7 @@
             </Grid.ColumnDefinitions>
             <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="80"
                       HorizontalAlignment="Left"
-                      ItemsSource="{Binding Drives}"
+                      ItemsSource="{Binding Drives, Mode=OneWay}"
                       SelectedItem="{Binding SelectedDrive}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
@@ -113,7 +113,7 @@
             </StackPanel>
             <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="80"
                       HorizontalAlignment="Right"
-                      ItemsSource="{Binding Drives}"
+                      ItemsSource="{Binding Drives, Mode=OneWay}"
                       SelectedItem="{Binding SelectedDrive}"/>
         </Grid>
 
@@ -138,9 +138,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LeftPathText" Grid.Column="0" Margin="5,0" FontWeight="Bold" Text="{Binding CurrentPath}" />
+            <TextBlock x:Name="LeftPathText" Grid.Column="0" Margin="5,0" FontWeight="Bold" Text="{Binding CurrentPath, Mode=OneWay}" />
             <Label Grid.Column="1" Width="10"/>
-            <TextBlock x:Name="RightPathText" Grid.Column="2" Margin="5,0" FontWeight="Bold" HorizontalAlignment="Right" Text="{Binding CurrentPath}"/>
+            <TextBlock x:Name="RightPathText" Grid.Column="2" Margin="5,0" FontWeight="Bold" HorizontalAlignment="Right" Text="{Binding CurrentPath, Mode=OneWay}"/>
         </Grid>
 
         <!-- Основные списки -->
@@ -151,11 +151,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="LeftList" Grid.Column="0" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      ItemsSource="{Binding Items}"
+                      ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="Transparent"/>
             <ListView x:Name="RightList" Grid.Column="2" ItemTemplate="{StaticResource FileItemTemplate}" SelectionMode="Extended"
-                      ItemsSource="{Binding Items}"
+                      ItemsSource="{Binding Items, Mode=OneWay}"
                       PreviewKeyDown="List_PreviewKeyDown" MouseDoubleClick="List_DoubleClick" MouseRightButtonUp="List_RightClick"/>
         </Grid>
 
@@ -167,25 +167,25 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0">
-                <Run Text="{Binding TotalLabel}" Foreground="Black"/>
-                <Run Text="{Binding TotalSpace}" Foreground="Black"/>
+                <Run Text="{Binding TotalLabel, Mode=OneWay}" Foreground="Black"/>
+                <Run Text="{Binding TotalSpace, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="  "/>
-                <Run Text="{Binding UsedLabel}" Foreground="DarkRed"/>
-                <Run Text="{Binding UsedSpace}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedLabel, Mode=OneWay}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedSpace, Mode=OneWay}" Foreground="DarkRed"/>
                 <Run Text="  "/>
-                <Run Text="{Binding FreeLabel}" Foreground="ForestGreen"/>
-                <Run Text="{Binding FreeSpace}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeLabel, Mode=OneWay}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeSpace, Mode=OneWay}" Foreground="ForestGreen"/>
             </TextBlock>
             <Label Grid.Column="1" Width="10"/>
             <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right">
-                <Run Text="{Binding TotalLabel}" Foreground="Black"/>
-                <Run Text="{Binding TotalSpace}" Foreground="Black"/>
+                <Run Text="{Binding TotalLabel, Mode=OneWay}" Foreground="Black"/>
+                <Run Text="{Binding TotalSpace, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="  "/>
-                <Run Text="{Binding UsedLabel}" Foreground="DarkRed"/>
-                <Run Text="{Binding UsedSpace}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedLabel, Mode=OneWay}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedSpace, Mode=OneWay}" Foreground="DarkRed"/>
                 <Run Text="  "/>
-                <Run Text="{Binding FreeLabel}" Foreground="ForestGreen"/>
-                <Run Text="{Binding FreeSpace}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeLabel, Mode=OneWay}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeSpace, Mode=OneWay}" Foreground="ForestGreen"/>
             </TextBlock>
         </Grid>
     </Grid>
