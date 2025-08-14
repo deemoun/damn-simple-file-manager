@@ -1,0 +1,32 @@
+<Window x:Class="DamnSimpleFileManager.Windows.LynkrWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Lynkr" Height="400" Width="600"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox x:Name="UrlTextBox" Width="300" Margin="0,0,5,0"/>
+            <TextBox x:Name="DescriptionTextBox" Width="200" Margin="0,0,5,0"/>
+            <Button Content="Add" Width="60" Click="Add_Click"/>
+        </StackPanel>
+        <ListView x:Name="LinksList" Grid.Row="1" Margin="0,0,0,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Url" DisplayMemberBinding="{Binding Url}" Width="300"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Open" Width="60" Margin="0,0,5,0" Click="Open_Click"/>
+            <Button Content="Delete" Width="60" Margin="0,0,5,0" Click="Delete_Click"/>
+            <Button Content="Import" Width="60" Margin="0,0,5,0" Click="Import_Click"/>
+            <Button Content="Export" Width="60" Click="Export_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
