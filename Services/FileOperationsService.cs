@@ -49,7 +49,7 @@ namespace DamnSimpleFileManager.Services
                             continue;
                     }
 
-                    await CopyItemAsync(item, target, progress, token, totalBytes, ref copied);
+                    copied = await CopyItemAsync(item, target, progress, token, totalBytes, copied);
                     dest.LoadDirectory(dest.CurrentDir);
                 }
                 catch (OperationCanceledException)
@@ -122,7 +122,7 @@ namespace DamnSimpleFileManager.Services
                     }
                     catch (IOException)
                     {
-                        await CopyItemAsync(item, target, progress, token, totalBytes, ref copied);
+                        copied = await CopyItemAsync(item, target, progress, token, totalBytes, copied);
                         if (item is FileInfo)
                             File.Delete(item.FullName);
                         else if (item is DirectoryInfo)
@@ -249,7 +249,7 @@ namespace DamnSimpleFileManager.Services
             return 0;
         }
 
-        private static async Task CopyItemAsync(FileSystemInfo source, string destination, IProgress<double> progress, CancellationToken token, long totalBytes, ref long copied)
+        private static async Task<long> CopyItemAsync(FileSystemInfo source, string destination, IProgress<double> progress, CancellationToken token, long totalBytes, long copied)
         {
             if (source is FileInfo file)
             {
@@ -282,9 +282,10 @@ namespace DamnSimpleFileManager.Services
                 foreach (var child in dir.GetFileSystemInfos())
                 {
                     var childDest = Path.Combine(destination, child.Name);
-                    await CopyItemAsync(child, childDest, progress, token, totalBytes, ref copied);
+                    copied = await CopyItemAsync(child, childDest, progress, token, totalBytes, copied);
                 }
             }
+            return copied;
         }
     }
 }
