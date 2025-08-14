@@ -166,9 +166,27 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0" Text="{Binding DriveInfo}" />
+            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0">
+                <Run Text="{Binding TotalLabel}" Foreground="Black"/>
+                <Run Text="{Binding TotalSpace}" Foreground="Black"/>
+                <Run Text="  "/>
+                <Run Text="{Binding UsedLabel}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedSpace}" Foreground="DarkRed"/>
+                <Run Text="  "/>
+                <Run Text="{Binding FreeLabel}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeSpace}" Foreground="ForestGreen"/>
+            </TextBlock>
             <Label Grid.Column="1" Width="10"/>
-            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right" Text="{Binding DriveInfo}"/>
+            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right">
+                <Run Text="{Binding TotalLabel}" Foreground="Black"/>
+                <Run Text="{Binding TotalSpace}" Foreground="Black"/>
+                <Run Text="  "/>
+                <Run Text="{Binding UsedLabel}" Foreground="DarkRed"/>
+                <Run Text="{Binding UsedSpace}" Foreground="DarkRed"/>
+                <Run Text="  "/>
+                <Run Text="{Binding FreeLabel}" Foreground="ForestGreen"/>
+                <Run Text="{Binding FreeSpace}" Foreground="ForestGreen"/>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>

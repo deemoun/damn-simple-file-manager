@@ -49,19 +49,51 @@ namespace DamnSimpleFileManager
             }
         }
 
-        private string driveInfo = string.Empty;
-        public string DriveInfo
+        private string totalSpace = string.Empty;
+        public string TotalSpace
         {
-            get => driveInfo;
+            get => totalSpace;
             private set
             {
-                if (driveInfo != value)
+                if (totalSpace != value)
                 {
-                    driveInfo = value;
+                    totalSpace = value;
                     OnPropertyChanged();
                 }
             }
         }
+
+        private string usedSpace = string.Empty;
+        public string UsedSpace
+        {
+            get => usedSpace;
+            private set
+            {
+                if (usedSpace != value)
+                {
+                    usedSpace = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string freeSpace = string.Empty;
+        public string FreeSpace
+        {
+            get => freeSpace;
+            private set
+            {
+                if (freeSpace != value)
+                {
+                    freeSpace = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string TotalLabel => Localization.Get("DriveInfo_Total") + ":";
+        public string UsedLabel => Localization.Get("DriveInfo_Used") + ":";
+        public string FreeLabel => Localization.Get("DriveInfo_Free") + ":";
 
         public DirectoryInfo CurrentDir { get; private set; } = null!;
         private readonly Stack<DirectoryInfo> history = new();
@@ -150,11 +182,9 @@ namespace DamnSimpleFileManager
             long total = drive.TotalSize;
             long free = drive.TotalFreeSpace;
             long used = total - free;
-            DriveInfo = Localization.Get(
-                "DriveInfo_Format",
-                FormatBytes(total),
-                FormatBytes(used),
-                FormatBytes(free));
+            TotalSpace = FormatBytes(total);
+            UsedSpace = FormatBytes(used);
+            FreeSpace = FormatBytes(free);
         }
 
         private static string FormatBytes(long bytes)
