@@ -34,6 +34,7 @@
                 <Separator/>
                 <MenuItem x:Name="CopyMenuItem" Header="_Copy" Click="Copy_Click" InputGestureText="F5" IsEnabled="False"/>
                 <MenuItem x:Name="MoveMenuItem" Header="_Move" Click="Move_Click" InputGestureText="F6" IsEnabled="False"/>
+                <MenuItem x:Name="RenameMenuItem" Header="_Rename" Click="Rename_Click" InputGestureText="F2" IsEnabled="False"/>
                 <MenuItem x:Name="DeleteMenuItem" Header="_Delete" Click="Delete_Click" InputGestureText="F8" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem x:Name="OpenTerminalMenuItem" Header="_Open Terminal" Click="OpenTerminal_Click"/>

@@ -69,6 +69,8 @@ namespace DamnSimpleFileManager
             CopyMenuItem.InputGestureText = "F5";
             MoveMenuItem.Header = Localization.Get("Menu_Move");
             MoveMenuItem.InputGestureText = "F6";
+            RenameMenuItem.Header = Localization.Get("Menu_Rename");
+            RenameMenuItem.InputGestureText = "F2";
             DeleteMenuItem.Header = Localization.Get("Menu_Delete");
             DeleteMenuItem.InputGestureText = "F8";
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
@@ -225,6 +227,8 @@ namespace DamnSimpleFileManager
             CopyMenuItem.IsEnabled = hasItems;
             MoveButton.IsEnabled = hasItems;
             MoveMenuItem.IsEnabled = hasItems;
+            var canRename = ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is not ParentDirectoryInfo;
+            RenameMenuItem.IsEnabled = canRename;
             DeleteButton.IsEnabled = hasItems;
             DeleteMenuItem.IsEnabled = hasItems;
         }
@@ -279,6 +283,11 @@ namespace DamnSimpleFileManager
                     RightList.Focus();
                 else
                     LeftList.Focus();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.F2)
+            {
+                RenameSelected();
                 e.Handled = true;
             }
             else if (e.Key == Key.F3)
@@ -493,9 +502,20 @@ namespace DamnSimpleFileManager
             }
         }
 
+        private void RenameSelected()
+        {
+            Logger.Log("Rename clicked");
+            if (ActiveList.SelectedItems.Count == 1 && ActiveList.SelectedItem is FileSystemInfo item && item is not ParentDirectoryInfo)
+            {
+                fileOperationsService.Rename(ActivePane, item, this);
+            }
+        }
+
         private async void Copy_Click(object sender, RoutedEventArgs e) => await CopySelectedAsync();
 
         private async void Move_Click(object sender, RoutedEventArgs e) => await MoveSelectedAsync();
+
+        private void Rename_Click(object sender, RoutedEventArgs e) => RenameSelected();
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {

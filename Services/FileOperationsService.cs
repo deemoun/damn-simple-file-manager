@@ -221,6 +221,35 @@ namespace DamnSimpleFileManager.Services
             }
         }
 
+        public void Rename(FilePaneViewModel pane, FileSystemInfo item, Window owner)
+        {
+            string path = pane.CurrentDir.FullName;
+            string name = Interaction.InputBox(
+                $"{Localization.Get("Prompt_Rename")}\n{path}",
+                $"{Localization.Get("Prompt_Rename_Title")} - {path}",
+                item.Name,
+                (int)(owner.Left + (owner.ActualWidth - 300) / 2),
+                (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
+            if (!string.IsNullOrWhiteSpace(name) && name != item.Name && ValidateName(name, owner))
+            {
+                try
+                {
+                    string target = Path.Combine(path, name);
+                    if (item is FileInfo)
+                        File.Move(item.FullName, target, true);
+                    else if (item is DirectoryInfo)
+                        Directory.Move(item.FullName, target);
+                    Logger.Log($"Renamed '{item.FullName}' to '{target}'");
+                    pane.LoadDirectory(pane.CurrentDir);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"Error renaming '{item.FullName}' to '{name}'", ex);
+                    MessageBox.Show(owner, Localization.Get("Error_Rename", ex.Message));
+                }
+            }
+        }
+
         private static bool ValidateName(string name, Window owner)
         {
             if (Path.IsPathRooted(name) || name.Contains("..") || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
