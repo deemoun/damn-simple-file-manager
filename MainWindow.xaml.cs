@@ -285,6 +285,16 @@ namespace DamnSimpleFileManager
                     LeftList.Focus();
                 e.Handled = true;
             }
+            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.Key == Key.F1)
+            {
+                LeftList.Focus();
+                e.Handled = true;
+            }
+            else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt) && e.Key == Key.F2)
+            {
+                RightList.Focus();
+                e.Handled = true;
+            }
             else if (e.Key == Key.F2)
             {
                 RenameSelected();
