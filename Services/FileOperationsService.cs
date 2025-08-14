@@ -121,32 +121,34 @@ namespace DamnSimpleFileManager.Services
 
         public void CreateFolder(FilePaneViewModel pane, Window owner)
         {
+            string path = pane.CurrentDir.FullName;
             string name = Interaction.InputBox(
-                Localization.Get("Prompt_FolderName"),
-                Localization.Get("Prompt_CreateFolder"),
+                $"{Localization.Get("Prompt_FolderName")}\n{path}",
+                $"{Localization.Get("Prompt_CreateFolder")} - {path}",
                 Localization.Get("Default_FolderName"),
                 (int)(owner.Left + (owner.ActualWidth - 300) / 2),
                 (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
-                Directory.CreateDirectory(Path.Combine(pane.CurrentDir.FullName, name));
-                Logger.Log($"Created folder '{name}' in '{pane.CurrentDir.FullName}'");
+                Directory.CreateDirectory(Path.Combine(path, name));
+                Logger.Log($"Created folder '{name}' in '{path}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
         }
 
         public void CreateFile(FilePaneViewModel pane, Window owner)
         {
+            string path = pane.CurrentDir.FullName;
             string name = Interaction.InputBox(
-                Localization.Get("Prompt_FileName"),
-                Localization.Get("Prompt_CreateFile"),
+                $"{Localization.Get("Prompt_FileName")}\n{path}",
+                $"{Localization.Get("Prompt_CreateFile")} - {path}",
                 Localization.Get("Default_FileName"),
                 (int)(owner.Left + (owner.ActualWidth - 300) / 2),
                 (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
-                File.Create(Path.Combine(pane.CurrentDir.FullName, name)).Close();
-                Logger.Log($"Created file '{name}' in '{pane.CurrentDir.FullName}'");
+                File.Create(Path.Combine(path, name)).Close();
+                Logger.Log($"Created file '{name}' in '{path}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
         }
