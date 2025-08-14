@@ -48,3 +48,7 @@ SizeUnits=B,KB,MB,GB,TB,PB,EB
 Exception_PathNull=La ruta no puede estar vacía
 FileType_Default=ARCHIVO
 NoItemsMessage=No se encontraron elementos. ¡Ve y agrega algunos!
+Menu_Tools=_Herramientas
+Menu_Services=_Servicios
+Menu_ControlPanel=_Panel de control
+Menu_System=_Sistema

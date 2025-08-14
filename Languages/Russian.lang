@@ -48,3 +48,7 @@ SizeUnits=Б,КБ,МБ,ГБ,ТБ,ПБ,ЭБ
 Exception_PathNull=Путь не может быть пустым
 FileType_Default=ФАЙЛ
 NoItemsMessage=Ничего не найдено. Добавьте что-нибудь!
+Menu_Tools=_Сервис
+Menu_Services=_Службы
+Menu_ControlPanel=_Панель управления
+Menu_System=_Система

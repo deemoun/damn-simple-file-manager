@@ -69,6 +69,10 @@ namespace DamnSimpleFileManager
             DeleteMenuItem.Header = Localization.Get("Menu_Delete");
             DeleteMenuItem.InputGestureText = "F8";
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
+            ToolsMenu.Header = Localization.Get("Menu_Tools");
+            ServicesMenuItem.Header = Localization.Get("Menu_Services");
+            ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
+            SystemMenuItem.Header = Localization.Get("Menu_System");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
             AboutMenuItem.Header = Localization.Get("Menu_About");
@@ -293,6 +297,24 @@ namespace DamnSimpleFileManager
                 Logger.LogError("Error opening terminal", ex);
                 MessageBox.Show(this, Localization.Get("Error_OpenTerminal", ex.Message));
             }
+        }
+
+        private void OpenServices_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open services clicked");
+            Process.Start(new ProcessStartInfo("services.msc") { UseShellExecute = true });
+        }
+
+        private void OpenControlPanel_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open Control Panel clicked");
+            Process.Start(new ProcessStartInfo("control") { UseShellExecute = true });
+        }
+
+        private void OpenSystem_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open System clicked");
+            Process.Start(new ProcessStartInfo("control", "system") { UseShellExecute = true });
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

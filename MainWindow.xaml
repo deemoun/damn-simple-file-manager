@@ -58,6 +58,11 @@
                 <Separator/>
                 <MenuItem x:Name="ExitMenuItem" Header="E_xit" Click="Exit_Click"/>
             </MenuItem>
+            <MenuItem x:Name="ToolsMenu" Header="_Tools">
+                <MenuItem x:Name="ServicesMenuItem" Header="Services" Click="OpenServices_Click"/>
+                <MenuItem x:Name="ControlPanelMenuItem" Header="Control Panel" Click="OpenControlPanel_Click"/>
+                <MenuItem x:Name="SystemMenuItem" Header="System" Click="OpenSystem_Click"/>
+            </MenuItem>
             <MenuItem x:Name="HelpMenu" Header="_Help">
                 <MenuItem x:Name="AboutMenuItem" Header="_About" Click="About_Click"/>
             </MenuItem>
