@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using DamnSimpleFileManager.Utils;
 
@@ -16,17 +17,38 @@ namespace DamnSimpleFileManager.Windows
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (linkManager.AddLink(UrlTextBox.Text))
+            var url = UrlTextBox.Text.Trim();
+            if (url == (string)UrlTextBox.Tag)
+                url = string.Empty;
+
+            if (linkManager.AddLink(url))
             {
-                if (!string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
-                    linkManager.SetDescription(UrlTextBox.Text.Trim(), DescriptionTextBox.Text.Trim());
-                UrlTextBox.Clear();
-                DescriptionTextBox.Clear();
+                var description = DescriptionTextBox.Text.Trim();
+                if (description != (string)DescriptionTextBox.Tag && !string.IsNullOrWhiteSpace(description))
+                    linkManager.SetDescription(url, description);
+                UrlTextBox.Text = (string)UrlTextBox.Tag;
+                DescriptionTextBox.Text = (string)DescriptionTextBox.Tag;
                 LinksList.Items.Refresh();
             }
             else
             {
                 MessageBox.Show(this, "Invalid URL", "Lynkr");
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb && tb.Text == tb.Tag?.ToString())
+            {
+                tb.Clear();
+            }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb && string.IsNullOrWhiteSpace(tb.Text))
+            {
+                tb.Text = tb.Tag?.ToString();
             }
         }
 

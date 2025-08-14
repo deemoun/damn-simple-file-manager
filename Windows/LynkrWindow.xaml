@@ -10,8 +10,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBox x:Name="UrlTextBox" Width="300" Margin="0,0,5,0"/>
-            <TextBox x:Name="DescriptionTextBox" Width="200" Margin="0,0,5,0"/>
+            <TextBox x:Name="UrlTextBox" Width="300" Margin="0,0,5,0"
+                     Text="Enter website address" Tag="Enter website address"
+                     GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+            <TextBox x:Name="DescriptionTextBox" Width="200" Margin="0,0,5,0"
+                     Text="Enter title" Tag="Enter title"
+                     GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
             <Button Content="Add" Width="60" Click="Add_Click"/>
         </StackPanel>
         <ListView x:Name="LinksList" Grid.Row="1" Margin="0,0,0,10">
