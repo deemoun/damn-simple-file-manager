@@ -11,7 +11,10 @@ The application is intentionally minimalistic and aims to offer a straightforwar
 - Dual-pane interface for easy file operations
 - Keyboard support and simple navigation
 - Create, copy, move, and delete files or folders
+- Sortable columns (Name, Size, Type, Created) with default sort by file type
 - Displays drive information and available space
+- Tools menu including utilities like **Lynkr** for managing links
+- Localization support in English, Russian, and Spanish
 - Configurable behavior via `dsfm.ini`
 
 ## Configuration
