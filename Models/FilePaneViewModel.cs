@@ -140,9 +140,15 @@ namespace DamnSimpleFileManager
             {
                 Items.Add(new ParentDirectoryInfo(dir.Parent.FullName));
             }
-            foreach (var d in dir.GetDirectories().Where(d => Settings.ShowHiddenFiles || !d.Attributes.HasFlag(FileAttributes.Hidden)))
+            foreach (var d in dir.GetDirectories().Where(d =>
+                             Settings.ShowHiddenFiles ||
+                             (!d.Attributes.HasFlag(FileAttributes.Hidden) &&
+                              !d.Attributes.HasFlag(FileAttributes.System))))
                 Items.Add(d);
-            foreach (var f in dir.GetFiles().Where(f => Settings.ShowHiddenFiles || !f.Attributes.HasFlag(FileAttributes.Hidden)))
+            foreach (var f in dir.GetFiles().Where(f =>
+                             Settings.ShowHiddenFiles ||
+                             (!f.Attributes.HasFlag(FileAttributes.Hidden) &&
+                              !f.Attributes.HasFlag(FileAttributes.System))))
                 Items.Add(f);
 
             CurrentPath = dir.FullName;
