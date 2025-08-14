@@ -12,7 +12,24 @@ namespace DamnSimpleFileManager.Windows
         public LynkrWindow()
         {
             InitializeComponent();
+            ApplyLocalization();
             LinksList.ItemsSource = linkManager.GetAllLinks();
+        }
+
+        private void ApplyLocalization()
+        {
+            Title = Localization.Get("Lynkr_Title");
+            UrlTextBox.Text = Localization.Get("Lynkr_UrlPlaceholder");
+            UrlTextBox.Tag = UrlTextBox.Text;
+            DescriptionTextBox.Text = Localization.Get("Lynkr_DescriptionPlaceholder");
+            DescriptionTextBox.Tag = DescriptionTextBox.Text;
+            AddButton.Content = Localization.Get("Lynkr_Button_Add");
+            UrlColumn.Header = Localization.Get("Lynkr_Column_Url");
+            DescriptionColumn.Header = Localization.Get("Lynkr_Column_Description");
+            OpenButton.Content = Localization.Get("Lynkr_Button_Open");
+            DeleteButton.Content = Localization.Get("Lynkr_Button_Delete");
+            ImportButton.Content = Localization.Get("Lynkr_Button_Import");
+            ExportButton.Content = Localization.Get("Lynkr_Button_Export");
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -32,7 +49,7 @@ namespace DamnSimpleFileManager.Windows
             }
             else
             {
-                MessageBox.Show(this, "Invalid URL", "Lynkr");
+                MessageBox.Show(this, Localization.Get("Lynkr_Error_InvalidUrl"), Localization.Get("Lynkr_Title"));
             }
         }
 
@@ -71,7 +88,7 @@ namespace DamnSimpleFileManager.Windows
 
         private void Import_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog { Filter = "JSON files (*.json)|*.json" };
+            var dialog = new OpenFileDialog { Filter = $"{Localization.Get("Lynkr_JsonFilter")} (*.json)|*.json" };
             if (dialog.ShowDialog() == true)
             {
                 linkManager.ImportFromFile(dialog.FileName);
@@ -82,7 +99,7 @@ namespace DamnSimpleFileManager.Windows
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog { Filter = "JSON files (*.json)|*.json", FileName = "links.json" };
+            var dialog = new SaveFileDialog { Filter = $"{Localization.Get("Lynkr_JsonFilter")} (*.json)|*.json", FileName = "links.json" };
             if (dialog.ShowDialog() == true)
             {
                 linkManager.ExportToFile(dialog.FileName);

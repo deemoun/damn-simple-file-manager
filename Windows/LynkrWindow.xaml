@@ -1,7 +1,7 @@
 <Window x:Class="DamnSimpleFileManager.Windows.LynkrWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Lynkr" Height="400" Width="600"
+        Title="" Height="400" Width="600"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -14,23 +14,23 @@
                      Text="Enter website address" Tag="Enter website address"
                      GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
             <TextBox x:Name="DescriptionTextBox" Width="200" Margin="0,0,5,0"
-                     Text="Enter title" Tag="Enter title"
+                     Text="Enter description" Tag="Enter description"
                      GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
-            <Button Content="Add" Width="60" Click="Add_Click"/>
+            <Button x:Name="AddButton" Content="Add" Width="60" Click="Add_Click"/>
         </StackPanel>
         <ListView x:Name="LinksList" Grid.Row="1" Margin="0,0,0,10">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Url" DisplayMemberBinding="{Binding Url}" Width="300"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    <GridViewColumn x:Name="UrlColumn" Header="Url" DisplayMemberBinding="{Binding Url}" Width="300"/>
+                    <GridViewColumn x:Name="DescriptionColumn" Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
                 </GridView>
             </ListView.View>
         </ListView>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Open" Width="60" Margin="0,0,5,0" Click="Open_Click"/>
-            <Button Content="Delete" Width="60" Margin="0,0,5,0" Click="Delete_Click"/>
-            <Button Content="Import" Width="60" Margin="0,0,5,0" Click="Import_Click"/>
-            <Button Content="Export" Width="60" Click="Export_Click"/>
+            <Button x:Name="OpenButton" Content="Open" Width="60" Margin="0,0,5,0" Click="Open_Click"/>
+            <Button x:Name="DeleteButton" Content="Delete" Width="60" Margin="0,0,5,0" Click="Delete_Click"/>
+            <Button x:Name="ImportButton" Content="Import" Width="60" Margin="0,0,5,0" Click="Import_Click"/>
+            <Button x:Name="ExportButton" Content="Export" Width="60" Click="Export_Click"/>
         </StackPanel>
     </Grid>
 </Window>
