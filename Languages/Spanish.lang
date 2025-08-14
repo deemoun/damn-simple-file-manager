@@ -57,6 +57,7 @@ Menu_Services=_Servicios
 Menu_ControlPanel=_Panel de control
 Menu_System=_Sistema
 Menu_Lynkr=_Lynkr
+Menu_OpenSettingsIni=_Abrir archivo de configuración ini
 Column_Name=Nombre
 Column_Type=Tipo
 Column_Size=Tamaño
