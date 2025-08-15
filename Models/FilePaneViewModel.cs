@@ -11,7 +11,7 @@ namespace DamnSimpleFileManager
     internal class FilePaneViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<FileSystemInfo> Items { get; } = new();
-        public ObservableCollection<string> Drives { get; } = new();
+        public ObservableCollection<DriveInfo> Drives { get; } = new();
 
         internal enum SortField
         {
@@ -24,8 +24,8 @@ namespace DamnSimpleFileManager
         private SortField currentSortField = SortField.Type;
         private bool sortAscending = true;
 
-        private string? selectedDrive;
-        public string? SelectedDrive
+        private DriveInfo? selectedDrive;
+        public DriveInfo? SelectedDrive
         {
             get => selectedDrive;
             set
@@ -36,7 +36,7 @@ namespace DamnSimpleFileManager
                     OnPropertyChanged();
                     if (value != null)
                     {
-                        CurrentDir = new DirectoryInfo(value);
+                        CurrentDir = value.RootDirectory;
                         history.Clear();
                         LoadDirectory(CurrentDir);
                         OnPropertyChanged(nameof(CanGoBack));
@@ -125,11 +125,11 @@ namespace DamnSimpleFileManager
         public void PopulateDrives()
         {
             Drives.Clear();
-            foreach (var drive in System.IO.DriveInfo.GetDrives())
+            foreach (var drive in DriveInfo.GetDrives())
             {
                 if (drive.IsReady)
                 {
-                    Drives.Add(drive.Name);
+                    Drives.Add(drive);
                 }
             }
 
@@ -246,7 +246,7 @@ namespace DamnSimpleFileManager
 
         private void UpdateDriveInfo(DirectoryInfo dir)
         {
-            var drive = new System.IO.DriveInfo(dir.Root.FullName);
+            var drive = new DriveInfo(dir.Root.FullName);
             long total = drive.TotalSize;
             long free = drive.TotalFreeSpace;
             long used = total - free;
