@@ -8,6 +8,14 @@
         <local:FileTypeConverter x:Key="FileTypeConverter" />
         <local:FileForegroundConverter x:Key="FileForegroundConverter" />
         <local:FileSizeConverter x:Key="FileSizeConverter" />
+        <DataTemplate x:Key="DriveTemplate">
+            <TextBlock>
+                <Run Text="{Binding Name}" />
+                <Run Text=" [" />
+                <Run Text="{Binding VolumeLabel}" />
+                <Run Text="]" />
+            </TextBlock>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -60,10 +68,11 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="80"
+            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="150"
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Drives, Mode=OneWay}"
-                      SelectedItem="{Binding SelectedDrive}"/>
+                      SelectedItem="{Binding SelectedDrive}"
+                      ItemTemplate="{StaticResource DriveTemplate}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
                     <StackPanel Orientation="Horizontal">
@@ -108,10 +117,11 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="80"
+            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="150"
                       HorizontalAlignment="Right"
                       ItemsSource="{Binding Drives, Mode=OneWay}"
-                      SelectedItem="{Binding SelectedDrive}"/>
+                      SelectedItem="{Binding SelectedDrive}"
+                      ItemTemplate="{StaticResource DriveTemplate}"/>
         </Grid>
 
         <!-- Кнопки Назад -->
