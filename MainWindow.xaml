@@ -68,7 +68,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="150"
+            <ComboBox x:Name="LeftDriveSelector" Grid.Column="0" Width="200" Margin="0,0,10,0"
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Drives, Mode=OneWay}"
                       SelectedItem="{Binding SelectedDrive}"
@@ -117,7 +117,7 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="150"
+            <ComboBox x:Name="RightDriveSelector" Grid.Column="2" Width="200" Margin="10,0,0,0"
                       HorizontalAlignment="Right"
                       ItemsSource="{Binding Drives, Mode=OneWay}"
                       SelectedItem="{Binding SelectedDrive}"
