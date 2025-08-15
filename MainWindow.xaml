@@ -10,9 +10,9 @@
         <local:FileSizeConverter x:Key="FileSizeConverter" />
         <DataTemplate x:Key="DriveTemplate">
             <TextBlock>
-                <Run Text="{Binding Name}" />
+                <Run Text="{Binding Name, Mode=OneWay}" />
                 <Run Text=" [" />
-                <Run Text="{Binding VolumeLabel}" />
+                <Run Text="{Binding VolumeLabel, Mode=OneWay}" />
                 <Run Text="]" />
             </TextBlock>
         </DataTemplate>
@@ -182,7 +182,7 @@
                                     <GridViewColumnHeader x:Name="LeftNameHeader" Tag="Name" Click="GridViewColumnHeader_Click"/>
                                 </GridViewColumn.Header>
                                 <GridViewColumn.DisplayMemberBinding>
-                                    <Binding Path="Name"/>
+                                    <Binding Path="Name" Mode="OneWay"/>
                                 </GridViewColumn.DisplayMemberBinding>
                             </GridViewColumn>
                             <GridViewColumn Width="100">
@@ -248,7 +248,7 @@
                                     <GridViewColumnHeader x:Name="RightNameHeader" Tag="Name" Click="GridViewColumnHeader_Click"/>
                                 </GridViewColumn.Header>
                                 <GridViewColumn.DisplayMemberBinding>
-                                    <Binding Path="Name"/>
+                                    <Binding Path="Name" Mode="OneWay"/>
                                 </GridViewColumn.DisplayMemberBinding>
                             </GridViewColumn>
                             <GridViewColumn Width="100">
