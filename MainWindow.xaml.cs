@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using System.ComponentModel;
 using DamnSimpleFileManager.Services;
 using DamnSimpleFileManager.Windows;
+using DamnSimpleFileManager.Utils;
 
 namespace DamnSimpleFileManager
 {
@@ -422,11 +423,16 @@ namespace DamnSimpleFileManager
         {
             Logger.Log("List right-clicked");
             var list = (ListView)sender;
-            if (list.SelectedItem is FileSystemInfo selectedItem && selectedItem is not ParentDirectoryInfo)
+            var selectedItems = list.SelectedItems
+                .OfType<FileSystemInfo>()
+                .Where(i => i is not ParentDirectoryInfo)
+                .Select(i => i.FullName)
+                .ToArray();
+            if (selectedItems.Length > 0)
             {
                 try
                 {
-                    Process.Start("explorer.exe", $"/select,\"{selectedItem.FullName}\"");
+                    ShellContextMenu.ShowForPaths(selectedItems, this);
                 }
                 catch (Exception ex)
                 {
