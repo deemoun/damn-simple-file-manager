@@ -16,6 +16,29 @@
                 <Run Text="]" />
             </TextBlock>
         </DataTemplate>
+        <Style TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -132,10 +155,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button x:Name="LeftBackButton" Grid.Column="0" Content="←" Width="40" Height="30"
-                    Command="{Binding NavigateBackCommand}" HorizontalAlignment="Left" Margin="5"/>
+                    Click="BackButton_Click" IsEnabled="{Binding CanGoBack}"
+                    HorizontalAlignment="Left" Margin="5"/>
             <Label Grid.Column="1" Width="10"/>
             <Button x:Name="RightBackButton" Grid.Column="2" Content="←" Width="40" Height="30"
-                    Command="{Binding NavigateBackCommand}" HorizontalAlignment="Right" Margin="5"/>
+                    Click="BackButton_Click" IsEnabled="{Binding CanGoBack}"
+                    HorizontalAlignment="Right" Margin="5"/>
         </Grid>
 
         <!-- Текущие пути -->
