@@ -17,7 +17,7 @@ namespace DamnSimpleFileManager
                 double sizeInMb = fi.Length / (1024.0 * 1024.0);
                 if (sizeInMb >= 1024)
                 {
-                    return $"{sizeInMb / 1024:0.##} GB";
+                    return $"{sizeInMb / 1024:0.##} GB"; 
                 }
                 return $"{sizeInMb:0.##} MB";
             }
@@ -26,7 +26,7 @@ namespace DamnSimpleFileManager
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 }
