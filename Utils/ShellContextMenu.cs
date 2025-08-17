@@ -110,18 +110,23 @@ namespace DamnSimpleFileManager.Utils
                 SHParseDisplayName(paths[i], IntPtr.Zero, out pidls[i], 0, out _);
             }
 
-            SHBindToParent(pidls[0], ref IID_IShellFolder, out IntPtr parentPtr, out IntPtr firstItem);
+            Guid iidShellFolder = IID_IShellFolder;
+            SHBindToParent(pidls[0], ref iidShellFolder, out IntPtr parentPtr, out IntPtr firstItem);
             IShellFolder parent = (IShellFolder)Marshal.GetObjectForIUnknown(parentPtr);
 
             IntPtr apidl = Marshal.AllocCoTaskMem(IntPtr.Size * paths.Length);
             Marshal.WriteIntPtr(apidl, 0, firstItem);
             for (int i = 1; i < paths.Length; i++)
             {
-                SHBindToParent(pidls[i], ref IID_IShellFolder, out _, out IntPtr rel);
+                // SHBindToParent requires a ref Guid but Guid fields are readonly.
+                // Use a local variable so it can be passed by reference without violating
+                // the readonly restriction, resolving the compiler error.
+                SHBindToParent(pidls[i], ref iidShellFolder, out _, out IntPtr rel);
                 Marshal.WriteIntPtr(apidl, i * IntPtr.Size, rel);
             }
 
-            parent.GetUIObjectOf(hwnd, (uint)paths.Length, apidl, ref IID_IContextMenu, IntPtr.Zero, out IntPtr menuPtr);
+            Guid iidContextMenu = IID_IContextMenu;
+            parent.GetUIObjectOf(hwnd, (uint)paths.Length, apidl, ref iidContextMenu, IntPtr.Zero, out IntPtr menuPtr);
             IContextMenu menu = (IContextMenu)Marshal.GetObjectForIUnknown(menuPtr);
 
             IntPtr hMenu = CreatePopupMenu();
