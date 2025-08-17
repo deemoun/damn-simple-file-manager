@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DamnSimpleFileManager.Windows;
 
@@ -34,5 +35,19 @@ public partial class InputDialog : Window
     private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         OkButton.IsEnabled = !string.IsNullOrWhiteSpace(InputTextBox.Text);
+    }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        InputTextBox.Focus();
+    }
+
+    private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            DialogResult = false;
+        }
     }
 }
