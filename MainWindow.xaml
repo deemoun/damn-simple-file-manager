@@ -57,6 +57,7 @@
                 <MenuItem x:Name="OpenSettingsIniMenuItem" Header="Open Settings ini file" Click="OpenSettingsIni_Click"/>
             </MenuItem>
             <MenuItem x:Name="HelpMenu" Header="_Help">
+                <MenuItem x:Name="CheckUpdatesMenuItem" Header="Check for updates" Click="CheckUpdates_Click"/>
                 <MenuItem x:Name="AboutMenuItem" Header="_About" Click="About_Click"/>
             </MenuItem>
         </Menu>
