@@ -1,7 +1,7 @@
 <Window x:Class="DamnSimpleFileManager.Windows.CopyProgressWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Progress" Icon="../Resources/dsfm.ico" Width="300"
+        Title="Progress" Width="300"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Grid Margin="10">
