@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Win32;
 using DamnSimpleFileManager.Utils;
 
@@ -75,6 +76,11 @@ namespace DamnSimpleFileManager.Windows
             {
                 linkManager.OpenLink(item.Url);
             }
+        }
+
+        private void LinksList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Open_Click(sender, e);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
