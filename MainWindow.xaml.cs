@@ -128,7 +128,15 @@ namespace DamnSimpleFileManager
                         try
                         {
                             Logger.Log($"Navigating into '{dir.FullName}'");
+                            pane.RememberSelection(dir.FullName, pane.CurrentDir.FullName);
                             pane.NavigateInto(dir);
+                            var last = pane.GetLastSelectedItem();
+                            if (last != null)
+                            {
+                                list.SelectedItem = last;
+                                list.ScrollIntoView(last);
+                            }
+                            list.Focus();
                         }
                         catch (Exception ex)
                         {
@@ -150,6 +158,13 @@ namespace DamnSimpleFileManager
                         {
                             Logger.Log($"Navigating into '{dir.FullName}'");
                             pane.NavigateInto(dir);
+                            var last = pane.GetLastSelectedItem();
+                            if (last != null)
+                            {
+                                list.SelectedItem = last;
+                                list.ScrollIntoView(last);
+                            }
+                            list.Focus();
                         }
                         catch (Exception ex)
                         {
@@ -271,6 +286,23 @@ namespace DamnSimpleFileManager
             var list = (ListView)sender;
             var pane = list == LeftList ? leftPane : rightPane;
             OpenSelected(pane, list);
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Back button clicked");
+            var pane = sender == LeftBackButton ? leftPane : rightPane;
+            var list = sender == LeftBackButton ? LeftList : RightList;
+            pane.NavigateBack();
+            var last = pane.GetLastSelectedItem();
+            if (last != null)
+            {
+                list.SelectedItem = last;
+                list.ScrollIntoView(last);
+            }
+            list.Focus();
+            activePane = pane;
+            UpdateOperationsAvailability();
         }
 
         private async void Window_PreviewKeyDown(object sender, KeyEventArgs e)
