@@ -1,7 +1,7 @@
 <Window x:Class="DamnSimpleFileManager.Windows.LynkrWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Lynkr" Icon="../Resources/dsfm.ico" Height="400" Width="600"
+        Title="" Height="400" Width="600"
         WindowStartupLocation="CenterOwner"
         PreviewKeyDown="Window_PreviewKeyDown">
     <Grid Margin="10">

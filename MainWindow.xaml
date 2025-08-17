@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DamnSimpleFileManager"
-        Title="Damn Simple File Manager" Icon="Resources/dsfm.ico" Height="768" Width="1300"
+        Title="" Height="768" Width="1300"
         PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <local:FileTypeConverter x:Key="FileTypeConverter" />
@@ -74,45 +74,45 @@
                       SelectedItem="{Binding SelectedDrive}"
                       ItemTemplate="{StaticResource DriveTemplate}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="CreateFolderButton" Style="{StaticResource ToolbarButtonStyle}" Click="CreateFolder_Click" ToolTip="{Binding Text, ElementName=CreateFolderText}">
+                <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B7;" Margin="0,0,5,0"/>
+                        <TextBlock Text="📁" Margin="0,0,5,0"/>
                         <TextBlock x:Name="CreateFolderText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="CreateFileButton" Style="{StaticResource ToolbarButtonStyle}" Click="CreateFile_Click" ToolTip="{Binding Text, ElementName=CreateFileText}">
+                <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" Margin="0,0,5,0"/>
+                        <TextBlock Text="📄" Margin="0,0,5,0"/>
                         <TextBlock x:Name="CreateFileText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="ViewButton" Style="{StaticResource ToolbarButtonStyle}" Click="View_Click" IsEnabled="False" ToolTip="{Binding Text, ElementName=ViewText}">
+                <Button x:Name="ViewButton" Width="110" Height="30" Margin="0,0,5,0" Click="View_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A9;" Margin="0,0,5,0"/>
+                        <TextBlock Text="👁️" Margin="0,0,5,0"/>
                         <TextBlock x:Name="ViewText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="CopyButton" Style="{StaticResource ToolbarButtonStyle}" Click="Copy_Click" IsEnabled="False" ToolTip="{Binding Text, ElementName=CopyText}">
+                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C8;" Margin="0,0,5,0"/>
+                        <TextBlock Text="📋" Margin="0,0,5,0"/>
                         <TextBlock x:Name="CopyText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="MoveButton" Style="{StaticResource ToolbarButtonStyle}" Click="Move_Click" IsEnabled="False" ToolTip="{Binding Text, ElementName=MoveText}">
+                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DE;" Margin="0,0,5,0"/>
+                        <TextBlock Text="📂" Margin="0,0,5,0"/>
                         <TextBlock x:Name="MoveText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="DeleteButton" Style="{StaticResource ToolbarButtonStyle}" Click="Delete_Click" IsEnabled="False" ToolTip="{Binding Text, ElementName=DeleteText}">
+                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" Margin="0,0,5,0"/>
+                        <TextBlock Text="🗑️" Margin="0,0,5,0"/>
                         <TextBlock x:Name="DeleteText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="TerminalButton" Style="{StaticResource ToolbarButtonStyle}" Click="OpenTerminal_Click" ToolTip="{Binding Text, ElementName=TerminalText}">
+                <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" Margin="0,0,5,0"/>
+                        <TextBlock Text="💻" Margin="0,0,5,0"/>
                         <TextBlock x:Name="TerminalText"/>
                     </StackPanel>
                 </Button>
