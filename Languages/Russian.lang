@@ -10,6 +10,7 @@ Menu_Delete=_Удалить
 Menu_OpenTerminal=_Открыть терминал
 Menu_Exit=_Выход
 Menu_Help=_Помощь
+Menu_CheckForUpdates=_Проверить обновления
 Menu_About=_О программе
 Button_CreateFolder=Создать папку
 Button_CreateFile=Создать файл

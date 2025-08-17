@@ -85,6 +85,7 @@ namespace DamnSimpleFileManager
             OpenSettingsIniMenuItem.Header = Localization.Get("Menu_OpenSettingsIni");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
             HelpMenu.Header = Localization.Get("Menu_Help");
+            CheckUpdatesMenuItem.Header = Localization.Get("Menu_CheckForUpdates");
             AboutMenuItem.Header = Localization.Get("Menu_About");
             CreateFolderText.Text = Localization.Get("Button_CreateFolder");
             CreateFileText.Text = Localization.Get("Button_CreateFile");
@@ -407,6 +408,15 @@ namespace DamnSimpleFileManager
         {
             Logger.Log("Exit clicked");
             Close();
+        }
+
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Check for updates clicked");
+            Process.Start(new ProcessStartInfo("https://github.com/deemoun/damn-simple-file-manager/releases")
+            {
+                UseShellExecute = true
+            });
         }
 
         private void About_Click(object sender, RoutedEventArgs e)

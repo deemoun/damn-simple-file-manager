@@ -10,6 +10,7 @@ Menu_Delete=_Eliminar
 Menu_OpenTerminal=_Abrir Terminal
 Menu_Exit=_Salir
 Menu_Help=_Ayuda
+Menu_CheckForUpdates=_Buscar actualizaciones
 Menu_About=_Acerca de
 Button_CreateFolder=Crear carpeta
 Button_CreateFile=Crear archivo
