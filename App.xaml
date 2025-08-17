@@ -4,6 +4,16 @@
              xmlns:local="clr-namespace:DamnSimpleFileManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!-- Basic color palette and shared styles -->
+        <Color x:Key="PrimaryColor">#FF007ACC</Color>
+        <Color x:Key="SecondaryColor">#FF2D2D30</Color>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/>
 
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="110"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
     </Application.Resources>
 </Application>
