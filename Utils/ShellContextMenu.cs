@@ -31,7 +31,12 @@ namespace DamnSimpleFileManager.Utils
         private static extern uint TrackPopupMenuEx(IntPtr hmenu, uint uFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-        private static extern int SHParseDisplayName(string name, IntPtr pbc, out IntPtr ppidl, uint sfgaoIn, out uint psfgaoOut);
+        private static extern int SHParseDisplayName(
+            string name,
+            IntPtr pbc,
+            out IntPtr ppidl,
+            uint sfgaoIn,
+            out uint psfgaoOut);
 
         [DllImport("shell32.dll")]
         private static extern int SHBindToParent(IntPtr pidl, ref Guid riid, out IntPtr ppv, out IntPtr ppidlLast);
