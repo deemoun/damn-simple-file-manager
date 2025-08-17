@@ -206,7 +206,21 @@ namespace DamnSimpleFileManager.Services
                 (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
-                Directory.CreateDirectory(Path.Combine(path, name));
+                string target = Path.Combine(path, name);
+                if (Directory.Exists(target))
+                {
+                    Logger.Log($"Folder already exists '{target}'");
+                    MessageBox.Show(owner, Localization.Get("Error_FolderExists", target), Localization.Get("Error_FolderExists_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (File.Exists(target))
+                {
+                    Logger.Log($"File already exists '{target}'");
+                    MessageBox.Show(owner, Localization.Get("Error_FileExists", target), Localization.Get("Error_FileExists_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                Directory.CreateDirectory(target);
                 Logger.Log($"Created folder '{name}' in '{path}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
@@ -223,7 +237,21 @@ namespace DamnSimpleFileManager.Services
                 (int)(owner.Top + (owner.ActualHeight - 150) / 2)).Trim();
             if (!string.IsNullOrWhiteSpace(name) && ValidateName(name, owner))
             {
-                File.Create(Path.Combine(path, name)).Close();
+                string target = Path.Combine(path, name);
+                if (File.Exists(target))
+                {
+                    Logger.Log($"File already exists '{target}'");
+                    MessageBox.Show(owner, Localization.Get("Error_FileExists", target), Localization.Get("Error_FileExists_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (Directory.Exists(target))
+                {
+                    Logger.Log($"Folder already exists '{target}'");
+                    MessageBox.Show(owner, Localization.Get("Error_FolderExists", target), Localization.Get("Error_FolderExists_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                File.Create(target).Close();
                 Logger.Log($"Created file '{name}' in '{path}'");
                 pane.LoadDirectory(pane.CurrentDir);
             }
