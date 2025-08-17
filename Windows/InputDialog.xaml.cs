@@ -40,6 +40,7 @@ public partial class InputDialog : Window
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         InputTextBox.Focus();
+        InputTextBox.SelectAll();
     }
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
