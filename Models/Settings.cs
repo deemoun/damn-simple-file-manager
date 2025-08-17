@@ -24,6 +24,11 @@ namespace DamnSimpleFileManager
                 ? value.Equals("true", StringComparison.OrdinalIgnoreCase)
                 : true;
 
+        public static bool RecycleBinDelete =>
+            Values.TryGetValue("recycle_bin_delete", out var value)
+                ? value.Equals("true", StringComparison.OrdinalIgnoreCase)
+                : true;
+
         public static void Load()
         {
             Values.Clear();
@@ -53,6 +58,11 @@ namespace DamnSimpleFileManager
             if (!Values.ContainsKey("move_confirmation"))
             {
                 Values["move_confirmation"] = "true";
+                changed = true;
+            }
+            if (!Values.ContainsKey("recycle_bin_delete"))
+            {
+                Values["recycle_bin_delete"] = "true";
                 changed = true;
             }
             if (changed)

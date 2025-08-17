@@ -23,6 +23,7 @@ The application is intentionally minimalistic and aims to offer a straightforwar
 Set `hidden_files=false` to hide files and folders marked as hidden.
 Set `copy_confirmation=false` to copy files and folders without confirmation.
 Set `move_confirmation=false` to move files and folders without confirmation.
+Set `recycle_bin_delete=false` to delete items permanently instead of using the Recycle Bin.
 
 ## Keyboard Shortcuts
 
