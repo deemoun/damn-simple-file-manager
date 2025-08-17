@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,6 @@ namespace DamnSimpleFileManager
     {
         public ObservableCollection<FileSystemInfo> Items { get; } = new();
         public ObservableCollection<DriveInfo> Drives { get; } = new();
-        private readonly Dictionary<string, string> lastSelectedItems = new();
 
         internal enum SortField
         {
@@ -283,27 +281,11 @@ namespace DamnSimpleFileManager
         {
             if (history.Count > 0)
             {
-                var previous = history.Pop();
-                lastSelectedItems[previous.FullName] = CurrentDir.FullName;
-                CurrentDir = previous;
+                CurrentDir = history.Pop();
                 LoadDirectory(CurrentDir);
                 OnPropertyChanged(nameof(CanGoBack));
                 NavigateBackCommand.RaiseCanExecuteChanged();
             }
-        }
-
-        public void RememberSelection(string directory, string selectedPath)
-        {
-            lastSelectedItems[directory] = selectedPath;
-        }
-
-        public FileSystemInfo? GetLastSelectedItem()
-        {
-            if (lastSelectedItems.TryGetValue(CurrentDir.FullName, out var path))
-            {
-                return Items.FirstOrDefault(i => i.FullName == path);
-            }
-            return null;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
