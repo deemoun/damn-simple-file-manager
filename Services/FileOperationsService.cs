@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
+using Interaction = Microsoft.VisualBasic.Interaction;
 using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Services
