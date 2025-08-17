@@ -40,6 +40,7 @@ Confirm_Copy_Title=Confirmar copia
 Confirm_Move=¿Mover de {0} a {1}?
 Confirm_Move_Title=Confirmar movimiento
 Confirm_Delete=¿Eliminar {0} elemento(s) seleccionado(s)?
+Confirm_Delete_RecycleBin=¿Mover los {0} elemento(s) seleccionado(s) a la Papelera?
 Confirm_Delete_Title=Confirmar eliminación
 Error_Delete=Error al eliminar: {0}
 Error_InvalidName=Nombre no válido

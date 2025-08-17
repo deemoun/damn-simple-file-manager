@@ -40,6 +40,7 @@ Confirm_Copy_Title=Подтверждение копирования
 Confirm_Move=Переместить из {0} в {1}?
 Confirm_Move_Title=Подтверждение перемещения
 Confirm_Delete=Удалить выбранные {0} элемент(ов)?
+Confirm_Delete_RecycleBin=Переместить выбранные {0} элемент(ов) в корзину?
 Confirm_Delete_Title=Подтверждение удаления
 Error_Delete=Ошибка удаления: {0}
 Error_InvalidName=Недопустимое имя

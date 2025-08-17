@@ -40,6 +40,7 @@ Confirm_Copy_Title=Confirm copy
 Confirm_Move=Move from {0} to {1}?
 Confirm_Move_Title=Confirm move
 Confirm_Delete=Delete selected {0} item(s)?
+Confirm_Delete_RecycleBin=Move selected {0} item(s) to Recycle Bin?
 Confirm_Delete_Title=Confirm delete
 Error_Delete=Delete error: {0}
 Error_InvalidName=Invalid name
