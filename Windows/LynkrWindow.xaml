@@ -18,7 +18,7 @@
                      GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
             <Button x:Name="AddButton" Content="Add" Width="60" Click="Add_Click"/>
         </StackPanel>
-        <ListView x:Name="LinksList" Grid.Row="1" Margin="0,0,0,10">
+        <ListView x:Name="LinksList" Grid.Row="1" Margin="0,0,0,10" MouseDoubleClick="LinksList_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn x:Name="UrlColumn" Header="Url" DisplayMemberBinding="{Binding Url}" Width="300"/>
