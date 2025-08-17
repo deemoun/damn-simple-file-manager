@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Utils
 {
@@ -11,6 +12,7 @@ namespace DamnSimpleFileManager.Utils
     {
         private List<LinkItem> links = new();
         private string? pendingUrlForDescription = null;
+        private const long MaxFileSizeBytes = 5 * 1024 * 1024;
 
         public LinkManager()
         {
@@ -61,10 +63,31 @@ namespace DamnSimpleFileManager.Utils
         public bool ImportFromFile(string filePath)
         {
             if (!File.Exists(filePath)) return false;
-            var json = File.ReadAllText(filePath);
-            links = JsonSerializer.Deserialize<List<LinkItem>>(json) ?? new();
-            LinkStorage.Save(links);
-            return true;
+            try
+            {
+                var info = new FileInfo(filePath);
+                if (info.Length > MaxFileSizeBytes)
+                {
+                    Logger.Log($"Import file '{filePath}' exceeds max size; skipping import.");
+                    return false;
+                }
+
+                var json = File.ReadAllText(filePath);
+                var importedLinks = JsonSerializer.Deserialize<List<LinkItem>>(json);
+                if (importedLinks == null) return false;
+                links = importedLinks;
+                LinkStorage.Save(links);
+                return true;
+            }
+            catch (IOException ex)
+            {
+                Logger.LogError($"Error reading import file '{filePath}'", ex);
+            }
+            catch (JsonException ex)
+            {
+                Logger.LogError($"Error deserializing import file '{filePath}'", ex);
+            }
+            return false;
         }
 
         public bool ExportToFile(string filePath)
