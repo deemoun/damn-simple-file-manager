@@ -220,6 +220,13 @@ namespace DamnSimpleFileManager
         private void SetupWatcher(DirectoryInfo dir)
         {
             watcher?.Dispose();
+
+            if (!dir.Exists)
+            {
+                watcher = null;
+                return;
+            }
+
             watcher = new FileSystemWatcher(dir.FullName)
             {
                 NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite,
@@ -279,13 +286,19 @@ namespace DamnSimpleFileManager
 
         public void NavigateBack()
         {
-            if (history.Count > 0)
+            while (history.Count > 0)
             {
-                CurrentDir = history.Pop();
-                LoadDirectory(CurrentDir);
-                OnPropertyChanged(nameof(CanGoBack));
-                NavigateBackCommand.RaiseCanExecuteChanged();
+                var dir = history.Pop();
+                if (dir.Exists)
+                {
+                    CurrentDir = dir;
+                    LoadDirectory(CurrentDir);
+                    break;
+                }
             }
+
+            OnPropertyChanged(nameof(CanGoBack));
+            NavigateBackCommand.RaiseCanExecuteChanged();
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
