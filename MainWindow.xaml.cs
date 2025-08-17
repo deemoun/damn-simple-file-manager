@@ -375,7 +375,7 @@ namespace DamnSimpleFileManager
         private void OpenSettingsIni_Click(object sender, RoutedEventArgs e)
         {
             Logger.Log("Open Settings ini clicked");
-            var configPath = Path.Combine(AppContext.BaseDirectory, "dsfm.ini");
+            var configPath = Settings.ConfigPath;
             try
             {
                 Process.Start(new ProcessStartInfo("notepad.exe", configPath)

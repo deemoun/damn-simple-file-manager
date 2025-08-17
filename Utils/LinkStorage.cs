@@ -6,12 +6,12 @@ namespace DamnSimpleFileManager.Utils
 {
     public static class LinkStorage
     {
-        private const string FileName = "links.json";
+        private static readonly string FileName = AppData.GetPath("links.json");
 
         public static List<LinkItem> Load()
         {
-            if (!File.Exists(FileName)) return new List<LinkItem>();
             var json = File.ReadAllText(FileName);
+            if (string.IsNullOrWhiteSpace(json)) return new List<LinkItem>();
             return JsonSerializer.Deserialize<List<LinkItem>>(json) ?? new List<LinkItem>();
         }
 

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using DamnSimpleFileManager.Utils;
 
 namespace DamnSimpleFileManager
 {
     internal static class Settings
     {
-        private static readonly string ConfigPath = Path.Combine(AppContext.BaseDirectory, "dsfm.ini");
+        internal static string ConfigPath => AppData.GetPath("dsfm.ini");
         private static readonly Dictionary<string, string> Values = new();
 
         public static bool ShowHiddenFiles =>
