@@ -105,10 +105,23 @@ namespace DamnSimpleFileManager.Windows
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog { Filter = $"{Localization.Get("Lynkr_JsonFilter")} (*.json)|*.json", FileName = "links.json" };
+            var dialog = new SaveFileDialog
+            {
+                Filter = $"{Localization.Get("Lynkr_JsonFilter")} (*.json)|*.json",
+                FileName = "links.json"
+            };
+
             if (dialog.ShowDialog() == true)
             {
                 linkManager.ExportToFile(dialog.FileName);
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
             }
         }
     }
