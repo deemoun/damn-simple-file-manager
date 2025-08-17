@@ -155,9 +155,10 @@ namespace DamnSimpleFileManager.Services
             if (selectedItems.Count == 0)
                 return;
 
+            var messageKey = Settings.RecycleBinDelete ? "Confirm_Delete_RecycleBin" : "Confirm_Delete";
             var result = MessageBox.Show(
                 owner,
-                Localization.Get("Confirm_Delete", selectedItems.Count),
+                Localization.Get(messageKey, selectedItems.Count),
                 Localization.Get("Confirm_Delete_Title"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
