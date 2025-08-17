@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.FileIO;
 using DamnSimpleFileManager;
 
 namespace DamnSimpleFileManager.Services
@@ -170,11 +171,17 @@ namespace DamnSimpleFileManager.Services
                 {
                     if (item is FileInfo)
                     {
-                        File.Delete(item.FullName);
+                        if (Settings.RecycleBinDelete)
+                            FileSystem.DeleteFile(item.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        else
+                            File.Delete(item.FullName);
                     }
                     else if (item is DirectoryInfo)
                     {
-                        Directory.Delete(item.FullName, true);
+                        if (Settings.RecycleBinDelete)
+                            FileSystem.DeleteDirectory(item.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        else
+                            Directory.Delete(item.FullName, true);
                     }
                 }
                 catch (Exception ex)
