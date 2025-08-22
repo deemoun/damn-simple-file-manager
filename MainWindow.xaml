@@ -53,6 +53,7 @@
                 <MenuItem x:Name="ServicesMenuItem" Header="Services" Click="OpenServices_Click"/>
                 <MenuItem x:Name="ControlPanelMenuItem" Header="Control Panel" Click="OpenControlPanel_Click"/>
                 <MenuItem x:Name="SystemMenuItem" Header="System" Click="OpenSystem_Click"/>
+                <MenuItem x:Name="FileBookmarksMenuItem" Header="File Bookmarks" Click="OpenFileBookmarks_Click"/>
                 <MenuItem x:Name="LynkrMenuItem" Header="Lynkr" Click="OpenLynkr_Click"/>
                 <MenuItem x:Name="OpenSettingsIniMenuItem" Header="Open Settings ini file" Click="OpenSettingsIni_Click"/>
             </MenuItem>
