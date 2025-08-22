@@ -17,9 +17,12 @@ namespace DamnSimpleFileManager.Utils
             links = LinkStorage.Load();
         }
 
-        private bool IsValidUrl(string url) =>
-            url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-            url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        private bool IsValidUrl(string url)
+        {
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+                return false;
+            return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+        }
 
         public bool AddLink(string url)
         {
@@ -62,7 +65,20 @@ namespace DamnSimpleFileManager.Utils
         {
             if (!File.Exists(filePath)) return false;
             var json = File.ReadAllText(filePath);
-            links = JsonSerializer.Deserialize<List<LinkItem>>(json) ?? new();
+            var imported = JsonSerializer.Deserialize<List<LinkItem>>(json) ?? new();
+            var validLinks = new List<LinkItem>();
+            foreach (var item in imported)
+            {
+                if (item != null && IsValidUrl(item.Url))
+                {
+                    validLinks.Add(item);
+                }
+                else
+                {
+                    Logger.Log($"Skipping invalid URL during import: {item?.Url}");
+                }
+            }
+            links = validLinks;
             LinkStorage.Save(links);
             return true;
         }
@@ -77,6 +93,11 @@ namespace DamnSimpleFileManager.Utils
         {
             var item = links.FirstOrDefault(l => l.Url == url);
             if (item == null) return false;
+            if (!IsValidUrl(item.Url))
+            {
+                Logger.Log($"Blocked attempt to open invalid URL: {item.Url}");
+                return false;
+            }
             Process.Start(new ProcessStartInfo(item.Url) { UseShellExecute = true });
             return true;
         }
