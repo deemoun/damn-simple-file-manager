@@ -36,6 +36,7 @@ Set `hidden_files=false` to hide files and folders marked as hidden.
 Set `copy_confirmation=false` to copy files and folders without confirmation.
 Set `move_confirmation=false` to move files and folders without confirmation.
 Set `recycle_bin_delete=false` to delete items permanently instead of using the Recycle Bin.
+Set `dark_theme=true` to enable the dark theme.
 
 ## Keyboard Shortcuts
 

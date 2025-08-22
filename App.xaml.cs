@@ -10,8 +10,6 @@ namespace DamnSimpleFileManager
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             AppDomain.CurrentDomain.UnhandledException += (s, args) =>
             {
                 var ex = args.ExceptionObject as Exception ?? new Exception(args.ExceptionObject.ToString());
@@ -24,6 +22,16 @@ namespace DamnSimpleFileManager
             };
 
             Settings.Load();
+            if (Settings.DarkTheme)
+            {
+                Resources.MergedDictionaries.Add(new ResourceDictionary
+                {
+                    Source = new Uri("Resources/DarkTheme.xaml", UriKind.Relative)
+                });
+            }
+
+            base.OnStartup(e);
+
             Logger.Log("Application started");
         }
     }
