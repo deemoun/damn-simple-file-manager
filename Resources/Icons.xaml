@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <PathGeometry x:Key="FolderIcon" Figures="M2,4 H6 L8,6 H14 V14 H2 Z" />
+    <PathGeometry x:Key="FileIcon" Figures="M3,2 H11 L13,4 V14 H3 Z M11,2 V4 H13" />
+    <GeometryGroup x:Key="ViewIcon" FillRule="EvenOdd">
+        <EllipseGeometry Center="8,8" RadiusX="7" RadiusY="5"/>
+        <EllipseGeometry Center="8,8" RadiusX="2" RadiusY="2"/>
+    </GeometryGroup>
+    <GeometryGroup x:Key="CopyIcon">
+        <RectangleGeometry Rect="5,4,8,8"/>
+        <RectangleGeometry Rect="3,6,8,8"/>
+    </GeometryGroup>
+    <PathGeometry x:Key="MoveIcon" Figures="M4,8 L10,4 V7 H14 V9 H10 V12 Z" />
+    <GeometryGroup x:Key="DeleteIcon">
+        <RectangleGeometry Rect="4,5,8,9"/>
+        <RectangleGeometry Rect="5,2,6,2"/>
+    </GeometryGroup>
+    <GeometryGroup x:Key="TerminalIcon">
+        <RectangleGeometry Rect="3,3,10,7"/>
+        <RectangleGeometry Rect="6,11,4,1"/>
+    </GeometryGroup>
+</ResourceDictionary>
