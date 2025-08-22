@@ -30,6 +30,11 @@ namespace DamnSimpleFileManager
                 ? result
                 : true;
 
+        public static bool DarkTheme =>
+            Values.TryGetValue("dark_theme", out var value) && bool.TryParse(value, out var result)
+                ? result
+                : false;
+
         public static void Load()
         {
             var changed = false;
@@ -71,6 +76,7 @@ namespace DamnSimpleFileManager
                                     case "copy_confirmation":
                                     case "move_confirmation":
                                     case "recycle_bin_delete":
+                                    case "dark_theme":
                                         if (bool.TryParse(val, out var boolVal))
                                             Values[key] = boolVal.ToString().ToLowerInvariant();
                                         else
@@ -120,6 +126,11 @@ namespace DamnSimpleFileManager
             if (!Values.ContainsKey("recycle_bin_delete"))
             {
                 Values["recycle_bin_delete"] = "true";
+                changed = true;
+            }
+            if (!Values.ContainsKey("dark_theme"))
+            {
+                Values["dark_theme"] = "false";
                 changed = true;
             }
             if (changed)
