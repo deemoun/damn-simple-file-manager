@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DamnSimpleFileManager"
         Title="" Height="768" Width="1300"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
     <Window.Resources>
         <local:FileTypeConverter x:Key="FileTypeConverter" />
         <local:FileForegroundConverter x:Key="FileForegroundConverter" />

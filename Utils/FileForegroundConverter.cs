@@ -16,7 +16,7 @@ namespace DamnSimpleFileManager
         {
             if (value is DirectoryInfo || value is ParentDirectoryInfo)
             {
-                return Brushes.DeepSkyBlue;
+                return Brushes.LightSkyBlue;
             }
             return SystemColors.ControlTextBrush;
         }
