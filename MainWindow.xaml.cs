@@ -429,6 +429,15 @@ namespace DamnSimpleFileManager
             about.ShowDialog();
         }
 
+        private void SpaceText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                Logger.Log("Disk space text double-clicked - opening Task Manager");
+                Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true });
+            }
+        }
+
         private void List_RightClick(object sender, MouseButtonEventArgs e)
         {
             Logger.Log("List right-clicked");

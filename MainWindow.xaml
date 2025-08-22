@@ -298,7 +298,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0">
+            <TextBlock x:Name="LeftSpaceText" Grid.Column="0" Margin="5,0"
+                       MouseLeftButtonDown="SpaceText_MouseLeftButtonDown">
                 <Run Text="{Binding TotalLabel, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="{Binding TotalSpace, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="  "/>
@@ -309,7 +310,8 @@
                 <Run Text="{Binding FreeSpace, Mode=OneWay}" Foreground="ForestGreen"/>
             </TextBlock>
             <Label Grid.Column="1" Width="10"/>
-            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right">
+            <TextBlock x:Name="RightSpaceText" Grid.Column="2" Margin="5,0" HorizontalAlignment="Right"
+                       MouseLeftButtonDown="SpaceText_MouseLeftButtonDown">
                 <Run Text="{Binding TotalLabel, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="{Binding TotalSpace, Mode=OneWay}" Foreground="Black"/>
                 <Run Text="  "/>
