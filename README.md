@@ -23,11 +23,11 @@ Bookmark your favorite folders and links for quick access.
 
 ### URL Bookmarks
 
-![URL Bookmarks](images/bookmarks.jpg)
+![URL Bookmarks](images/lynkr.jpg)
 
 ### File Bookmarks
 
-![File Bookmarks](images/lynkr.jpg)
+![File Bookmarks](images/bookmarks.jpg)
 
 ## Configuration
 
