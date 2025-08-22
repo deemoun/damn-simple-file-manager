@@ -76,45 +76,45 @@
                       SelectedItem="{Binding SelectedDrive}"
                       ItemTemplate="{StaticResource DriveTemplate}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click">
+                <Button x:Name="CreateFolderButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFolder_Click" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📁" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource FolderIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="CreateFolderText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click">
+                <Button x:Name="CreateFileButton" Width="110" Height="30" Margin="0,0,5,0" Click="CreateFile_Click" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📄" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource FileIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="CreateFileText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="ViewButton" Width="110" Height="30" Margin="0,0,5,0" Click="View_Click" IsEnabled="False">
+                <Button x:Name="ViewButton" Width="110" Height="30" Margin="0,0,5,0" Click="View_Click" IsEnabled="False" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="👁️" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource ViewIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="ViewText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click" IsEnabled="False">
+                <Button x:Name="CopyButton" Width="110" Height="30" Margin="0,0,5,0" Click="Copy_Click" IsEnabled="False" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📋" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource CopyIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="CopyText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click" IsEnabled="False">
+                <Button x:Name="MoveButton" Width="110" Height="30" Margin="0,0,5,0" Click="Move_Click" IsEnabled="False" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📂" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource MoveIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="MoveText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click" IsEnabled="False">
+                <Button x:Name="DeleteButton" Width="110" Height="30" Margin="0,0,5,0" Click="Delete_Click" IsEnabled="False" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🗑️" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource DeleteIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="DeleteText"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click">
+                <Button x:Name="TerminalButton" Width="110" Height="30" Click="OpenTerminal_Click" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="💻" Margin="0,0,5,0"/>
+                        <Path Data="{StaticResource TerminalIcon}" Width="16" Height="16" Margin="0,0,5,0" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Uniform" />
                         <TextBlock x:Name="TerminalText"/>
                     </StackPanel>
                 </Button>
