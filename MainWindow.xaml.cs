@@ -81,6 +81,7 @@ namespace DamnSimpleFileManager
             ServicesMenuItem.Header = Localization.Get("Menu_Services");
             ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
             SystemMenuItem.Header = Localization.Get("Menu_System");
+            FileBookmarksMenuItem.Header = Localization.Get("Menu_FileBookmarks");
             LynkrMenuItem.Header = Localization.Get("Menu_Lynkr");
             OpenSettingsIniMenuItem.Header = Localization.Get("Menu_OpenSettingsIni");
             ExitMenuItem.Header = Localization.Get("Menu_Exit");
@@ -362,6 +363,16 @@ namespace DamnSimpleFileManager
             Process.Start(new ProcessStartInfo("control", "system") { UseShellExecute = true });
         }
 
+        private void OpenFileBookmarks_Click(object sender, RoutedEventArgs e)
+        {
+            Logger.Log("Open File Bookmarks clicked");
+            var wnd = new FileBookmarksWindow
+            {
+                Owner = this
+            };
+            wnd.ShowDialog();
+        }
+
         private void OpenLynkr_Click(object sender, RoutedEventArgs e)
         {
             Logger.Log("Open Lynkr clicked");
@@ -435,6 +446,38 @@ namespace DamnSimpleFileManager
             {
                 Logger.Log("Disk space text double-clicked - opening Task Manager");
                 Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true });
+            }
+        }
+
+        public string GetCurrentLeftPath() => leftPane.CurrentDir.FullName;
+
+        public void OpenPathFromBookmark(string path)
+        {
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    leftPane.NavigateInto(new DirectoryInfo(path));
+                }
+                else if (File.Exists(path))
+                {
+                    var file = new FileInfo(path);
+                    leftPane.NavigateInto(file.Directory!);
+                    var item = leftPane.Items.FirstOrDefault(i => i is FileInfo fi && fi.FullName == file.FullName);
+                    if (item != null)
+                    {
+                        LeftList.SelectedItem = item;
+                        LeftList.ScrollIntoView(item);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, Localization.Get("FileBookmarks_Error_PathNotFound"), Localization.Get("FileBookmarks_Title"));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, Localization.Get("Error_OpenFolder", ex.Message));
             }
         }
 
