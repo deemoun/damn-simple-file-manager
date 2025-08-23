@@ -82,7 +82,7 @@ namespace DamnSimpleFileManager
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
             ToolsMenu.Header = Localization.Get("Menu_Tools");
             TogglePaneMenuItem.Header = Localization.Get(isRightPaneVisible ? "Menu_RemoveSecondPane" : "Menu_AddSecondPane");
-            TogglePaneMenuItem.InputGestureText = "Alt+F2";
+            TogglePaneMenuItem.InputGestureText = "Shift+F2";
             ServicesMenuItem.Header = Localization.Get("Menu_Services");
             ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
             SystemMenuItem.Header = Localization.Get("Menu_System");
@@ -296,7 +296,7 @@ namespace DamnSimpleFileManager
                     LeftList.Focus();
                 e.Handled = true;
             }
-            else if (e.Key == Key.F2 && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+            else if (e.Key == Key.F2 && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             {
                 TogglePane();
                 e.Handled = true;
