@@ -35,6 +35,11 @@ namespace DamnSimpleFileManager
                 ? result
                 : false;
 
+        public static bool StartSinglePane =>
+            Values.TryGetValue("start_single_pane", out var value) && bool.TryParse(value, out var result)
+                ? result
+                : false;
+
         public static void Load()
         {
             var changed = false;
@@ -77,6 +82,7 @@ namespace DamnSimpleFileManager
                                     case "move_confirmation":
                                     case "recycle_bin_delete":
                                     case "dark_theme":
+                                    case "start_single_pane":
                                         if (bool.TryParse(val, out var boolVal))
                                             Values[key] = boolVal.ToString().ToLowerInvariant();
                                         else
@@ -131,6 +137,11 @@ namespace DamnSimpleFileManager
             if (!Values.ContainsKey("dark_theme"))
             {
                 Values["dark_theme"] = "false";
+                changed = true;
+            }
+            if (!Values.ContainsKey("start_single_pane"))
+            {
+                Values["start_single_pane"] = "false";
                 changed = true;
             }
             if (changed)

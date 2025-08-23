@@ -22,12 +22,14 @@ namespace DamnSimpleFileManager
         private readonly FilePaneViewModel rightPane;
         private FilePaneViewModel activePane;
         private readonly FileOperationsService fileOperationsService;
+        private bool isRightPaneVisible;
 
         public MainWindow()
         {
             InitializeComponent();
             Logger.Log("MainWindow initialized");
             Localization.LoadSystemLanguage();
+            isRightPaneVisible = !Settings.StartSinglePane;
             ApplyLocalization();
 
             leftPane = new FilePaneViewModel();
@@ -55,6 +57,7 @@ namespace DamnSimpleFileManager
             LeftList.SelectionChanged += List_SelectionChanged;
             RightList.SelectionChanged += List_SelectionChanged;
             UpdateOperationsAvailability();
+            UpdatePaneLayout();
         }
 
         private void ApplyLocalization()
@@ -78,6 +81,8 @@ namespace DamnSimpleFileManager
             DeleteMenuItem.InputGestureText = "F8";
             OpenTerminalMenuItem.Header = Localization.Get("Menu_OpenTerminal");
             ToolsMenu.Header = Localization.Get("Menu_Tools");
+            TogglePaneMenuItem.Header = Localization.Get(isRightPaneVisible ? "Menu_RemoveSecondPane" : "Menu_AddSecondPane");
+            TogglePaneMenuItem.InputGestureText = "Alt+F2";
             ServicesMenuItem.Header = Localization.Get("Menu_Services");
             ControlPanelMenuItem.Header = Localization.Get("Menu_ControlPanel");
             SystemMenuItem.Header = Localization.Get("Menu_System");
@@ -291,6 +296,11 @@ namespace DamnSimpleFileManager
                     LeftList.Focus();
                 e.Handled = true;
             }
+            else if (e.Key == Key.F2 && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+            {
+                TogglePane();
+                e.Handled = true;
+            }
             else if (e.Key == Key.F2)
             {
                 RenameSelected();
@@ -412,6 +422,76 @@ namespace DamnSimpleFileManager
             {
                 Logger.LogError("Error opening settings file", ex);
                 MessageBox.Show(this, Localization.Get("Error_OpenFile", ex.Message));
+            }
+        }
+
+        private void TogglePaneMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            TogglePane();
+        }
+
+        private void TogglePane()
+        {
+            isRightPaneVisible = !isRightPaneVisible;
+            if (isRightPaneVisible)
+            {
+                var dir = leftPane.CurrentDir;
+                var drive = rightPane.Drives.FirstOrDefault(d => d.Name == dir.Root.FullName);
+                if (drive != null)
+                {
+                    rightPane.SelectedDrive = drive;
+                    rightPane.LoadDirectory(dir);
+                }
+            }
+            UpdatePaneLayout();
+        }
+
+        private void UpdatePaneLayout()
+        {
+            if (isRightPaneVisible)
+            {
+                DrivesGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                BackGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+                BackGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                PathsGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+                PathsGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                ListsGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+                ListsGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+                SpaceGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+                SpaceGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+
+                RightDriveSelector.Visibility = Visibility.Visible;
+                RightBackButton.Visibility = Visibility.Visible;
+                RightPathText.Visibility = Visibility.Visible;
+                RightList.Visibility = Visibility.Visible;
+                RightSpaceText.Visibility = Visibility.Visible;
+
+                TogglePaneMenuItem.Header = Localization.Get("Menu_RemoveSecondPane");
+            }
+            else
+            {
+                DrivesGrid.ColumnDefinitions[2].Width = new GridLength(0);
+                BackGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                BackGrid.ColumnDefinitions[2].Width = new GridLength(0);
+                PathsGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                PathsGrid.ColumnDefinitions[2].Width = new GridLength(0);
+                ListsGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                ListsGrid.ColumnDefinitions[2].Width = new GridLength(0);
+                SpaceGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                SpaceGrid.ColumnDefinitions[2].Width = new GridLength(0);
+
+                RightDriveSelector.Visibility = Visibility.Collapsed;
+                RightBackButton.Visibility = Visibility.Collapsed;
+                RightPathText.Visibility = Visibility.Collapsed;
+                RightList.Visibility = Visibility.Collapsed;
+                RightSpaceText.Visibility = Visibility.Collapsed;
+
+                TogglePaneMenuItem.Header = Localization.Get("Menu_AddSecondPane");
+                if (activePane == rightPane)
+                {
+                    activePane = leftPane;
+                    LeftList.Focus();
+                }
             }
         }
 
