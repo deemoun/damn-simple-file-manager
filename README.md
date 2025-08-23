@@ -37,6 +37,7 @@ Set `copy_confirmation=false` to copy files and folders without confirmation.
 Set `move_confirmation=false` to move files and folders without confirmation.
 Set `recycle_bin_delete=false` to delete items permanently instead of using the Recycle Bin.
 Set `dark_theme=true` to enable the dark theme (experimental).
+Set `start_single_pane=true` to launch with a single pane.
 
 ## Keyboard Shortcuts
 
@@ -46,6 +47,7 @@ Set `dark_theme=true` to enable the dark theme (experimental).
 - **F7** – Create a new folder
 - **Shift+F7** – Create a new file
 - **F8** – Delete selected files or folders (with confirmation)
+- **Alt+F2** – Toggle second pane
 
 ## Building
 

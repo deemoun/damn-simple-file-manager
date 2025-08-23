@@ -52,6 +52,7 @@
                 <MenuItem x:Name="ExitMenuItem" Header="E_xit" Click="Exit_Click"/>
             </MenuItem>
             <MenuItem x:Name="ToolsMenu" Header="_Tools">
+                <MenuItem x:Name="TogglePaneMenuItem" Header="Add second pane" Click="TogglePaneMenuItem_Click" InputGestureText="Alt+F2"/>
                 <MenuItem x:Name="ServicesMenuItem" Header="Services" Click="OpenServices_Click"/>
                 <MenuItem x:Name="ControlPanelMenuItem" Header="Control Panel" Click="OpenControlPanel_Click"/>
                 <MenuItem x:Name="SystemMenuItem" Header="System" Click="OpenSystem_Click"/>
@@ -66,7 +67,7 @@
         </Menu>
 
         <!-- Диски -->
-        <Grid Grid.Row="1" Margin="5">
+        <Grid x:Name="DrivesGrid" Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -129,7 +130,7 @@
         </Grid>
 
         <!-- Кнопки Назад -->
-        <Grid Grid.Row="2" Margin="5">
+        <Grid x:Name="BackGrid" Grid.Row="2" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -143,7 +144,7 @@
         </Grid>
 
         <!-- Текущие пути -->
-        <Grid Grid.Row="3" Margin="5">
+        <Grid x:Name="PathsGrid" Grid.Row="3" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -155,7 +156,7 @@
         </Grid>
 
         <!-- Основные списки -->
-        <Grid Grid.Row="4" Grid.IsSharedSizeScope="True">
+        <Grid x:Name="ListsGrid" Grid.Row="4" Grid.IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -295,7 +296,7 @@
         </Grid>
 
         <!-- Информация о диске -->
-        <Grid Grid.Row="5" Margin="5">
+        <Grid x:Name="SpaceGrid" Grid.Row="5" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
