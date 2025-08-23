@@ -47,7 +47,7 @@ Set `start_single_pane=true` to launch with a single pane.
 - **F7** – Create a new folder
 - **Shift+F7** – Create a new file
 - **F8** – Delete selected files or folders (with confirmation)
-- **Alt+F2** – Toggle second pane
+- **Shift+F2** – Toggle second pane
 
 ## Building
 
